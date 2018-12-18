@@ -1,0 +1,65 @@
+$vue-blue: #55a0f0;
+$vue-green: #00c185;
+body {
+  padding-top: 50px;
+  padding-bottom: 20px;
+  background-color: cornsilk;
+}
+
+span {
+  display: block;
+  overflow: hidden;
+  padding: 0 4px 0 6px;
+}
+
+input {
+  float: left;
+  
+}
+
+label {
+  float: left;
+  width: 20%;
+  text-align: right;
+  
+}
+
+.pad-4 {
+  padding: 4px 0px 4px 0px;
+}
+
+.alert-validate {
+  padding: 0.25rem 0.5rem;
+  color: red;
+}
+
+.has-error {  
+  border-color: red;
+}
+
+.short-input {
+  width: 70%;
+  color: darkolivegreen;
+  background-color: #fff;
+}
+
+.v-select .dropdown-toggle{
+  background-color: #fff;
+}
+
+.short-check {
+  width: 20px;
+  height: 20px;
+  margin: 0 0 0 30px;
+}
+
+.short-drop {
+
+  overflow: visible;
+  padding: 0 4px 0 6px;
+  
+  
+  color: darkolivegreen;
+  background-color: #fff;
+}
+
