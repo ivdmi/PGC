@@ -148,7 +148,6 @@
 
   
     <!-- <button ref="createBtn" class="btn btn-warning" v-on:click="addItem('post')">Create</button> -->
-
     <!-- <button class="btn btn-warning" v-on:click="createAspirant('cancel')">Cancel</button> -->
     <!-- <router-link class="btn btn-warning" to="/aspirants">Cancel</router-link> -->
     <hr>
