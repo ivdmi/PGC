@@ -22,7 +22,9 @@ namespace PGC {
         public void ConfigureServices (IServiceCollection services) {
             string conString = Microsoft.Extensions.Configuration.ConfigurationExtensions.GetConnectionString (this.Configuration, "DefaultConnection");
             services.AddDbContext<AspiranturaContext> (options => options.UseSqlite (conString));
-            services.AddMvc ();
+            services.AddMvc ().AddJsonOptions (options => {
+                options.SerializerSettings.DateFormatString = "yyyy-MM-dd";
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -45,7 +47,7 @@ namespace PGC {
 
                 routes.MapSpaFallbackRoute (
                     name: "spa-fallback",
-                    defaults : new { controller = "Home", action = "Index" });                    
+                    defaults : new { controller = "Home", action = "Index" });
             });
         }
     }

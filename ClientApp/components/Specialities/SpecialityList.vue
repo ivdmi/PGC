@@ -1,17 +1,6 @@
 <template>
     <div>
-        <!-- <ul v-if="list.length">
-            <SpecialityItem
-                v-for="item in list"
-                :key="item.id"
-                :item="item"                
-            />
-        </ul>
-        <p v-else>
-            Nothing left in the list. Add a new todo in the input above.
-        </p> -->
-
-<div id="people">
+<div id="people" class="col-8 offset-2">
   <v-client-table :columns="columns" :data="list" :options="options"></v-client-table>
 </div>
 
@@ -19,13 +8,9 @@
 </template>
 
 <script>
-import SpecialityItem from "./SpecialityItem";
 import axios from "axios";
 
-export default {
-  components: {
-    SpecialityItem
-  },
+export default {  
   data() {
     return {
       list: [],

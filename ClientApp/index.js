@@ -1,67 +1,85 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import VeeValidate, { Validator } from "vee-validate";
-import uk from "vee-validate/dist/locale/uk"
+import uk from "vee-validate/dist/locale/uk";
 import BootstrapVue from "bootstrap-vue";
-import { ServerTable, ClientTable, Event } from "vue-tables-2";
+import { ClientTable, Event } from "vue-tables-2";
+
 import App from "./App.vue";
-import TodoList from "./components/Todo/TodoList.vue";
+
 import SpecialityList from "./components/Specialities/SpecialityList.vue";
 
 import AspirantList from "./components/Aspirants/AspirantList.vue";
 import AspirantAdd from "./components/Aspirants/AspirantAdd.vue";
+import AspirantEdit from "./components/Aspirants/AspirantEdit.vue";
 
-import ProductList from "./components/Products/Products.vue";
-import AddProduct from "./components/Products/AddProduct.vue";
+import OrderList from "./components/Orders/OrderList.vue";
+import OrderAdd from "./components/Orders/OrderAdd.vue";
+
+import DepartmentList from "./components/Departments/DepartmentList.vue";
+import DepartmentAdd from "./components/Departments/DepartmentAdd.vue";
+import DepartmentEdit from "./components/Departments/DepartmentEdit.vue";
+
+import FacultyList from "./components/Faculties/FacultyList.vue";
+import FacultyAdd from "./components/Faculties/FacultyAdd.vue";
+import FacultyEdit from "./components/Faculties/FacultyEdit.vue";
+
+import PrepodList from "./components/Prepods/PrepodList.vue";
+import PrepodAdd from "./components/Prepods/PrepodAdd.vue";
+import PrepodEdit from "./components/Prepods/PrepodEdit.vue";
 
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
+
+import "vue-good-table/dist/vue-good-table.css";
+
 import bTable from "bootstrap-vue/es/components/table/table";
+import axios from "axios";
 
 
 Vue.config.productionTip = false;
+
 Vue.use(BootstrapVue);
 Vue.component("b-table", bTable);
 Vue.use(bTable);
+Vue.use(axios);
+
 Vue.use(ClientTable);
 Vue.use(VueRouter);
 
-Validator.localize({uk: uk});
-Vue.use(VeeValidate, { locale: 'uk'});
-// VeeValidate.Validator.extend('phone', phoneRule);
+Validator.localize({ uk: uk });
 
 const phoneRule = {
-  
-  getMessage(field, args){
-    return 'Поле ${field} має містити телефонний номер';
-  },
-  
-  validate(value, args) {
-  const MOBILREG = /^((1[3578][0-9])+\d{8})$/;
+  getMessage(field, args) {
+    return "Поле ${field} має містити телефонний номер";
+  },  
+validate(value, args) 
+{
+  const MOBILREG = /^[+]*\d+[\d-]{5,14}\d+$/;
   return MOBILREG.test(value);
 }
+};
+
+const notNull = {
+  getMessage(field, args) {
+    return "Виберіть поле ${field}";
+  },  
+validate(value, args) 
+{
+  var k = false;
+  //if ((value != null) && (value.value != 0) && (value.value != null))
+  if ((value != null) && (value.value != null))
+  {
+    k=true;
+  }
+  return k;
 }
+};
 
-// const dictionary = {
-//   en: {
-//     messages:{
-//       alpha: () => 'Some English Message'
-//     }
-//   },
-//   us: {
-//     messages: {
-//       alpha: 'Введіьб'
-//     }
-//   }
-// };
+VeeValidate.Validator.extend('phone', phoneRule);
+VeeValidate.Validator.extend('selectValue', notNull);
 
-// Override and merge the dictionaries
-// Validator.localize('uk');
-
-// const validator = new Validator({ first_name: 'alpha' });
-
-// validator.localize('uк'); // now this validator will generate messages in Arabic.
-
+Vue.use(VeeValidate, { locale: "uk" });
 
 const routes = [
   {
@@ -69,41 +87,56 @@ const routes = [
     component: App,
     children: [
       {
-        path: "/todo",
-        component: TodoList
+        path: "/specialities", component: SpecialityList
       },
       {
-        path: "/specialities",
-        component: SpecialityList
+        path: "/aspirants", component: AspirantList,
+        // children: [
+        //   // { path: "aspirant-add", name: "AspirantAdd", component: AspirantAdd },
+        //   // { path: 'aspirant-add/:specialities/:statuses/:departments', name: 'AspirantAdd', component: AspirantAdd, props: true },
+        //   // { path: 'aspirant-edit/:item/:specialities/:statuses', name: 'AspirantEdit', component: AspirantEdit, props: true }
+        // ]
       },
+      { path: 'aspirant-add/:specialities/:statuses/:studyforms/:departments', name: 'AspirantAdd', component: AspirantAdd, props: true },
+      { path: 'aspirant-edit/:item/:specialities/:statuses', name: 'AspirantEdit', component: AspirantEdit, props: true },
       {
-        path: "/aspirants",
-        component: AspirantList,
+        path: "/orders", component: OrderList,
         children: [
-          { path: "aspirant-add", name: "AspirantAdd", component: AspirantAdd }
-          // {
-          //   name: "Edit",
-          //   path: "edit/:id",
-          //   component: EditItem
-          // }
+          // { path: "order-add/:item/:types", name: "OrderAdd", component: OrderAdd },
+          // { path: 'order-edit/:item/:types', name: 'AspirantEdit', component: AspirantEdit, props: true }          
         ]
       },
-      {
-        path: "/aspirant-add",
-        component: AspirantAdd
+      {        
+        path: "order-add/:types", name: "OrderAdd", component: OrderAdd
       },
       {
-        path: "/products",
-        component: ProductList,
-        children: [
-          { path: "add-product", component: AddProduct }
-          // {
-          //   name: "Edit",
-          //   path: "edit/:id",
-          //   component: EditItem
-          // }
-        ]
-      }
+        path: "/faculties", component: FacultyList,        
+      },
+      {         
+        path: "faculty-add", name: "FacultyAdd", component: FacultyAdd
+      },
+      {         
+        path: "faculty-edit/:item", name: "FacultyEdit", component: FacultyEdit
+      },
+      {
+        path: "/departments", component: DepartmentList,        
+      },      
+      {         
+        path: "department-add", name: "DepartmentAdd", component: DepartmentAdd
+      },
+      {         
+        // path: "department-edit/:item", name: "DepartmentEdit", component: DepartmentEdit
+        path: "department-edit/:id", name: "DepartmentEdit", component: DepartmentEdit
+      },      
+      {
+        path: "/prepods", component: PrepodList,        
+      },      
+      {         
+        path: "prepod-add", name: "PrepodAdd", component: PrepodAdd
+      },
+      {         
+        path: "prepod-edit/:id", name: "PrepodEdit", component: PrepodEdit
+      },
     ]
   }
 ];
@@ -113,7 +146,7 @@ const router = new VueRouter({
   mode: "history"
 });
 
-export const eventBus = new Vue();
+// export const eventBus = new Vue();
 
 new Vue({
   el: "#app",

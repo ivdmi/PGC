@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 
 namespace PGC.Models {
     public class Speciality {
@@ -15,6 +18,9 @@ namespace PGC.Models {
 
         public bool IsUsed { get; set; }
 
-        public ICollection<Aspirant> Aspirants { get; set; }
+        [NotMapped]
+        public virtual ICollection<Aspirant> Aspirants { get; set; }
+
+        public ICollection<DepartmentSpeciality> DepartmentSpecialities { get; set; }
     }
 }

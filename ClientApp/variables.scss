@@ -1,9 +1,10 @@
 $vue-blue: #55a0f0;
 $vue-green: #00c185;
 body {
-  padding-top: 50px;
-  padding-bottom: 20px;
-  background-color: cornsilk;
+  padding: 20px;
+  // padding-bottom: 40px;
+  // background-color: whitesmoke;
+  background-color: lavender;
 }
 
 span {
@@ -13,8 +14,7 @@ span {
 }
 
 input {
-  float: left;
-  
+  float: left;  
 }
 
 label {
@@ -26,6 +26,32 @@ label {
 
 .pad-4 {
   padding: 4px 0px 4px 0px;
+}
+
+.font-12
+{
+  font-size: 12px;
+}
+
+.font-14
+{
+  font-size: 14px;
+  font-weight: normal;
+}
+
+.btnxs
+{
+  font-size: 12px;  
+  height: 20px;  
+  line-height: 14px;
+  margin-bottom: 0px;
+  margin-left: 0px;
+  margin-right: 0px;
+  margin-top: 0px;
+  padding-bottom: 3px;
+  padding-left: 6px;
+  padding-right: 6px;
+  padding-top: 3px;
 }
 
 .alert-validate {
@@ -54,12 +80,48 @@ label {
 }
 
 .short-drop {
-
   overflow: visible;
-  padding: 0 4px 0 6px;
-  
-  
+  padding: 0 4px 0 6px;  
   color: darkolivegreen;
   background-color: #fff;
+}
+
+table.vgt-table {
+  font-size: 14px;
+  font-weight: normal;
+}
+
+.vgt-input, .vgt-select{  
+  font-size: 11px;  
+  height: 22px;
+}
+
+.vgt-select{    
+  padding: 0px 0px;    
+}
+.vgt-input{    
+  padding: 0px 2px;    
+}
+
+.vgt-table thead th {  
+  padding: .5em 0px .5em 0px;    
+  text-align: left;
+}
+
+.vgt-table th.filter-th {
+  padding: .3em .3em .3em .3em;
+}
+
+.vgt-wrap__footer {  
+  padding: .2em;  
+}
+
+.td-left {  
+  text-align: left;
+}
+
+.visibility-collapse {
+  visibility: collapse;
+  height: 0px;
 }
 

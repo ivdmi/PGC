@@ -24,18 +24,35 @@ namespace PGC.Controllers {
             return sp;
         }
 
-		// названия специальностей для выпадающего списка в Aspirant
+        // названия специальностей для выпадающего списка в Aspirant
         [HttpGet ("names")]
         public IEnumerable<ItemData> GetSpecialityNames () {
             IList<ItemData> list = new List<ItemData> ();
-            var sp = _context.Specialities.Include ("Knowledge").Where (t => t.IsUsed);
+            //var sp = _context.Specialities.Include ("Knowledge").Where (t => t.IsUsed);
+            var sp = _context.Specialities.Where (t => t.IsUsed);
             foreach (var item in sp) {
                 char ch = Convert.ToChar (160);
                 string space = new String (ch, 5 - item.Id.ToString ().Length);
                 string txt = item.Id + space + item.Name;
                 list.Add (new ItemData () { Value = item.Id, Text = txt });
             }
-        return list;
+            return list;
+        }
+
+        // специальности для кафедры
+        [HttpGet ("selected/{departmentId}")]
+        public dynamic GetSelectedSpecialities ([FromRoute] int departmentId) {
+
+            // пересечение двух множеств по Id
+            var specialities = _context.Specialities.Include ("Knowledge").Select (i => new { i.Id, i.Name, i.KnowledgeId, i.Knowledge, i.IsUsed }).ToList ();
+            var selectedSpecId = _context.DepartmentSpecialities.Where (d => d.DepartmentId == departmentId).ToList ();
+
+            var selSpec =
+                from sp in specialities
+            where (selectedSpecId.Any (x => x.SpecialityId == sp.Id))
+            select sp;
+
+            return selSpec;
         }
 
         // GET: api/Specialities/5

@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
 using PGC.Models.ViewModels;
 
 namespace PGC.Models {
@@ -25,7 +23,7 @@ namespace PGC.Models {
         [Display (Name = "Вид наказу")]
         public OrderType OrderType { get; set; }
 
-        public ICollection<AspirantOrder> AsppirantOrders { get; set; }
+        public ICollection<AspirantOrder> AspirantOrders { get; set; }
 
         // не включаются в БД
         [NotMapped]

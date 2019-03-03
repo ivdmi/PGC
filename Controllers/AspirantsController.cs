@@ -24,16 +24,7 @@ namespace PGC.Controllers {
             return _context.Aspirants;
         }
 
-        [HttpGet ("statuses")]
-        public IEnumerable<ItemData> GetStatuses () {            
-            return Helper.GetStatusList();
-        }
-
-        // public class StatusItem {
-        //     public int Value { get; set; }
-        //     public string Text { get; set; }
-        // }
-
+        // Добавить запись
         // POST: api/Aspirants
         [HttpPost]
         public async Task<IActionResult> PostAspirant ([FromBody] Aspirant aspirant) {
@@ -47,6 +38,7 @@ namespace PGC.Controllers {
             return Ok (id);
         }
 
+        // Удалить запись
         // DELETE: api/Aspirants/5
         [HttpDelete ("{id}")]
         public async Task<IActionResult> DeleteAspirant ([FromRoute] int id) {
@@ -64,6 +56,45 @@ namespace PGC.Controllers {
             await _context.SaveChangesAsync ();
 
             return Ok (aspirant);
+        }
+
+        // Редактировать запись
+        // PUT: api/Aspirant/5
+        [HttpPut ("{id}")]
+        public async Task<IActionResult> PutAspirant ([FromRoute] int id, [FromBody] Aspirant aspirant) {
+            if (!ModelState.IsValid) {
+                return BadRequest (ModelState);
+            }
+
+            if (id != aspirant.Id) {
+                return BadRequest ();
+            }
+
+            _context.Entry (aspirant).State = EntityState.Modified;
+
+            try {
+                await _context.SaveChangesAsync ();
+            } catch (DbUpdateConcurrencyException) {
+                if (!AspirantExists (id)) {
+                    return NotFound ();
+                } else {
+                    throw;
+                }
+            }
+
+            return NoContent ();
+        }
+
+        // ===========================================================================================================    
+
+        [HttpGet ("statuses")]
+        public IEnumerable<ItemData> GetStatuses () {            
+            return Helper.GetStatusList();
+        }
+
+        [HttpGet ("studyforms")]
+        public IEnumerable<ItemData> GetStudyForms () {
+            return Helper.GetStudyForms();
         }
 
         // ===========================================================================================================
@@ -84,34 +115,8 @@ namespace PGC.Controllers {
             return Ok (speciality);
         }
 
-        // PUT: api/SpecialitiesApi/5
-        [HttpPut ("{id}")]
-        public async Task<IActionResult> PutSpeciality ([FromRoute] int id, [FromBody] Speciality speciality) {
-            if (!ModelState.IsValid) {
-                return BadRequest (ModelState);
-            }
-
-            if (id != speciality.Id) {
-                return BadRequest ();
-            }
-
-            _context.Entry (speciality).State = EntityState.Modified;
-
-            try {
-                await _context.SaveChangesAsync ();
-            } catch (DbUpdateConcurrencyException) {
-                if (!SpecialityExists (id)) {
-                    return NotFound ();
-                } else {
-                    throw;
-                }
-            }
-
-            return NoContent ();
-        }
-
-        private bool SpecialityExists (int id) {
-            return _context.Specialities.Any (e => e.Id == id);
+        private bool AspirantExists (int id) {
+            return _context.Aspirants.Any (e => e.Id == id);
         }
 
         public class AspirantView {

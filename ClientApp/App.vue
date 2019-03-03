@@ -1,30 +1,14 @@
 <template>
     <div id="home">
-        <h1>Hello World!</h1>
-         
-         <b-alert show> Hello Bootstrap! </b-alert>
-
-
-<b-nav pills>
-  <b-nav-item to="/todo">Todo List</b-nav-item>
-  <b-nav-item to="/specialities">Спеціальності</b-nav-item>
-  <b-nav-item to="/aspirants">Аспіранти</b-nav-item>
-  <b-nav-item to="/products">Products</b-nav-item>
-</b-nav>
-
-<!-- <b-card no-block>
-  <b-tabs>
-    <b-tab title="Tab1">
-      Tab 1 Contents
-    </b-tab>
-    <b-tab title="Tab2">
-      Tab 2 Contents
-    </b-tab>
-  </b-tabs>
-</b-card> -->
-
-<router-view></router-view> 
-
+      <b-nav pills class="col-8 offset-2">        
+        <b-nav-item to="/specialities">Спеціальності</b-nav-item>
+        <b-nav-item to="/aspirants">Аспіранти</b-nav-item>
+        <b-nav-item to="/faculties">Факультети</b-nav-item>
+        <b-nav-item to="/departments">Кафедри</b-nav-item>
+        <b-nav-item to="/prepods">Викладачі</b-nav-item>
+        <b-nav-item to="/orders">Накази</b-nav-item>
+      </b-nav>
+      <router-view></router-view> 
     </div>
 </template>
 
@@ -39,9 +23,10 @@ export default {
 @import "./variables.scss";
 
 #home {
-  max-width: 800px;
+  // max-width: 1700px;
   margin: 0 auto;
-  line-height: 1.4;
+  padding: 0em 1em;
+  line-height: 1.2;
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

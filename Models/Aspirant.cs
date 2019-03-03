@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
+using PGC.Data;
 
 namespace PGC.Models {
     public class Aspirant {
@@ -29,44 +30,65 @@ namespace PGC.Models {
         public string Phone { get; set; }
 
         public string Email { get; set; }
-
-        [Display (Name = "Вступ")]
+        
+        [DataType (DataType.Date)]
         public DateTime? InputDate { get; set; }
 
-        [Display (Name = "Дата захисту")]
+        [DataType (DataType.Date)]
+        public DateTime? GraduationDate { get; set; }
+        
         [DataType (DataType.Date)]
         public DateTime? ProtectionDate { get; set; }
 
-        //[Display(Name = "Стаціонар/Заочна")]
-        //public bool? StationaryForm { get; set; }
+        [Display(Name = "Стаціонар/Заочна")]
+        public bool Stationary { get; set; }
 
-        //[Display(Name = "Денна/Вечірня")]
-        //public bool? DayForm { get; set; }
-
-        //[Display(Name = "Бюджет/Контракт")]
-        //public bool? Budget { get; set; }
+        [Display(Name = "Бюджет/Контракт")]
+        public bool Budget { get; set; }
 
         [Display (Name = "Докторант/Аспірант")]
         public bool Doctorant { get; set; }
 
+        [Display (Name = "Чоловік/Жінка")]
+        public bool Sex { get; set; }
+
         [Display (Name = "Захист")]
         public bool Protection { get; set; }
+
+        public bool Present {get; set;}
 
         [Range (0, 5)]
         [Display (Name = "Курс")]
         public int Course { get; set; }
 
-        public int StatustypeId { get; set; } = 1;
+        // public int? StatustypeId { get; set; }
+
+        // ключи
 
         [Display (Name = "Спеціальність")]
-        public int SpecialityId { get; set; } = 21;
+        public int? SpecialityId { get; set; }        
+                
+        [Display (Name = "Кафедра")]
+        public int? DepartmentId { get; set; }
 
-        public Speciality Speciality { get; set; }
+        public int? StudyformId { get; set; }
+        
+
+        public int? PrepodId { get; set; }
+
+        //  -------------------- навигационные свойства ------------------------
+
+        public Speciality Speciality { get; set; }        
+
+        public Department Department {get;set;}
+        public Prepod Prepod { get; set; }
 
         [Display (Name = "Статус")]
-        public StatusType StatusType { get; set; }
+        public StatusTypeEnum StatusType { get; set; }
 
-        public ICollection<AspirantOrder> AsppirantOrders { get; set; }
+        public StudyForm  StudyForm {get;set;}
+
+        public ICollection<AspirantOrder> AspirantOrders { get; set; }
 
         [Display (Name = "Вступ")]
         public int? InputYear {

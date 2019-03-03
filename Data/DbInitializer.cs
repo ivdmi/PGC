@@ -18,7 +18,8 @@ namespace PGC.Data {
             SpecialityInit (context);
             OrderInit (context);
             AspirantInit (context);
-            ScientificAdviserInit (context);
+            DepartmentInit (context);
+            PrepodsInit (context);
         }
 
         private static void StatusTypeInit (AspiranturaContext context) {
@@ -223,31 +224,28 @@ namespace PGC.Data {
             context.SaveChanges ();
         }
 
-        private static void OrderInit (AspiranturaContext context) {
-            var orders = new Order[] {
-                new Order { Date = DateTime.Parse ("2010-09-01"), Number = "1", OrdertypeId = 1 },
-                new Order { Date = DateTime.Parse ("2011-09-01"), Number = "79", OrdertypeId = 4 },
-                new Order { Date = DateTime.Parse ("2012-09-01"), Number = "53", OrdertypeId = 1 },
-                new Order { Date = DateTime.Parse ("2014-03-01"), Number = "3", OrdertypeId = 2 },
-                new Order { Date = DateTime.Parse ("2015-05-30"), Number = "3", OrdertypeId = 3 }
-            };
-            foreach (Order item in orders) {
-                context.Orders.Add (item);
-            }
-            context.SaveChanges ();
-        }
-
         private static void AspirantInit (AspiranturaContext context) {
             var aspirants = new Aspirant[] {
-                new Aspirant { Name = "Carson", Surename = "Alexander", Birthday = DateTime.Parse ("2005-09-01"), Patronymic = "Петрович", StatustypeId = (int) StatusTypeEnum.новий, SpecialityId = 21, InputDate = DateTime.Parse ("2010-09-01") },
-                new Aspirant { Name = "Meredith", Surename = "Alonso", Birthday = DateTime.Parse ("2002-09-01"), Patronymic = "Васильевич", StatustypeId = (int) StatusTypeEnum.новий, SpecialityId = 21 },
-                new Aspirant { Name = "Arturo", Surename = "Anand", Birthday = DateTime.Parse ("2003-09-01"), StatustypeId = (int) StatusTypeEnum.навчання, SpecialityId = 21 },
-                new Aspirant { Name = "Gytis", Surename = "Barzdukas", Birthday = DateTime.Parse ("2002-09-01"), StatustypeId = (int) StatusTypeEnum.новий, SpecialityId = 21 },
-                new Aspirant { Name = "Yan", Surename = "Li", Birthday = DateTime.Parse ("2002-09-01"), StatustypeId = (int) StatusTypeEnum.відрахований_2, SpecialityId = 21 },
-                new Aspirant { Name = "Peggy", Surename = "Justice", Birthday = DateTime.Parse ("2001-09-01"), StatustypeId = (int) StatusTypeEnum.відрахований_2, SpecialityId = 21 },
-                new Aspirant { Name = "Laura", Surename = "Norman", Birthday = DateTime.Parse ("2003-09-01"), StatustypeId = (int) StatusTypeEnum.захист_достроково, SpecialityId = 21 },
-                new Aspirant { Name = "Nino", Surename = "Olivetto", Birthday = DateTime.Parse ("2005-09-01"), StatustypeId = (int) StatusTypeEnum.стажування, SpecialityId = 21 }
+                // new Aspirant { Name = "Олександр", Surename = "Бука", Birthday = DateTime.Parse ("1989-09-01"), Patronymic = "Петрович", StatustypeId = (int) StatusTypeEnum.новий, SpecialityId = 73, InputDate = DateTime.Parse ("2018-09-01"), StudyformId=(int)FormEnum.Денна },
+                // new Aspirant { Name = "Сергій", Surename = "Гітієс", Birthday = DateTime.Parse ("1992-09-01"), Patronymic = "Васильевич", StatustypeId = (int) StatusTypeEnum.новий, SpecialityId = 75, StudyformId=(int)FormEnum.Денна },
+                // new Aspirant { Name = "Кирило", Surename = "Вітус", Birthday = DateTime.Parse ("1991-09-01"), StatustypeId = (int) StatusTypeEnum.навчання, SpecialityId = 113, StudyformId=(int) FormEnum.Денна },
+                // new Aspirant { Name = "Михайло", Surename = "Barzdukas", Birthday = DateTime.Parse ("1992-09-01"), StatustypeId = (int) StatusTypeEnum.новий, SpecialityId = 113, StudyformId=(int)FormEnum.Денна },
+                // new Aspirant { Name = "Yan", Surename = "Li", Birthday = DateTime.Parse ("1985-09-01"), StatustypeId = (int) StatusTypeEnum.відрахований_2, SpecialityId = 113, StudyformId=(int)FormEnum.Заочна },
+                // new Aspirant { Name = "Альберт", Surename = "Justice", Birthday = DateTime.Parse ("1991-09-01"), StatustypeId = (int) StatusTypeEnum.відрахований_2, SpecialityId = 73, StudyformId=(int)FormEnum.Вечірня },
+                // new Aspirant { Name = "Laura", Surename = "Norman", Birthday = DateTime.Parse ("1991-09-01"), StatustypeId = (int) StatusTypeEnum.захист_достроково, SpecialityId = 73, StudyformId=(int)FormEnum.Денна },
+                // new Aspirant { Name = "Nino", Surename = "Olivetto", Birthday = DateTime.Parse ("1990-09-01"), StatustypeId = (int) StatusTypeEnum.стажування, SpecialityId = 113, StudyformId=(int)FormEnum.Вечірня }
+
+                new Aspirant { Name = "Олександр", Surename = "Бука", Birthday = DateTime.Parse ("1989-09-01"), Patronymic = "Петрович", StatusType = StatusTypeEnum.новий, SpecialityId = 73, InputDate = DateTime.Parse ("2018-09-01"), StudyForm = StudyForm.денна },
+                new Aspirant { Name = "Сергій", Surename = "Гітієс", Birthday = DateTime.Parse ("1992-09-01"), Patronymic = "Васильевич", StatusType = StatusTypeEnum.новий, SpecialityId = 75, StudyForm = StudyForm.вечірня },
+                new Aspirant { Name = "Кирило", Surename = "Вітус", Birthday = DateTime.Parse ("1991-09-01"), StatusType = StatusTypeEnum.навчання, SpecialityId = 113, StudyForm = StudyForm.денна },
+                new Aspirant { Name = "Михайло", Surename = "Barzdukas", Birthday = DateTime.Parse ("1992-09-01"), StatusType = StatusTypeEnum.новий, SpecialityId = 113, StudyForm = StudyForm.денна },
+                new Aspirant { Name = "Yan", Surename = "Li", Birthday = DateTime.Parse ("1985-09-01"), StatusType = StatusTypeEnum.відрахований_2, SpecialityId = 113, StudyForm = StudyForm.заочна },
+                new Aspirant { Name = "Альберт", Surename = "Justice", Birthday = DateTime.Parse ("1991-09-01"), StatusType = StatusTypeEnum.відрахований_2, SpecialityId = 73, StudyForm = StudyForm.вечірня },
+                new Aspirant { Name = "Laura", Surename = "Norman", Birthday = DateTime.Parse ("1991-09-01"), StatusType = StatusTypeEnum.захист_достроково, SpecialityId = 73, StudyForm = StudyForm.денна },
+                new Aspirant { Name = "Nino", Surename = "Olivetto", Birthday = DateTime.Parse ("1990-09-01"), StatusType = StatusTypeEnum.стажування, SpecialityId = 113, StudyForm = StudyForm.вечірня }
+
             };
+
             foreach (Aspirant asp in aspirants) {
                 context.Aspirants.Add (asp);
             }
@@ -272,17 +270,70 @@ namespace PGC.Data {
 
         }
 
-        private static void ScientificAdviserInit (AspiranturaContext context) {
-            var advisers = new ScientificAdviser[] {
-                new ScientificAdviser { Surename = "Фролов", Name = "Володимир", Patronymic = "Петрович", Birthday = DateTime.Parse ("1927-09-01") },
-                new ScientificAdviser { Surename = "Платон", Name = "Семен", Patronymic = "Якович", Birthday = DateTime.Parse ("1971-09-14") },
-                new ScientificAdviser { Surename = "Книш", Name = "Володимир", Patronymic = "Ігоревич", Birthday = DateTime.Parse ("1937-11-20") },
-                new ScientificAdviser { Surename = "Янишевич", Name = "Сергій", Patronymic = "Сергійович", Birthday = DateTime.Parse ("1927-09-01") },
-                new ScientificAdviser { Surename = "Шевченко", Name = "Петро", Patronymic = "Петрович", Birthday = DateTime.Parse ("1942-11-21") }
+        private static void OrderInit (AspiranturaContext context) {
+            var orders = new Order[] {
+                new Order { Date = DateTime.Parse ("2010-09-01"), Number = "1", OrdertypeId = 1 },
+                new Order { Date = DateTime.Parse ("2011-09-01"), Number = "79", OrdertypeId = 4 },
+                new Order { Date = DateTime.Parse ("2012-09-01"), Number = "53", OrdertypeId = 1 },
+                new Order { Date = DateTime.Parse ("2014-03-01"), Number = "3", OrdertypeId = 2 },
+                new Order { Date = DateTime.Parse ("2015-05-30"), Number = "3", OrdertypeId = 3 }
+            };
+            foreach (Order item in orders) {
+                context.Orders.Add (item);
+            }
+            context.SaveChanges ();
+        }
+
+        private static void DepartmentInit (AspiranturaContext context) {
+            var faculties = new Faculty[] {
+                new Faculty { Name = "Факультет інформатики та обчислювальної техніки", Acronym = "ФІОТ", Phone = "2903332", Email = "fiot@kpi.ua" },
+                new Faculty { Name = "Фізтех", Acronym = "ФТІ", Decan = "Новіков Олексій Миколайович", Phone = "2903482", Email = "fti@kpi.ua" },
+                new Faculty { Name = "Інститут прикладного системного аналізу", Acronym = "ІПСА", Phone = "4738981", Email = "ipsa@kpi.ua" }
             };
 
-            foreach (ScientificAdviser adv in advisers) {
-                context.Advisers.Add (adv);
+            foreach (Faculty item in faculties) {
+                context.Faculties.Add (item);
+            }
+
+            context.SaveChanges ();
+
+            var departments = new Department[] {
+                new Department { Name = "Кафердра АСУ і У", Acronym = "АСУІУ", Phone = "2903311", Email = "asuiu@kpi.ua", FacultyId = 1 },
+                new Department { Name = "Кафедра робототехніки", Acronym = "РТ", Decan = "Шлопак В.М.", Phone = "2903777", Email = "krt@kpi.ua", FacultyId = 1 },
+            };
+
+            foreach (Department item in departments) {
+                context.Departments.Add (item);
+            }
+            context.SaveChanges ();
+        }
+
+        private static void PrepodsInit (AspiranturaContext context) {
+
+            // var positions = new Position[]
+            // {
+            //     new Position {Id = 1, Abbreviation = "декан", Name="декан факультету"},
+            //     new Position {Id = 2, Abbreviation = "заст.декана", Name="заступник декана факультету"},
+            //     new Position {Id = 3, Abbreviation = "зав.кафедри", Name="завідувач кафедрою"},
+            //     new Position {Id = 4, Abbreviation = "заст.зав.кафедри", Name="заступник завідувача кафедрою"},
+            //     new Position {Id = 5, Abbreviation = "ст.викладач", Name="старший викладач"},
+            //     new Position {Id = 6, Abbreviation = "викладач", Name="викладач"},
+            //     new Position {Id = 7, Abbreviation = "інше", Name="інше"},
+            // };
+
+            // foreach (Position item in positions) {
+            //     context.Positions.Add (item);
+            // }
+
+            // context.SaveChanges ();
+
+            var prepods = new Prepod[] {
+                new Prepod { Surename = "Гуру", Name = "Василь", Patronymic = "Петрович", Phone = "2903311", Email = "asuiu@kpi.ua", Present = true, Position = Position.ст_викладач, Rank = Rank.професор, Degree = Degree.доктор_наук },
+                new Prepod { Surename = "Вершина", Name = "Сергій", Patronymic = "Михайлович", Phone = "12203311", Email = "uiu@kpi.ua", Present = true, Position = Position.зав_каф },
+            };
+
+            foreach (Prepod item in prepods) {
+                context.Prepods.Add (item);
             }
             context.SaveChanges ();
         }
