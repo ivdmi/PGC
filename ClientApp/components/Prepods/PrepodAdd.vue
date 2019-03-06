@@ -193,6 +193,8 @@
             <input type="submit" class="btn btn-warning mr-2" value="Зберегти">
             <router-link to="/prepods" tag="button" class="btn btn-warning">Скасувати</router-link>
           </b-row>
+		  
+		  
           <hr>
           <h5>Обрати кафедри</h5>
           <prepod-department-list @add-department="onAddOne"></prepod-department-list>

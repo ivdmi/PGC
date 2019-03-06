@@ -6,8 +6,8 @@ using System.Linq;
 using PGC.Data;
 
 namespace PGC.Models.ViewModels {
-    public class PrepodLists {
-        public PrepodLists (Prepod prepod) {
+    public class PrepodSelectLists {
+        public PrepodSelectLists (Prepod prepod) {
             Positions = Helper.GetPositions ();
             Ranks = Helper.GetRanks ();
             Degrees = Helper.GetDegrees ();

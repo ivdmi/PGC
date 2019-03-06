@@ -1,262 +1,178 @@
-<template id="aspirant">
-  <div>
-    <h2>Редагування облікового запису аспіранта</h2>
+<template>
 
-    <b-container fluid>
-      <b-row class="pad-4">
-        <b-col cols="2" class="text-right">Прізвище:</b-col>
-        <b-col cols="5">
-          <b-form-input 
-          size="sm" 
-          type="text" 
-          name="surename"
-          v-model="aspirant.surename"
-          v-validate="'required|alpha'"
-          :class="{'has-error': errors.has('surename')}"
-          ></b-form-input>
-        </b-col>
-      </b-row>
-      <div v-if="errors.has('surename')" class="offset-3 alert-validate" >{{ errors.first('surename') }}</div>
-         
-      <b-row class="pad-4">
-        <b-col cols="2" class="text-right">Ім'я:</b-col>
-        <b-col cols="5">
-          <b-form-input
-            size="sm"
-            type="text"            
-            name="name"
-            v-model="aspirant.name"
-            v-validate="'required|alpha'"
-            :class="{'has-error': errors.has('name')}"
-          ></b-form-input>
-        </b-col>
-      </b-row>
-      <div v-if="errors.has('name')" class="offset-3 alert-validate" >{{ errors.first('name') }}</div>
+<div class="col-10 offset-1">
+  <h2>Редагування облікового запису аспіранта</h2>
+<form v-on:submit.prevent="editItem">
+<b-container fluid>
+	<b-row class="pad-4">
+          <b-col cols="2" class="text-right">Прізвище:</b-col>
+          <b-col cols="5">
+            <b-form-input
+              size="sm"
+              type="text"
+              name="surename"
+              v-model="model.surename"
+              v-validate="'required|alpha'"
+              :class="{'has-error': errors.has('surename')}"
+            ></b-form-input>
+          </b-col>
+    </b-row>
+    <div v-if="errors.has('surename')" class="offset-3 alert-validate" >{{ errors.first('surename') }}</div>		
+		
+	    <b-row class="pad-4">
+          <b-col cols="2" class="text-right">Ім'я:</b-col>
+          <b-col cols="5">
+            <b-form-input
+              size="sm"
+              type="text"
+              name="name"
+              v-model="model.name"
+              v-validate="'required|alpha'"
+              :class="{'has-error': errors.has('name')}"
+            ></b-form-input>
+          </b-col>
+        </b-row>
+        <div v-if="errors.has('name')" class="offset-3 alert-validate">{{ errors.first('name') }}</div>
 
-      <b-row class="pad-4">
-        <b-col cols="2" class="text-right">По батькові:</b-col>
-        <b-col cols="5">
-          <b-form-input
-            size="sm"
-            type="text"           
-            name="patronymic"
-          v-model="aspirant.patronymic"
-          v-validate="'alpha'"
-          :class="{'has-error': errors.has('patronymic')}"
-          ></b-form-input>
-        </b-col>
-      </b-row>
-      <div v-if="errors.has('patronymic')" class="offset-3 alert-validate" >{{ errors.first('patronymic') }}</div>
+        <b-row class="pad-4">
+          <b-col cols="2" class="text-right">По батькові:</b-col>
+          <b-col cols="5">
+            <b-form-input
+              size="sm"
+              type="text"
+              name="patronymic"
+              v-model="model.patronymic"
+              v-validate="'alpha'"
+              :class="{'has-error': errors.has('patronymic')}"
+            ></b-form-input>
+          </b-col>
+        </b-row>
+        <div v-if="errors.has('patronymic')" class="offset-3 alert-validate" >{{ errors.first('patronymic') }}</div>
 
-      <b-row class="pad-4">
-        <b-col cols="2" class="text-right">Телефон:</b-col>
-        <b-col cols="5">
-          <b-form-input
-            size="sm"
-            type="text"                        
-            name="phone"
-          v-model="aspirant.phone"
-          v-validate="'phone'"
-          :class="{'has-error': errors.has('phone')}"
-          ></b-form-input>
-        </b-col>
-      </b-row>
-      <div v-if="errors.has('phone')" class="offset-3 alert-validate" >{{ errors.first('phone') }}</div>
 
-      <b-row class="pad-4">
-        <b-col cols="2" class="text-right">Email:</b-col>
-        <b-col cols="5">
-          <b-form-input
-            size="sm"
-            type="email"
-            name="email"
-          v-model="aspirant.email"
-          v-validate="'email'"
-          :class="{'has-error': errors.has('email')}"
-          ></b-form-input>
-        </b-col>
-      </b-row>
-      <div v-if="errors.has('email')" class="offset-3 alert-validate" >{{ errors.first('email') }}</div>
+        <b-row class="pad-4">
+          <b-col cols="2" class="text-right">Телефон:</b-col>
+          <b-col cols="9">
+            <b-form-input
+              size="sm"
+              type="text"
+              name="Телефон"
+              v-model="model.phone"
+              v-validate="'phone'"
+              :class="{'has-error': errors.has('Телефон')}"
+            ></b-form-input>
+          </b-col>
+        </b-row>
+        <div v-if="errors.has('Телефон')" class="offset-3 alert-validate" >{{ errors.first('Телефон') }}</div>
 
-      <b-row class="pad-4">
-        <b-col cols="2" class="text-right">Народження:</b-col>
-        <b-col cols="5">
-          <b-form-input
-            name="birthday"
-            type="date"
-            v-model="aspirant.birthday"
-            size="sm"            
-            :min=this.minDate
-            :max=this.maxDate
-            v-validate="{
-              date_format : 'YYYY-MM-DD',
-              date_between : [this.minDate, this.maxDate, true]
-            }"
-          :class="{'has-error': errors.has('birthday')}"
-          ></b-form-input>
-        </b-col>
-      </b-row>
-     <div v-if="errors.has('birthday')" class="offset-3 alert-validate" >{{ errors.first('birthday') }}</div>
+        <b-row class="pad-4">
+          <b-col cols="2" class="text-right">Email:</b-col>
+          <b-col cols="9">
+            <b-form-input
+              size="sm"
+              type="email"
+              name="Email"
+              v-model="model.email"
+              v-validate="'email'"
+              :class="{'has-error': errors.has('Email')}"
+            ></b-form-input>
+          </b-col>
+        </b-row>
+        <div v-if="errors.has('Email')" class="offset-3 alert-validate">{{ errors.first('Email') }}</div>		
+		
+		
+		
+		<b-row class="pad-4">
+          <b-col cols="2" class="text-right">Бюджет (контракт)</b-col>
+          <b-col cols="5">
+            <span>
+              <input type="checkbox" class="short-check" v-model="model.budget">
+            </span>
+          </b-col>
+        </b-row>
+		
+		<b-row class="pad-4">
+          <b-col cols="2" class="text-right">Докторант (аспірант)</b-col>
+          <b-col cols="5">
+            <span>
+              <input type="checkbox" class="short-check" v-model="model.doctorant">
+            </span>
+          </b-col>
+        </b-row>
+		
+		<b-row class="pad-4">
+          <b-col cols="2" class="text-right">Чоловік (жінка)</b-col>
+          <b-col cols="5">
+            <span>
+              <input type="checkbox" class="short-check" v-model="model.sex">
+            </span>
+          </b-col>
+        </b-row>
+		
+		<b-row class="pad-4">
+          <b-col cols="2" class="text-right">Стать - чоловіча</b-col>
+          <b-col cols="5">
+            <span>
+              <input type="checkbox" class="short-check" v-model="model.sex">
+            </span>
+          </b-col>
+        </b-row>
+		
+		<b-row class="pad-4">
+          <b-col cols="2" class="text-right">В наявності:</b-col>
+          <b-col cols="5">
+            <span>
+              <input type="checkbox" class="short-check" v-model="model.present">
+            </span>
+          </b-col>
+        </b-row>
+		
+		<div class="col-10 offset-2">
+          <br>
+          <b-row class="pad-4">
+            <input type="submit" class="btn btn-warning mr-2" value="Зберегти">
+            <router-link to="/prepods" tag="button" class="btn btn-warning">Скасувати</router-link>
+          </b-row>
+          <hr>
+        </div>
+		
+		
+</b-container>
+</form>
+</div>
+</template>
 
-<b-row class="pad-4">
-        <b-col cols="2" class="text-right">inputDate:</b-col>
-        <b-col cols="5">
-          <b-form-input
-            name="inputDate"
-            type="date"
-            v-model="aspirant.inputDate"
-            size="sm"            
-            min="2017-01-01"
-            :max=this.currentDate
-            v-validate="{
-              date_format : 'YYYY-MM-DD',
-              date_between : ['2017-01-01', this.currentDate, true]
-            }"
-          :class="{'has-error': errors.has('inputDate')}"
-          ></b-form-input>
-        </b-col>
-      </b-row>
-     <div v-if="errors.has('inputDate')" class="offset-3 alert-validate" >{{ errors.first('inputDate') }}</div>
 
-<b-row class="pad-4">
-        <b-col cols="2" class="text-right">Захист:</b-col>
-        <b-col cols="5">
-          <b-form-input
-            name="protectionDate"
-            type="date"
-            v-model="aspirant.protectionDate"
-            size="sm"            
-            min="2017-01-01"
-            :max=this.currentDate
-            v-validate="{
-              date_format : 'YYYY-MM-DD',
-              date_between : ['2017-01-01', this.currentDate, true]
-            }"
-          :class="{'has-error': errors.has('protectionDate')}"
-          ></b-form-input>
-        </b-col>
-      </b-row>
-     <div v-if="errors.has('protectionDate')" class="offset-3 alert-validate" >{{ errors.first('protectionDate') }}</div>
-   
-      <b-row class="pad-4">
-        <b-col cols="2" class="text-right">Спеціальність:</b-col>
-        <b-col cols="5">
-          <v-select name="Спеціальність" label="text" :options="specialities" v-model="selectedSpeciality" v-validate="'required'" :class="{'has-error': errors.has('Спеціальність')}">
-            <template slot="option" slot-scope="option">
-              <span v-html="option.text"></span>
-            </template>
-          </v-select>
-        </b-col>
-      </b-row>
-      <div v-if="errors.has('Спеціальність')" class="offset-3 alert-validate" >{{ errors.first('Спеціальність') }}</div>
-
-      <b-row class="pad-4">
-        <b-col cols="2" class="text-right">Форма:</b-col>
-        <b-col cols="5">
-          <v-select 
-          name="Форма" 
-          label="text" 
-          :options="statuses" 
-          v-model="selectedStatus"
-          v-validate="'required'" 
-          :class="{'has-error': errors.has('Форма')}">
-            <template slot="option" slot-scope="option">
-              <span v-html="option.text"></span>
-            </template>
-          </v-select>
-        </b-col>
-      </b-row>
-      <div v-if="errors.has('Форма')" class="offset-3 alert-validate" >{{ errors.first('Форма') }}</div>
-
-      <b-row class="pad-4">
-        <b-col cols="2" class="text-right">Статус:</b-col>
-        <b-col cols="5">
-          <v-select 
-          name="Статус" 
-          label="text" 
-          :options="statuses" 
-          v-model="selectedStatus"
-          v-validate="'required'" 
-          :class="{'has-error': errors.has('Статус')}">
-            <template slot="option" slot-scope="option">
-              <span v-html="option.text"></span>
-            </template>
-          </v-select>
-        </b-col>
-      </b-row>
-      <div v-if="errors.has('Статус')" class="offset-3 alert-validate" >{{ errors.first('Статус') }}</div>      
-      <b-row class="pad-4">
-        <b-col cols="2" class="text-right">В наявності:</b-col>
-        <b-col cols="5">
-          <span>
-            <input type="checkbox" class="short-check" v-model="aspirant.present">
-          </span>
-        </b-col>
-      </b-row>         
-
-<b-row class="pad-4">
-        <b-col cols="2" class="text-right">Бюджет (контракт):</b-col>
-        <b-col cols="5">
-          <span>
-            <input type="checkbox" class="short-check" v-model="aspirant.budget">
-          </span>
-        </b-col>
-      </b-row>         
-
-<b-row class="pad-4">
-        <b-col cols="2" class="text-right">Стаціонар (заочна):</b-col>
-        <b-col cols="5">
-          <span>
-            <input type="checkbox" class="short-check" v-model="aspirant.stationary">
-          </span>
-        </b-col>
-      </b-row>         
-
-      <b-row class="pad-4">
-        <b-col cols="2" class="text-right">Денна (вечірня):</b-col>
-        <b-col cols="5">
-          <span>
-            <input type="checkbox" class="short-check" v-model="aspirant.day">
-          </span>
-        </b-col>
-      </b-row>         
-
-      <b-row class="pad-4">
-        <b-col cols="2" class="text-right">Докторант (аспірант):</b-col>
-        <b-col cols="5">
-          <span>
-            <input type="checkbox" class="short-check" v-model="aspirant.doctorant">
-          </span>
-        </b-col>
-      </b-row>  
-
-      <b-row class="pad-4">
-        <b-col cols="2" class="text-right">Захист:</b-col>
-        <b-col cols="5">
-          <span>
-            <input type="checkbox" class="short-check" v-model="aspirant.protection">
-          </span>
-        </b-col>
-      </b-row>       
-                
-      <b-row class="pad-4">
-        <b-col cols="2" class="text-right">Курс:</b-col>
-        <b-col cols="5">
-          <b-form-input          
-          name="Курс"
-          v-model="aspirant.course"
-          min=0
-          max=3
-          type="number"
-          v-validate="'numeric|between:0,3'"
-          :class="{'has-error': errors.has('Курс')}"
-          ></b-form-input>
-        </b-col>
-      </b-row>
-      <div v-if="errors.has('Курс')" class="offset-3 alert-validate" >{{ errors.first('Курс') }}</div>
-
-    </b-container>
-
+		
+		<!-- label: "Спеціальність",
+          field: "specialityId",
+		  
+		  label: "Керівник",
+          field: "prepod",          
+		  
+		  label: "Кафедра",
+          field: "department",          
+		  
+		  label: "Форма",
+          field: "studyForm",          
+		  
+		  label: "Статус",
+          field: "statusType",          
+		
+		label: "Курс",
+        field: "course",
+        type: "number",
+		
+		
+			label: "Телефон", 
+			field: "phone" 
+			
+			label: "Email", 
+			field: "email" 
+			
+			 -->
+			
+			
     <button class="btn btn-warning" v-on:click="saveAspirant('put')">Зберегти</button>
     <button class="btn btn-warning" v-on:click="saveAspirant('cancel')">Відмовитися</button>
 
@@ -265,10 +181,9 @@
 </template>
 
 <script>
+
 import axios from "axios";
-import { eventBus } from "./../../index.js";
 import vSelect from "vue-select";
-import VueRouter from "vue-router";
 import moment from "moment";
 
 export default {
@@ -278,86 +193,83 @@ export default {
 
   data() {
     return {
-      // новый объект для значений (чтобы не портить ссылку)
-      aspirant: {
-        id: this.$route.params.item.id,
+      model: {
+        id: "",
+        surename: "",
+        name: "",
+        patronymic: "",
 
-        name: this.$route.params.item.name,
-        surename: this.$route.params.item.surename,
-        patronymic: this.$route.params.item.patronymic,
+        birthday: "",
 
-        phone: this.$route.params.item.phone,
-        email: this.$route.params.item.email,
+        phone: "",
+        email: "",
+        
+        // date
+        inputDate: "",
+        graduationDate: "",
+        protectionDate: "",
 
-        birthday: this.$route.params.item.birthday,
-        inputDate: this.$route.params.item.inputDate,
-        protectionDate: this.$route.params.item.protectionDate,
+        // bool
+        stationary: "",
+        budget: "",
+        doctorant: "",
+        sex: "",
+        protection: "",
+        present: "",
 
-        present: this.$route.params.item.present,
-        budget: this.$route.params.item.budget,
-        stationary: this.$route.params.item.stationary,
-        day: this.$route.params.item.day,
-        doctorant: this.$route.params.item.doctorant,
-        protection: this.$route.params.item.protection,        
+        // int (numeric)
+        course: "",
 
-        course: this.$route.params.item.course,
-
-        specialityId: this.$route.params.item.specialityId,
-        statusType: this.$route.params.item.statusType,
-        studyForm: this.$route.params.item.studyForm,
+        // Select
+        statusType: "",        
+        specialityId: "",
+        departmentId: "",
+        studyformId: "",
+        prepodId: "",
+        
       },
 
-      // запомнить ссылку на объект
-      refAspirant: this.$route.params.item,
-
-      specialities: [],
+      selectedStatusType: {},
+      selectedSpecialityId: {},
+      selectedDepartmentId: {},
+      selectedStudyformId: {},
+      selectedPrepodId: {},
       statuses: [],
+      specialities: [],
+      departments: [],
       studyforms: [],
-      selectedSpeciality: {
-        value: this.$route.params.item.specialityId
-      },
-      selectedStatus: {
-        value: this.$route.params.item.statusType
-      },
+      prepods: [],
+
+      maxDate: moment().add("years", -25).format("YYYY-MM-DD"),
+      minDate: "1930-01-01",
+
       currentDate: moment().format("YYYY-MM-DD"),
-      maxDate: moment()
-        .add("years", -20)
-        .format("YYYY-MM-DD"),
-      minDate: "1935-01-01"
+      
+      
     };
   },
 
   mounted: function() {
-    // читаем в массив специальности и заполняем selectedSpeciality
+    const responseAspirant = axios.get("api/Aspirants/" + this.$route.params.id);    
+    const responseLists = axios.get(
+      "api/Aspirants/lists/" + this.$route.params.id
+    );
 
-    this.specialities = this.$route.params.specialities;
-    this.selectedSpeciality.text = this.specialities.find(
-      x => x.value === this.selectedSpeciality.value
-    ).text;
+    axios
+      .all([responseAspirant, responseLists])
+      .then(responses => {
+        this.model = responses[0].data;        
 
-    this.statuses = this.$route.params.statuses;
-    this.studyforms = this.$route.params.studyforms;
-    this.selectedStatus.text = this.statuses.find(
-      x => x.value === this.$route.params.item.statusType
-    ).text;
-    this.selectedStudyform.text = this.studyforms.find(
-      x => x.value === this.$route.params.item.studyForm
-    ).text;
-    // var self = this;
-
-    // axios.get(`api/specialities/names`).then(function(response) {
-    //   self.specialities = response.data;
-    //   self.selectedSpeciality.text = self.specialities.find(
-    //     x => x.value === self.selectedSpeciality.value
-    //   ).text;
-    // });
-
-    // axios.get(`api/Aspirants/statuses`).then(function(response) {
-    //   self.statuses = response.data;
-    //   self.selectedStatus.text = self.statuses.find(
-    //     x => x.value === self.$route.params.item.statustypeId
-    //   ).text;
-    // });
+        this.statuses = responses[1].data.statuses;
+        this.degrees = responses[1].data.degrees;
+        this.positions = responses[1].data.positions;
+        this.selectedRank = responses[2].data.selectedRank;
+        this.selectedDegree = responses[2].data.selectedDegree;
+        this.selectedPosition = responses[2].data.selectedPosition;
+      })
+      .catch(err => {
+        console.log(err);
+      });
   },
 
   methods: {

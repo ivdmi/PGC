@@ -198,6 +198,28 @@ export default {
   },
 
   mounted: function() {
+  const responseAspirant = axios.get("api/Aspirants/" + this.$route.params.id);    
+    const responseLists = axios.get(
+      "api/Aspirants/lists/" + this.$route.params.id
+    );
+
+    axios
+      .all([responseAspirant, responseLists])
+      .then(responses => {
+        this.model = responses[0].data;        
+
+        this.statuses = responses[1].data.statuses;
+        this.degrees = responses[1].data.degrees;
+        this.positions = responses[1].data.positions;
+        this.selectedRank = responses[2].data.selectedRank;
+        this.selectedDegree = responses[2].data.selectedDegree;
+        this.selectedPosition = responses[2].data.selectedPosition;
+      })
+      .catch(err => {
+        console.log(err);
+      });
+
+
     // axios.get(`api/specialities/names`).then(response => {this.specialities = response.data;});
 
     //axios.get(`api/departments`).then(response => {this.departments = response.data;});

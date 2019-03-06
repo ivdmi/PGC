@@ -5,11 +5,7 @@
     <div>
       <div class="row">
         <div class="col-2">
-          <button
-            class="btn btn-warning"
-            title="Додати запис"
-            v-on:click="launchItemAdd"
-          >Новий викладач</button>
+          <button class="btn btn-warning" title="Додати запис" v-on:click="addItem">Новий викладач</button>
         </div>
         <div class="col-2">
           <label class="btn btn-warning col-12">
@@ -25,11 +21,8 @@
           </label>
         </div>
         <span class="label" id="upload-file-info"></span>
-        <b-modal
-          class="text-danger border-danger"
-          ref="errorImportRef"
-          title="Помилка імпорту з XLS файлу!"
-        >
+
+        <b-modal class="text-danger border-danger" ref="errorImportRef" title="Помилка імпорту з XLS файлу!">
           <b-alert show variant="danger">{{this.errorData}}</b-alert>
         </b-modal>
       </div>
@@ -55,10 +48,9 @@
           :search-options="{
             enabled: true
           }"
-        >
           row-style-class="font-14"
           styleClass="vgt-table condensed bordered"
-          >
+        >       
           <template slot="table-row" slot-scope="props">
             <span v-if="props.column.field == 'Delete'">
               <button
@@ -70,7 +62,7 @@
             <span v-else-if="props.column.field == 'Edit'">
               <button
                 class="btn btn-warning btnxs"
-                @click="launchItemEdit(props.row)"
+                @click="editItem(props.row)"
                 title="Редагувати запис"
               >Зм</button>
             </span>
@@ -83,7 +75,7 @@
 </template>
 
 <script>
-import PrepodAdd from "./PrepodAdd";
+// import PrepodAdd from "./PrepodAdd";
 import axios from "axios";
 import { VueGoodTable } from "vue-good-table";
 import XLSX from "xlsx";
@@ -92,14 +84,15 @@ export default {
   name: "PrepodList",
   components: {
     VueGoodTable,
-    PrepodAdd,
+//    PrepodAdd,
     XLSX
   },
   data() {
     return {
       list: [],
       errorData: "",
-      columns: [
+      
+	  columns: [
         {
           label: "Прізвище",
           field: "surename",
@@ -145,7 +138,7 @@ export default {
           field: "present",
           filterOptions: {
             enabled: true,
-            placeholder: "Фільтр"
+            placeholder: "Ф"
           }
         },
         {
@@ -190,35 +183,49 @@ export default {
   },
 
   methods: {
+  
+	// -------------- Загрузить данные с контроллера --------------
     reloadList() {
-      var self = this;
-      axios.get(`api/Prepods`).then(function(response) {
-        self.list = response.data;
-      });
+//      var self = this;
+//      axios.get(`api/Prepods`).then(function(response) {
+//        self.list = response.data;
+//      });
+	axios.get(`api/Prepods`).then(response => {
+      this.list = response.data;
+    });	
     },
-
-    // вызов дочерней формы
-    launchItemAdd() {
+    
+	// -------------- Добавить --------------
+    addItem() {
       this.$router.push("/prepod-add");
     },
 
-    launchItemEdit(item) {
+	// -------------- Редактировать --------------
+    editItem(item) {
       this.$router.push({
         name: "PrepodEdit",
         params: { id: item.id }
       });
     },
-
+	
+	// -------------- Удалить --------------
     removeItem(id) {
-      var self = this;
-      axios.delete("api/Prepods/" + id).then(function(response) {
-        self.list = self.list.filter(item => {
+//      var self = this;
+//      axios.delete("api/Prepods/" + id).then(function(response) {
+//        self.list = self.list.filter(item => {
+//          return item.id !== id;
+//        });
+//      });
+	  
+	   axios.delete("api/Prepods/" + id).then(response => {
+        this.list = this.list.filter(item => {
           return item.id !== id;
         });
       });
     },
 
-    importExcel: function(evt) {
+    // -------------- Импортировать из файла Excel --------------
+	importExcel: function(evt) {
       var file;
       var files = evt.target.files;
 

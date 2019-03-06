@@ -28,8 +28,8 @@
           :pagination-options="{
             enabled: true,
             mode: 'pages',
-            perPage: 150,
-            perPageDropdown: [5, 20, 150],
+            perPage: 25,
+            perPageDropdown: [25, 50, 150],
             setCurrentPage: 1,
             nextLabel: '',
             prevLabel: '',
@@ -40,11 +40,11 @@
           }"
           :search-options="{
             enabled: true
-          }">
+          }"
           row-style-class="font-14"
           styleClass="vgt-table condensed bordered"
-          >
-           <template slot="table-row" slot-scope="props">
+          >    
+          <template slot="table-row" slot-scope="props">
     <span v-if="props.column.field == 'Delete'">
       <button class="btn btn-warning btnxs" @click="removeItem(props.row.id)" title="Видалити запис">X</button>
     </span>
@@ -62,7 +62,7 @@
 </template>
 
 <script>
-import DepartmentAdd from "./DepartmentAdd";
+// import DepartmentAdd from "./DepartmentAdd";
 import axios from "axios";
 import { VueGoodTable } from "vue-good-table";
 import XLSX from "xlsx";
@@ -71,7 +71,7 @@ export default {
   name: "DepartmentList",
   components: {
     VueGoodTable,
-    DepartmentAdd,
+//    DepartmentAdd,
     XLSX
   },
   data() {

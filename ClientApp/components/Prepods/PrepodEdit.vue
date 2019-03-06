@@ -1,5 +1,6 @@
 <template>
   <div class="col-10 offset-1">
+    <h2>Редагування облікового запису наукового керівника</h2>
     <form v-on:submit.prevent="editItem">
       <b-container fluid>
         <b-row class="pad-4">
@@ -15,10 +16,7 @@
             ></b-form-input>
           </b-col>
         </b-row>
-        <div
-          v-if="errors.has('surename')"
-          class="offset-3 alert-validate"
-        >{{ errors.first('surename') }}</div>
+        <div v-if="errors.has('surename')" class="offset-3 alert-validate" >{{ errors.first('surename') }}</div>
 
         <b-row class="pad-4">
           <b-col cols="2" class="text-right">Ім'я:</b-col>
@@ -48,10 +46,7 @@
             ></b-form-input>
           </b-col>
         </b-row>
-        <div
-          v-if="errors.has('patronymic')"
-          class="offset-3 alert-validate"
-        >{{ errors.first('patronymic') }}</div>
+        <div v-if="errors.has('patronymic')" class="offset-3 alert-validate" >{{ errors.first('patronymic') }}</div>
 
         <b-row class="pad-4">
           <b-col cols="2" class="text-right">Ступінь:</b-col>
@@ -137,10 +132,7 @@
             ></b-form-input>
           </b-col>
         </b-row>
-        <div
-          v-if="errors.has('Народження')"
-          class="offset-3 alert-validate"
-        >{{ errors.first('Народження') }}</div>
+        <div v-if="errors.has('Народження')" class="offset-3 alert-validate" >{{ errors.first('Народження') }}</div>
 
         <b-row class="pad-4">
           <b-col cols="2" class="text-right">Телефон:</b-col>
@@ -155,10 +147,7 @@
             ></b-form-input>
           </b-col>
         </b-row>
-        <div
-          v-if="errors.has('Телефон')"
-          class="offset-3 alert-validate"
-        >{{ errors.first('Телефон') }}</div>
+        <div v-if="errors.has('Телефон')" class="offset-3 alert-validate" >{{ errors.first('Телефон') }}</div>
 
         <b-row class="pad-4">
           <b-col cols="2" class="text-right">Email:</b-col>
@@ -194,6 +183,7 @@
             <router-link to="/prepods" tag="button" class="btn btn-warning">Скасувати</router-link>
           </b-row>
           <hr>
+		  		  
           <h5>Обрати кафедри</h5>
           <prepod-department-list @add-department="onAddOne"></prepod-department-list>
         </div>
@@ -241,9 +231,6 @@ export default {
       ranks: [],
       degrees: [],
       positions: [],
-
-      //   departments: [],
-      //   aspirants: [],
 
       maxDate: moment()
         .add("years", -25)

@@ -36,16 +36,16 @@ namespace PGC.Controllers {
             }).ToList ();
 
             // Формирую составное поле - из др. таблицы  - МАКС - КАК СДЕЛАТЬ ЧЕРЕЗ LINQ - ? 
-            foreach (var kaf in kafedraList) {
-                foreach (var ds in _context.DepartmentSpecialities.OrderBy (c => c.SpecialityId)) {
-                    if (kaf.Id == ds.DepartmentId) {
-                        if (String.IsNullOrEmpty (kaf.SpecialitiesString))
-                            kaf.SpecialitiesString = ds.SpecialityId.ToString ();
-                        else
-                            kaf.SpecialitiesString = kaf.SpecialitiesString + ", " + ds.SpecialityId.ToString ();
-                    }
-                }
-            }
+            // foreach (var kaf in kafedraList) {
+            //     foreach (var ds in _context.DepartmentSpecialities.OrderBy (c => c.SpecialityId)) {
+            //         if (kaf.Id == ds.DepartmentId) {
+            //             if (String.IsNullOrEmpty (kaf.SpecialitiesString))
+            //                 kaf.SpecialitiesString = ds.SpecialityId.ToString ();
+            //             else
+            //                 kaf.SpecialitiesString = kaf.SpecialitiesString + ", " + ds.SpecialityId.ToString ();
+            //         }
+            //     }
+            // }
 
             return kafedraList;
         }
@@ -201,19 +201,19 @@ namespace PGC.Controllers {
         // =========================================================================================================== 
 
         // названия кафедр для выпадающего списка 
-        [HttpGet ("names")]
-        public IEnumerable<ItemData> GetNames () {
-            IList<ItemData> list = new List<ItemData> ();
-            var sp = _context.Departments.Include ("Faculty");
-            foreach (var item in sp) {
-                char ch = Convert.ToChar (160);
-                // string space = new String (ch, 5 - item.Id.ToString ().Length);
-                string spaceA = new String (ch, 8 - item.Acronym.ToString ().Length);
-                string txt = item.Acronym + spaceA + item.Faculty?.Acronym;
-                list.Add (new ItemData () { Value = item.Id, Text = txt });
-            }
-            return list;
-        }
+//        [HttpGet ("names")]
+        // public IEnumerable<ItemData> GetNames () {
+        //     IList<ItemData> list = new List<ItemData> ();
+        //     var sp = _context.Departments.Include ("Faculty");
+        //     foreach (var item in sp) {
+        //         char ch = Convert.ToChar (160);
+        //         // string space = new String (ch, 5 - item.Id.ToString ().Length);
+        //         string spaceA = new String (ch, 8 - item.Acronym.ToString ().Length);
+        //         string txt = item.Acronym + spaceA + item.Faculty?.Acronym;
+        //         list.Add (new ItemData () { Value = item.Id, Text = txt });
+        //     }
+        //     return list;
+        // }
 
         private bool DepartmentExists (int id) {
             return _context.Departments.Any (e => e.Id == id);

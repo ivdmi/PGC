@@ -119,6 +119,7 @@ namespace PGC.Controllers {
 
         // -------------- вспомагательные Get ----------------
 
+                                                                                        // FOR DELETE
         // перечень всех кафедр для Select (PrepodDepartmentList.vue)
         [HttpGet ("departments")]
         public dynamic GetSelectNames () {
@@ -126,6 +127,7 @@ namespace PGC.Controllers {
             return kafedraList;
         }
 
+                                                                                        // FOR DELETE
         // перечень выбранных кафедр для препода (PrepodDepartmentSelectedList.vue)
         [HttpGet ("workplaces/{prepodId}")]
         public dynamic GetSelectedDepartments ([FromRoute] int prepodId) {
@@ -143,12 +145,12 @@ namespace PGC.Controllers {
         }
 
         // Enums и Selected items для препода
-        [HttpGet ("lists/{prepodId}")]
-        public async Task<PrepodLists> GetListsAsync ([FromRoute] int prepodId) {
+        [HttpGet ("lists/{id}")]
+        public async Task<PrepodSelectLists> GetListsAsync ([FromRoute] int id) {
 
-            Prepod prepod = await _context.Prepods.FirstOrDefaultAsync (m => m.Id == prepodId);
-            PrepodLists prepodSelectedLists = new PrepodLists (prepod);
-            return prepodSelectedLists;
+            Prepod prepod = await _context.Prepods.FirstOrDefaultAsync (m => m.Id == id);
+            PrepodSelectLists prepodSelectLists = new PrepodSelectLists (prepod);
+            return prepodSelectLists;
         }
 
         // Импорт из файла Excel

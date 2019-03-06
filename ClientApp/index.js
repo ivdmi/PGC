@@ -89,29 +89,15 @@ const routes = [
       {
         path: "/specialities", component: SpecialityList
       },
-      {
-        path: "/aspirants", component: AspirantList,
-        // children: [
-        //   // { path: "aspirant-add", name: "AspirantAdd", component: AspirantAdd },
-        //   // { path: 'aspirant-add/:specialities/:statuses/:departments', name: 'AspirantAdd', component: AspirantAdd, props: true },
-        //   // { path: 'aspirant-edit/:item/:specialities/:statuses', name: 'AspirantEdit', component: AspirantEdit, props: true }
-        // ]
-      },
+      
+      { path: "/aspirants", component: AspirantList },
       { path: 'aspirant-add/:specialities/:statuses/:studyforms/:departments', name: 'AspirantAdd', component: AspirantAdd, props: true },
-      { path: 'aspirant-edit/:item/:specialities/:statuses', name: 'AspirantEdit', component: AspirantEdit, props: true },
-      {
-        path: "/orders", component: OrderList,
-        children: [
-          // { path: "order-add/:item/:types", name: "OrderAdd", component: OrderAdd },
-          // { path: 'order-edit/:item/:types', name: 'AspirantEdit', component: AspirantEdit, props: true }          
-        ]
-      },
-      {        
-        path: "order-add/:types", name: "OrderAdd", component: OrderAdd
-      },
-      {
-        path: "/faculties", component: FacultyList,        
-      },
+      { path: "aspirant-edit/:id", name: "AspirantEdit", component: AspirantEdit },
+
+      { path: "/orders", component: OrderList },
+      { path: "order-add/:types", name: "OrderAdd", component: OrderAdd },
+      { path: "/faculties", component: FacultyList },
+
       {         
         path: "faculty-add", name: "FacultyAdd", component: FacultyAdd
       },

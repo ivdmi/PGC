@@ -24,20 +24,6 @@ namespace PGC.Controllers {
             return sp;
         }
 
-        // названия специальностей для выпадающего списка в Aspirant
-        [HttpGet ("names")]
-        public IEnumerable<ItemData> GetSpecialityNames () {
-            IList<ItemData> list = new List<ItemData> ();
-            //var sp = _context.Specialities.Include ("Knowledge").Where (t => t.IsUsed);
-            var sp = _context.Specialities.Where (t => t.IsUsed);
-            foreach (var item in sp) {
-                char ch = Convert.ToChar (160);
-                string space = new String (ch, 5 - item.Id.ToString ().Length);
-                string txt = item.Id + space + item.Name;
-                list.Add (new ItemData () { Value = item.Id, Text = txt });
-            }
-            return list;
-        }
 
         // специальности для кафедры
         [HttpGet ("selected/{departmentId}")]

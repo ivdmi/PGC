@@ -43,7 +43,7 @@ namespace PGC.Data {
         [Display (Name = "-")]
         відс = 0, [Display (Name = "доктор наук")]
         доктор_наук = 1, [Display (Name = "кандидат наук")]
-        кандидат_наук = 2, [Display (Name = "доктор філософії")]
+        кандидат_наук = 2, [Display (Name = "PhD")]
         доктор_філософії = 3
 
     }
@@ -84,63 +84,7 @@ namespace PGC.Data {
         public int Value { get; set; }
         public string Text { get; set; }
     }
-    public static class Helper {
-        // public static IList<ItemData> GetPositions () {
-        //     IList<ItemData> list = new List<ItemData> ();
-        //     foreach (Position item in Enum.GetValues (typeof (Position))) {
-        //         list.Add (item: new ItemData () { Value = (int) item, Text = item.ToString () });
-        //     }
-        //     return list;
-        // }
-        public static IList<ItemData> GetDegrees () {
-            IList<ItemData> list = new List<ItemData> ();
-            foreach (Degree item in Enum.GetValues (typeof (Degree))) {
-                list.Add (item: new ItemData () { Value = (int) item, Text = item.GetDisplayName () });
-            }
-            return list;
-        }
-
-        public static IList<ItemData> GetRanks () {
-            IList<ItemData> list = new List<ItemData> ();
-            foreach (Rank item in Enum.GetValues (typeof (Rank))) {
-                list.Add (item: new ItemData () { Value = (int) item, Text = item.GetDisplayName () });
-            }
-            return list;
-        }
-
-        public static IList<ItemData> GetPositions () {
-            IList<ItemData> list = new List<ItemData> ();
-            foreach (Position item in Enum.GetValues (typeof (Position))) {
-                list.Add (item: new ItemData () { Value = (int) item, Text = item.GetDisplayName () });
-            }
-            return list;
-        }
-
-        public static IList<ItemData> GetStudyForms () {
-            IList<ItemData> list = new List<ItemData> ();
-            foreach (StudyForm item in Enum.GetValues (typeof (StudyForm))) {
-                list.Add (item: new ItemData () { Value = (int) item, Text = item.GetDisplayName () });
-            }
-            return list;
-        }
-
-        public static IList<ItemData> GetStatusList () {
-            IList<ItemData> list = new List<ItemData> ();
-            foreach (StatusTypeEnum item in Enum.GetValues (typeof (StatusTypeEnum))) {
-                list.Add (item: new ItemData () { Value = (int) item, Text = item.GetDisplayName () });
-            }
-            return list;
-        }
-
-        public static IList<ItemData> GetOrderTypeList () {
-            IList<ItemData> list = new List<ItemData> ();
-            foreach (OrderTypeEnum item in Enum.GetValues (typeof (OrderTypeEnum))) {
-                list.Add (item: new ItemData () { Value = (int) item, Text = item.GetDisplayName () });
-            }
-            return list;
-        }
-
-    }
+    
 }
 
 // Расширяющий Enum класс - для расширяющих методов получения атрибутов из Enum

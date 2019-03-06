@@ -3,13 +3,32 @@
     <router-view></router-view>
 
     <div>
-      <p>
-        <button class="btn btn-warning" title="Додати запис" v-on:click="launchAdd">Додати</button>
-      </p>
+      <div class="row">
+        <div class="col-2">
+          <button class="btn btn-warning" title="Додати запис" v-on:click="addItem" >Новий аспірант</button>
+        </div>
+        <div class="col-2">
+          <label class="btn btn-warning col-12">
+            Імпорт з xls
+            <input
+              type="file"
+              multiple="false"
+              id="sheetjs-input"
+              accept=".xls, .xlsx"
+              @change="importExcel"
+              style="display:none"
+            >
+          </label>
+        </div>
+        <span class="label" id="upload-file-info"></span>
 
-      <div>
-        <vue-good-table
-          ref="my-table"
+        <b-modal class="text-danger border-danger" ref="errorImportRef" title="Помилка імпорту з XLS файлу!">
+          <b-alert show variant="danger">{{this.errorData}}</b-alert>
+        </b-modal>
+      </div>
+
+      <div>        
+        <vue-good-table          
           :columns="columns"
           :rows="list"
           :line-numbers="true"
@@ -22,8 +41,8 @@
           :pagination-options="{
             enabled: true,
             mode: 'pages',
-            perPage: 20,
-            perPageDropdown: [5, 20, 50],
+            perPage: 50,
+            perPageDropdown: [25, 50, 100],
             setCurrentPage: 1,
             nextLabel: '',
             prevLabel: '',
@@ -35,9 +54,9 @@
           row-style-class="font-14"
           styleClass="vgt-table condensed bordered"
         >
-          <div slot="selected-row-actions" slot-scope="props">
+          <!-- <div slot="selected-row-actions" slot-scope="props">
             <button class="btn btn-warning btnxs" @click="selectionAction(props.selectedRows)">Дія</button>
-          </div>
+          </div> -->
 
           <template slot="table-row" slot-scope="props">
             <span v-if="props.column.field == 'Delete'">
@@ -50,7 +69,7 @@
             <span v-else-if="props.column.field == 'Edit'">
               <button
                 class="btn btn-warning btnxs"
-                @click="launchEdit(props.row)"
+                @click="editItem(props.row)"
                 title="Редагувати запис"
               >Зм</button>
             </span>
@@ -63,44 +82,34 @@
 </template>
 
 <script>
-import AspirantAdd from "./AspirantAdd";
-import AspirantEdit from "./AspirantEdit";
+// import AspirantAdd from "./AspirantAdd";
+// import AspirantEdit from "./AspirantEdit";
 import axios from "axios";
 import { VueGoodTable } from "vue-good-table";
+import XLSX from "xlsx";
 
 export default {
   name: "AspirantList",
   components: {
     VueGoodTable,
-    AspirantAdd,
-    AspirantEdit
+    XLSX
+    //    AspirantAdd,
+    //    AspirantEdit
   },
   data() {
     return {
       list: [],
-      // отображение связанных полей
-      specialities: [],
-      statuses: [],
-      studyforms: [],
-      departments: [],
-      faculties: [],
-
+      errorData: "",
       columns: [
         {
           label: "Прізвище",
           field: "surename",
-          filterOptions: {
-            enabled: true,
-            placeholder: "Фільтр"
-          }
+          filterOptions: { enabled: true, placeholder: "Фільтр" }
         },
         {
           label: "Ім'я",
           field: "name",
-          filterOptions: {
-            enabled: true,
-            placeholder: "Фільтр"
-          }
+          filterOptions: { enabled: true, placeholder: "Фільтр" }
         },
         {
           label: "Побатькові",
@@ -111,29 +120,37 @@ export default {
           field: "specialityId",
           type: "number",
           tdClass: "td-left",
-          formatFn: this.formatSpecialityFn
+          filterOptions: { enabled: true, placeholder: "Фільтр" }
+        },
+        {
+          label: "Керівник",
+          field: "prepod",
+          tdClass: "td-left",
+          filterOptions: { enabled: true, placeholder: "Фільтр" }
         },
         {
           label: "Кафедра",
-          field: "departmentId",
-          type: "number",
+          field: "department",
           tdClass: "td-left",
-          formatFn: this.formatDepartmentFn
+          filterOptions: { enabled: true, placeholder: "Фільтр" }
         },
-
+        {
+          label: "Факультет",
+          field: "faculty",
+          tdClass: "td-left",
+          filterOptions: { enabled: true, placeholder: "Фільтр" }
+        },
         {
           label: "Форма",
           field: "studyForm",
-          type: "number",
           tdClass: "td-left",
-          formatFn: this.formatStudyFormsFn
+          filterOptions: { enabled: true, placeholder: "Фільтр" }
         },
         {
           label: "Статус",
           field: "statusType",
-          type: "number",
           tdClass: "td-left",
-          formatFn: this.formatStatusFn
+          filterOptions: { enabled: true, placeholder: "Фільтр" }
         },
         {
           label: "Курс",
@@ -142,104 +159,49 @@ export default {
           width: "20px",
           filterOptions: { enabled: true, placeholder: " " }
         },
-        { label: "Телефон", field: "phone" },
-        { label: "Email", field: "email" },
+
+        {
+          label: "Телефон",
+          field: "phone"
+        },
+        {
+          label: "Email",
+          field: "email"
+        },
         {
           label: "Наяв",
           field: "present",
-          type: "boolean",
           width: "20px",
           tdClass: "text-center",
-          formatFn: this.formatBoolFn,
-          filterOptions: {
-            enabled: true, // enable filter for this column
-            filterDropdownItems: [
-              { value: true, text: "Вчиться" },
-              { value: false, text: "Ні" }
-            ],
-            placeholder: "Всі"
-          }
-          // sortFn: this.sortBoolFn,
+          filterOptions: { enabled: true, placeholder: "Є" }
         },
         {
-          label: "Бюдж",
+          label: "Бдж",
           field: "budget",
-          type: "boolean",
           width: "20px",
           tdClass: "text-center",
-          formatFn: this.formatBoolFn,
-          filterOptions: {
-            enabled: true, // enable filter for this column
-            filterDropdownItems: [
-              { value: true, text: "Бюджет" },
-              { value: false, text: "Контракт" }
-            ],
-            placeholder: "Всі"
-          }
+          filterOptions: { enabled: true, placeholder: "Б" }
         },
-        // {
-        //   label: "Стац",
-        //   field: "stationary",
-        //   type: "boolean",
-        //   width: "20px",
-        //   tdClass: "text-center",
-        //   formatFn: this.formatBoolFn,
-        //   filterOptions: {
-        //     enabled: true, // enable filter for this column
-        //     filterDropdownItems: [
-        //       { value: true, text: "Стаціонар" },
-        //       { value: false, text: "Заочна" }
-        //     ],
-        //     placeholder: "Всі"
-        //   }
-        // },
         {
-          label: "Докт",
+          label: "Док",
           field: "doctorant",
-          type: "boolean",
           width: "20px",
           tdClass: "text-center",
-          formatFn: this.formatBoolFn,
-          filterOptions: {
-            enabled: true, // enable filter for this column
-            filterDropdownItems: [
-              { value: false, text: "Аспірант" },
-              { value: true, text: "Докторант" }
-            ],
-            placeholder: "Всі"
-          }
+          filterOptions: { enabled: true, placeholder: "а" }
         },
         {
-          label: "Чол",
+          label: "Стать",
           field: "sex",
-          type: "boolean",
           width: "20px",
           tdClass: "text-center",
-          formatFn: this.formatBoolFn,
-          filterOptions: {
-            enabled: true, // enable filter for this column
-            filterDropdownItems: [
-              { value: true, text: "Чоловік" },
-              { value: false, text: "Жінка" }
-            ],
-            placeholder: "Всі"
-          }
+          filterOptions: { enabled: true, placeholder: "ч" }
         },
         {
           label: "Захс",
           field: "protection",
-          type: "boolean",
           width: "20px",
           tdClass: "text-center",
-          formatFn: this.formatBoolFn,
-          filterOptions: {
-            enabled: true, // enable filter for this column
-            filterDropdownItems: [
-              { value: true, text: "Захистився" },
-              { value: false, text: "Ні" }
-            ],
-            placeholder: "Всі"
-          }
+          filterOptions: { enabled: true, placeholder: "З" }
         },
         {
           label: "Народж",
@@ -250,165 +212,122 @@ export default {
         },
         {
           label: "Вступ",
-          field: "inputDate",
-          type: "date",
-          dateInputFormat: "YYYY-MM-DD",
-          dateOutputFormat: "DD.MM.YYYY"
+          field: "inputYear",
+          type: "number",
+          width: "20px",
+          filterOptions: { enabled: true, placeholder: "2012" }
         },
         {
           label: "Закінчення",
-          field: "graduationDate",
-          type: "date",
-          dateInputFormat: "YYYY-MM-DD",
-          dateOutputFormat: "DD.MM.YYYY"
+          field: "graduationYear",
+          type: "number",
+          width: "20px",
+          filterOptions: { enabled: true, placeholder: "2017" }
         },
         {
           label: "Захист",
-          field: "protectionDate",
-          type: "date",
-          dateInputFormat: "YYYY-MM-DD",
-          dateOutputFormat: "DD.MM.YYYY"
+          field: "protectionYear",
+          type: "number",
+          width: "20px",
+          filterOptions: { enabled: true, placeholder: "2017" }
         },
+
         { label: "Del", field: "Delete" },
         { label: "Ed", field: "Edit" }
-      ],
-      isVisible: true
+      ]
     };
   },
 
   mounted: function() {
-    // ---------- Загрузка списка ----------
-    axios.get(`api/Aspirants`).then(response => {
-      this.list = response.data;
-    });
-
-    // ---------- Загрузка связанных таблиц и установка комбобоксов фильтра ----------
-
-    // Спеціальності
-    axios.get(`api/specialities/names`).then(response => {
-      this.specialities = response.data;
-      // Установить в комбобокс фильтра список специальностей
-      this.$set(this.columns[3], "filterOptions", {
-        enabled: true,
-        filterDropdownItems: this.specialities,
-        placeholder: "Всі"
-      });
-    });
-
-    // Кафедри
-    axios.get(`api/Departments/names`).then(response => {
-      this.departments = response.data;
-    });
-
-    // Форма навчання
-    axios.get(`api/Aspirants/studyforms`).then(response => {
-      this.studyforms = response.data;
-      // Установить в комбобокс фильтра список
-      this.$set(this.columns[4], "filterOptions", {
-        enabled: true,
-        filterDropdownItems: this.studyforms,
-        placeholder: "Всі"
-      });
-    });
-
-    // Статуси
-    axios.get(`api/Aspirants/statuses`).then(response => {
-      this.statuses = response.data;
-      // Установить в комбобокс фильтра список статусов
-      this.$set(this.columns[5], "filterOptions", {
-        enabled: true,
-        filterDropdownItems: this.statuses,
-        placeholder: "Всі"
-      });
-    });
+    this.reloadList();
   },
 
-  //   // инициализировать шину событий
-  //   eventBus.$on("change-aspirant", data => {
-  //     if (data.action == "post") {
-  //       this.addItem(data.item);
-  //     }
-  //     if (data.action == "put") {
-  //       this.editItem(data.item);
-  //     }
-  //     this.isVisible = true;
-  //   });
-  // },
-
-  // // разрушить шину событий, чтобы не срабатывал повторно
-  // destroyed: function() {
-  //   eventBus.$off();
-
   methods: {
-    // Вызовы  дочерних  форм
-
-    // -------------- Добавить --------------
-    launchAdd() {
-      this.$router.push({
-        name: "AspirantAdd",
-        params: {
-          specialities: this.specialities,
-          departments: this.departments,
-          statuses: this.statuses,
-          studyforms: this.studyforms
-        }
+    // -------------- Загрузить данные с контроллера --------------
+    reloadList() {
+      axios.get(`api/Aspirants`).then(response => {
+        this.list = response.data;
       });
     },
 
+    // -------------- Добавить --------------
+    addItem() {
+      this.$router.push("/aspirant-add");
+    },
+
     // -------------- Редактировать --------------
-    launchEdit(item) {
+    editItem(item) {
       this.$router.push({
         name: "AspirantEdit",
-        params: {
-          item: item,
-          specialities: this.specialities,
-          statuses: this.statuses,
-          studyforms: this.studyforms,
-          departments: this.departments
-        }
+        params: { id: item.id }
       });
     },
 
     removeItem(id) {
-      var self = this;
-      axios.delete("api/Aspirants/" + id).then(function(response) {
-        self.list = self.list.filter(item => {
+      //      var self = this;
+      //      axios.delete("api/Prepods/" + id).then(function(response) {
+      //        self.list = self.list.filter(item => {
+      //          return item.id !== id;
+      //        });
+      //      });
+      axios.delete("api/Prepods/" + id).then(response => {
+        this.list = this.list.filter(item => {
           return item.id !== id;
         });
       });
     },
 
-    selectionAction(params) {
-      var selectedRows = this.$refs["my-table"].selectedRows;
-    },
+    // -------------- Импортировать из файла Excel --------------
+    importExcel: function(evt) {
+      var file;
+      var files = evt.target.files;
 
-    formatBoolFn: function(value) {
-      return value ? "*" : "";
-    },
+      if (!files || files.length == 0) return;
 
-    formatStudyFormsFn(value) {
-      let sf = this.studyforms.find(x => x.value === value);
-      return sf.text;
-    },
+      file = files[0];
 
-    formatStudyFormsFn: function(value) {
-      let sf = this.studyforms.find(x => x.value === value);
-      return sf.text;
-    },
+      // очистить input, чтобы можно было выбрать тот же файл повторно
+      document.getElementById("sheetjs-input").value = "";
 
-    formatSpecialityFn: function(value) {
-      let sp = this.specialities.find(x => x.value === value);
-      return sp.text;
-    },
+      var reader = new FileReader();
+      var self = this;
 
-    formatDepartmentFn: function(value) {
-      let department = this.departments.find(x => x.value === value);
-      return department.text;
-    },
+      const importPromise = new Promise((resolve, reject) => {
+        reader.onload = function(e) {
+          // pre-process data
+          var binary = "";
+          var bytes = new Uint8Array(e.target.result);
+          var length = bytes.byteLength;
+          for (var i = 0; i < length; i++) {
+            binary += String.fromCharCode(bytes[i]);
+          }
 
-    formatStatusFn: function(value) {
-      let status = this.statuses.find(x => x.value === value);
-      return status.text;
+          /* read workbook */
+          var wb = XLSX.read(binary, { type: "binary" });
+
+          /* grab first sheet */
+          var wsname = wb.SheetNames[0];
+          var ws = wb.Sheets[wsname];
+
+          let Json = XLSX.utils.sheet_to_json(ws);
+
+          //          axios
+          //            .post(`api/prepods/import`, Json)
+          //            .then(response => resolve("result"))
+          //            .catch(err => {
+          //              reject(new Error(err.response.data));
+          //            });
+        };
+        reader.readAsArrayBuffer(file);
+      });
+
+      importPromise.then(
+        result => this.reloadList(),
+        error => {
+          this.errorData = error.message;
+          this.$refs.errorImportRef.show();
+        }
+      );
     }
   }
 };
