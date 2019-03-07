@@ -23,9 +23,9 @@ namespace PGC.Controllers {
         // GET: api/Aspirants
         [HttpGet]
         public IEnumerable<AspirantView> GetAspirants () {
-		
-		var list = _context.Aspirants.ToList ().Select (i => new AspirantView {
-                    Id = i.Id,
+
+            var list = _context.Aspirants.ToList ().Select (i => new AspirantView {
+                Id = i.Id,
                     Surename = i.Surename,
                     Name = i.Name,
                     Patronymic = i.Patronymic,
@@ -35,20 +35,31 @@ namespace PGC.Controllers {
                     InputYear = i.InputDate?.Year,
                     GraduationYear = i.GraduationDate?.Year,
                     ProtectionYear = i.ProtectionDate?.Year,
-                    StudyForm = i.StudyForm.GetDisplayName(),
-                    StatusType = i.StatusType.GetDisplayName(),
+                    StudyForm = i.StudyForm.GetDisplayName (),
+                    StatusType = i.StatusType.GetDisplayName (),
                     Budget = i.Budget ? "Б" : "к",
-                    Doctorant =  i.Doctorant ? "Д" : "а",
+                    Doctorant = i.Doctorant ? "Д" : "а",
                     Sex = i.Sex ? "ч" : "Ж",
-                    Protection =  i.Protection ? "З" : "-",
+                    Protection = i.Protection ? "З" : "-",
                     Present = i.Present ? "Є" : "-",
                     Course = i.Course,
                     SpecialityId = i.SpecialityId,
                     Deparment = i.Department?.Acronym,
                     Faculty = i.Department?.Faculty?.Acronym,
                     Prepod = i.Prepod?.FIO
-            }).ToList ();		
+            }).ToList ();
             return list;
+        }
+
+        // один преподаватель
+        // GET: api/Aspirants/5
+        [HttpGet ("{id}")]
+        public async Task<IActionResult> Get ([FromRoute] int id) {
+            var aspirant = await _context.Aspirants.SingleOrDefaultAsync (m => m.Id == id);
+            if (aspirant == null) {
+                return NotFound ();
+            }
+            return Ok (aspirant);
         }
 
         // Редактировать запись
@@ -87,15 +98,14 @@ namespace PGC.Controllers {
             return aspirantSelectLists;
         }
 
-
         // Добавить запись
         // POST: api/Aspirants
         [HttpPost]
         public async Task<IActionResult> PostAspirant ([FromBody] Aspirant aspirant) {
             if (!ModelState.IsValid) {
                 return BadRequest (ModelState);
-            }            
-            _context.Aspirants.Add (aspirant);            
+            }
+            _context.Aspirants.Add (aspirant);
             await _context.SaveChangesAsync ();
 
             int id = aspirant.Id;
@@ -122,10 +132,6 @@ namespace PGC.Controllers {
             return Ok (aspirant);
         }
 
-
-
-
-
         // ===========================================================================================================    
 
         // [HttpGet ("statuses")]
@@ -141,20 +147,20 @@ namespace PGC.Controllers {
         // ===========================================================================================================
 
         // GET: api/SpecialitiesApi/5
-        [HttpGet ("{id}")]
-        public async Task<IActionResult> GetSpeciality ([FromRoute] int id) {
-            if (!ModelState.IsValid) {
-                return BadRequest (ModelState);
-            }
+        // [HttpGet ("{id}")]
+        // public async Task<IActionResult> GetSpeciality ([FromRoute] int id) {
+        //     if (!ModelState.IsValid) {
+        //         return BadRequest (ModelState);
+        //     }
 
-            var speciality = await _context.Specialities.SingleOrDefaultAsync (m => m.Id == id);
+        //     var speciality = await _context.Specialities.SingleOrDefaultAsync (m => m.Id == id);
 
-            if (speciality == null) {
-                return NotFound ();
-            }
+        //     if (speciality == null) {
+        //         return NotFound ();
+        //     }
 
-            return Ok (speciality);
-        }
+        //     return Ok (speciality);
+        // }
 
         private bool AspirantExists (int id) {
             return _context.Aspirants.Any (e => e.Id == id);
