@@ -5,7 +5,7 @@
     <div>
       <div class="row">
         <div class="col-2">
-          <button class="btn btn-warning" title="Додати запис" v-on:click="addItem" >Новий аспірант</button>
+          <button class="btn btn-warning" title="Додати запис" v-on:click="addItem">Новий аспірант</button>
         </div>
         <div class="col-2">
           <label class="btn btn-warning col-12">
@@ -22,13 +22,17 @@
         </div>
         <span class="label" id="upload-file-info"></span>
 
-        <b-modal class="text-danger border-danger" ref="errorImportRef" title="Помилка імпорту з XLS файлу!">
+        <b-modal
+          class="text-danger border-danger"
+          ref="errorImportRef"
+          title="Помилка імпорту з XLS файлу!"
+        >
           <b-alert show variant="danger">{{this.errorData}}</b-alert>
         </b-modal>
       </div>
 
-      <div>        
-        <vue-good-table          
+      <div>
+        <vue-good-table
           :columns="columns"
           :rows="list"
           :line-numbers="true"
@@ -56,8 +60,7 @@
         >
           <!-- <div slot="selected-row-actions" slot-scope="props">
             <button class="btn btn-warning btnxs" @click="selectionAction(props.selectedRows)">Дія</button>
-          </div> -->
-
+          </div>-->
           <template slot="table-row" slot-scope="props">
             <span v-if="props.column.field == 'Delete'">
               <button
@@ -176,39 +179,37 @@ export default {
           filterOptions: { enabled: true, placeholder: "Є" }
         },
         {
-          label: "Бдж",
+          label: "Б/К",
           field: "budget",
-          width: "20px",
           tdClass: "text-center",
           filterOptions: { enabled: true, placeholder: "Б" }
         },
         {
-          label: "Док",
+          label: "Д/А",
           field: "doctorant",
-          width: "20px",
           tdClass: "text-center",
           filterOptions: { enabled: true, placeholder: "а" }
         },
         {
-          label: "Стать",
+          label: "Ст",
           field: "sex",
           width: "20px",
           tdClass: "text-center",
           filterOptions: { enabled: true, placeholder: "ч" }
         },
         {
-          label: "Захс",
+          label: "Зах",
           field: "protection",
           width: "20px",
           tdClass: "text-center",
           filterOptions: { enabled: true, placeholder: "З" }
         },
         {
-          label: "Народж",
-          field: "birthday",
-          type: "date",
-          dateInputFormat: "YYYY-MM-DD",
-          dateOutputFormat: "DD.MM.YYYY"
+          label: "Народ",
+          field: "birthYear",
+          type: "number",
+          width: "20px",
+          filterOptions: { enabled: true, placeholder: "2000" }
         },
         {
           label: "Вступ",
@@ -218,14 +219,14 @@ export default {
           filterOptions: { enabled: true, placeholder: "2012" }
         },
         {
-          label: "Закінчення",
+          label: "Закін",
           field: "graduationYear",
           type: "number",
           width: "20px",
           filterOptions: { enabled: true, placeholder: "2017" }
         },
         {
-          label: "Захист",
+          label: "Зах",
           field: "protectionYear",
           type: "number",
           width: "20px",

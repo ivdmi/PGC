@@ -16,12 +16,14 @@ namespace PGC.Data {
 
     public enum StatusTypeEnum : int {
         новий = 1,
-        навчання = 2, [Display (Name = "академ.відпустка")]
-        академ_відпустка = 3,
-        відрахований_2 = 4, [Display (Name = "захист достроково")]
+        навчання = 2, [Display (Name = "акд.відп")]
+        академ_відпустка = 3, [Display (Name = "від.невик")]
+        відрахований_2 = 4, [Display (Name = "зах.достр")]
         захист_достроково = 5,
-        закінчив = 6, [Display (Name = "повтор.курс")]
+        закінчив = 6, [Display (Name = "пвт.курс")]
         повторний_курс = 7,
+
+        [Display (Name = "стаж.")]
         стажування = 8
     }
 
@@ -84,7 +86,7 @@ namespace PGC.Data {
         public int Value { get; set; }
         public string Text { get; set; }
     }
-    
+
 }
 
 // Расширяющий Enum класс - для расширяющих методов получения атрибутов из Enum

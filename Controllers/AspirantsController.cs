@@ -24,14 +24,16 @@ namespace PGC.Controllers {
         [HttpGet]
         public IEnumerable<AspirantView> GetAspirants () {
 
-            var list = _context.Aspirants.ToList ().Select (i => new AspirantView {
+            var list = _context.Aspirants.Include ("Prepod").ToList ().Select (i => new AspirantView {
                 Id = i.Id,
                     Surename = i.Surename,
                     Name = i.Name,
                     Patronymic = i.Patronymic,
-                    Birthday = i.Birthday,
+
                     Phone = i.Phone,
                     Email = i.Email,
+
+                    BirthYear = i.Birthday?.Year,
                     InputYear = i.InputDate?.Year,
                     GraduationYear = i.GraduationDate?.Year,
                     ProtectionYear = i.ProtectionDate?.Year,

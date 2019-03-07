@@ -12,11 +12,13 @@
               name="surename"
               v-model="model.surename"
               v-validate="'required|alpha'"
-              :class="{'has-error': errors.has('surename')}"
+              :class="{ 'has-error': errors.has('surename') }"
             ></b-form-input>
           </b-col>
         </b-row>
-        <div v-if="errors.has('surename')" class="offset-3 alert-validate" >{{ errors.first('surename') }}</div>
+        <div v-if="errors.has('surename')" class="offset-3 alert-validate">
+          {{ errors.first("surename") }}
+        </div>
 
         <b-row class="pad-4">
           <b-col cols="2" class="text-right">Ім'я:</b-col>
@@ -27,11 +29,13 @@
               name="name"
               v-model="model.name"
               v-validate="'required|alpha'"
-              :class="{'has-error': errors.has('name')}"
+              :class="{ 'has-error': errors.has('name') }"
             ></b-form-input>
           </b-col>
         </b-row>
-        <div v-if="errors.has('name')" class="offset-3 alert-validate">{{ errors.first('name') }}</div>
+        <div v-if="errors.has('name')" class="offset-3 alert-validate">
+          {{ errors.first("name") }}
+        </div>
 
         <b-row class="pad-4">
           <b-col cols="2" class="text-right">По батькові:</b-col>
@@ -42,11 +46,13 @@
               name="patronymic"
               v-model="model.patronymic"
               v-validate="'alpha'"
-              :class="{'has-error': errors.has('patronymic')}"
+              :class="{ 'has-error': errors.has('patronymic') }"
             ></b-form-input>
           </b-col>
         </b-row>
-        <div v-if="errors.has('patronymic')" class="offset-3 alert-validate" >{{ errors.first('patronymic') }}</div>
+        <div v-if="errors.has('patronymic')" class="offset-3 alert-validate">
+          {{ errors.first("patronymic") }}
+        </div>
 
         <b-row class="pad-4">
           <b-col cols="2" class="text-right">Ступінь:</b-col>
@@ -57,7 +63,7 @@
               :options="degrees"
               v-model="selectedDegree"
               v-validate="'required|selectValue'"
-              :class="{'has-error': errors.has('Ступінь')}"
+              :class="{ 'has-error': errors.has('Ступінь') }"
             >
               <template slot="option" slot-scope="option">
                 <span v-html="option.text"></span>
@@ -65,10 +71,9 @@
             </v-select>
           </b-col>
         </b-row>
-        <div
-          v-if="errors.has('Ступінь')"
-          class="offset-3 alert-validate"
-        >{{ errors.first('Ступінь') }}</div>
+        <div v-if="errors.has('Ступінь')" class="offset-3 alert-validate">
+          {{ errors.first("Ступінь") }}
+        </div>
 
         <b-row class="pad-4">
           <b-col cols="2" class="text-right">Звання:</b-col>
@@ -79,7 +84,7 @@
               :options="ranks"
               v-model="selectedRank"
               v-validate="'required|selectValue'"
-              :class="{'has-error': errors.has('Звання')}"
+              :class="{ 'has-error': errors.has('Звання') }"
             >
               <template slot="option" slot-scope="option">
                 <span v-html="option.text"></span>
@@ -87,10 +92,9 @@
             </v-select>
           </b-col>
         </b-row>
-        <div
-          v-if="errors.has('Звання')"
-          class="offset-3 alert-validate"
-        >{{ errors.first('Звання') }}</div>
+        <div v-if="errors.has('Звання')" class="offset-3 alert-validate">
+          {{ errors.first("Звання") }}
+        </div>
 
         <b-row class="pad-4">
           <b-col cols="2" class="text-right">Посада:</b-col>
@@ -101,7 +105,7 @@
               :options="positions"
               v-model="selectedPosition"
               v-validate="'required|selectValue'"
-              :class="{'has-error': errors.has('Посада')}"
+              :class="{ 'has-error': errors.has('Посада') }"
             >
               <template slot="option" slot-scope="option">
                 <span v-html="option.text"></span>
@@ -109,10 +113,9 @@
             </v-select>
           </b-col>
         </b-row>
-        <div
-          v-if="errors.has('Посада')"
-          class="offset-3 alert-validate"
-        >{{ errors.first('Посада') }}</div>
+        <div v-if="errors.has('Посада')" class="offset-3 alert-validate">
+          {{ errors.first("Посада") }}
+        </div>
 
         <b-row class="pad-4">
           <b-col cols="2" class="text-right">Народження:</b-col>
@@ -125,14 +128,16 @@
               :min="this.minDate"
               :max="this.maxDate"
               v-validate="{
-              date_format : 'YYYY-MM-DD',
-              date_between : [this.minDate, this.maxDate, true]
-            }"
-              :class="{'has-error': errors.has('Народження')}"
+                date_format: 'YYYY-MM-DD',
+                date_between: [this.minDate, this.maxDate, true]
+              }"
+              :class="{ 'has-error': errors.has('Народження') }"
             ></b-form-input>
           </b-col>
         </b-row>
-        <div v-if="errors.has('Народження')" class="offset-3 alert-validate" >{{ errors.first('Народження') }}</div>
+        <div v-if="errors.has('Народження')" class="offset-3 alert-validate">
+          {{ errors.first("Народження") }}
+        </div>
 
         <b-row class="pad-4">
           <b-col cols="2" class="text-right">Телефон:</b-col>
@@ -143,11 +148,13 @@
               name="Телефон"
               v-model="model.phone"
               v-validate="'phone'"
-              :class="{'has-error': errors.has('Телефон')}"
+              :class="{ 'has-error': errors.has('Телефон') }"
             ></b-form-input>
           </b-col>
         </b-row>
-        <div v-if="errors.has('Телефон')" class="offset-3 alert-validate" >{{ errors.first('Телефон') }}</div>
+        <div v-if="errors.has('Телефон')" class="offset-3 alert-validate">
+          {{ errors.first("Телефон") }}
+        </div>
 
         <b-row class="pad-4">
           <b-col cols="2" class="text-right">Email:</b-col>
@@ -158,34 +165,51 @@
               name="Email"
               v-model="model.email"
               v-validate="'email'"
-              :class="{'has-error': errors.has('Email')}"
+              :class="{ 'has-error': errors.has('Email') }"
             ></b-form-input>
           </b-col>
         </b-row>
-        <div v-if="errors.has('Email')" class="offset-3 alert-validate">{{ errors.first('Email') }}</div>
+        <div v-if="errors.has('Email')" class="offset-3 alert-validate">
+          {{ errors.first("Email") }}
+        </div>
 
         <b-row class="pad-4">
           <b-col cols="2" class="text-right">В наявності:</b-col>
           <b-col cols="5">
             <span>
-              <input type="checkbox" class="short-check" v-model="model.present">
+              <input
+                type="checkbox"
+                class="short-check"
+                v-model="model.present"
+              />
             </span>
           </b-col>
         </b-row>
 
         <div class="col-10 offset-2">
           <h5>Місця роботи</h5>
-          <prepod-department-selected-list @del-department="onDel" :list="this.model.departments"></prepod-department-selected-list>
+          <prepod-department-selected-list
+            @del-department="onDel"
+            :list="this.model.departments"
+          ></prepod-department-selected-list>
 
-          <br>
+          <br />
           <b-row class="pad-4">
-            <input type="submit" class="btn btn-warning mr-2" value="Зберегти">
-            <router-link to="/prepods" tag="button" class="btn btn-warning">Скасувати</router-link>
+            <input
+              type="submit"
+              class="btn btn-warning mr-2"
+              value="Зберегти"
+            />
+            <router-link to="/prepods" tag="button" class="btn btn-warning"
+              >Скасувати</router-link
+            >
           </b-row>
-          <hr>
-		  		  
+          <hr />
+
           <h5>Обрати кафедри</h5>
-          <prepod-department-list @add-department="onAddOne"></prepod-department-list>
+          <prepod-department-list
+            @add-department="onAddOne"
+          ></prepod-department-list>
         </div>
       </b-container>
     </form>

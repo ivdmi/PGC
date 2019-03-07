@@ -30,20 +30,20 @@ namespace PGC.Models {
         public string Phone { get; set; }
 
         public string Email { get; set; }
-        
+
         [DataType (DataType.Date)]
         public DateTime? InputDate { get; set; }
 
         [DataType (DataType.Date)]
         public DateTime? GraduationDate { get; set; }
-        
+
         [DataType (DataType.Date)]
         public DateTime? ProtectionDate { get; set; }
 
-        [Display(Name = "Стаціонар/Заочна")]
-        public bool Stationary { get; set; }
+        // [Display (Name = "Стаціонар/Заочна")]
+        // public bool Stationary { get; set; }
 
-        [Display(Name = "Бюджет/Контракт")]
+        [Display (Name = "Бюджет/Контракт")]
         public bool Budget { get; set; }
 
         [Display (Name = "Докторант/Аспірант")]
@@ -55,7 +55,7 @@ namespace PGC.Models {
         [Display (Name = "Захист")]
         public bool Protection { get; set; }
 
-        public bool Present {get; set;}
+        public bool Present { get; set; }
 
         [Range (0, 5)]
         [Display (Name = "Курс")]
@@ -66,27 +66,26 @@ namespace PGC.Models {
         // ключи
 
         [Display (Name = "Спеціальність")]
-        public int? SpecialityId { get; set; }        
-                
+        public int? SpecialityId { get; set; }
+
         [Display (Name = "Кафедра")]
         public int? DepartmentId { get; set; }
 
- //       public int? StudyformId { get; set; }
-        
+        //       public int? StudyformId { get; set; }
 
         public int? PrepodId { get; set; }
 
         //  -------------------- навигационные свойства ------------------------
 
-        public Speciality Speciality { get; set; }        
+        public Speciality Speciality { get; set; }
 
-        public Department Department {get;set;}
+        public Department Department { get; set; }
         public Prepod Prepod { get; set; }
 
         [Display (Name = "Статус")]
         public StatusTypeEnum StatusType { get; set; }
 
-        public StudyForm  StudyForm {get;set;}
+        public StudyForm StudyForm { get; set; }
 
         public ICollection<AspirantOrder> AspirantOrders { get; set; }
 

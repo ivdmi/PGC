@@ -13,23 +13,19 @@ namespace PGC.Models.ViewModels {
 
         public string Name { get; set; }
 
-        public string Patronymic { get; set; }		
-        
+        public string Patronymic { get; set; }
+        public string Phone { get; set; }
+        public string Email { get; set; }
 
-        [DataType (DataType.Date)]
-        public DateTime? Birthday { get; set; }
-		
-		public string Phone { get; set; }
-        public string Email { get; set; }				
-				
-        public int? InputYear { get; set; }        
+        public int? BirthYear { get; set; }
+        public int? InputYear { get; set; }
         public int? GraduationYear { get; set; }
         public int? ProtectionYear { get; set; }
-		
-		[Display(Name = "Денна/Вечірня/Заочна")]
-		public string StudyForm {get;set;}
 
-        [Display(Name = "Бюджет/Контракт")]
+        [Display (Name = "Денна/Вечірня/Заочна")]
+        public string StudyForm { get; set; }
+
+        [Display (Name = "Бюджет/Контракт")]
         public string Budget { get; set; }
 
         [Display (Name = "Докторант/Аспірант")]
@@ -40,20 +36,20 @@ namespace PGC.Models.ViewModels {
 
         [Display (Name = "Захист")]
         public string Protection { get; set; }
-		
-        public string Present {get; set;}
-		
-		public int Course { get; set; }		
-        
-		public int? SpecialityId { get; set; }
-		
-//		public string SpecialityName { get; set; }
-		
+
+        public string Present { get; set; }
+
+        public int Course { get; set; }
+
+        public int? SpecialityId { get; set; }
+
+        //		public string SpecialityName { get; set; }
+
         public string Deparment { get; set; }
         public string Faculty { get; set; }
-		
-		public string Prepod { get; set; }
-		
-		public string StatusType { get; set; }	
+
+        public string Prepod { get; set; }
+
+        public string StatusType { get; set; }
     }
 }
