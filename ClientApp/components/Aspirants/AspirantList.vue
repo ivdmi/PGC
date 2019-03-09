@@ -5,7 +5,13 @@
     <div>
       <div class="row">
         <div class="col-2">
-          <button class="btn btn-warning" title="Додати запис" v-on:click="addItem">Новий аспірант</button>
+          <button
+            class="btn btn-warning"
+            title="Додати запис"
+            v-on:click="addItem"
+          >
+            Новий аспірант
+          </button>
         </div>
         <div class="col-2">
           <label class="btn btn-warning col-12">
@@ -17,7 +23,7 @@
               accept=".xls, .xlsx"
               @change="importExcel"
               style="display:none"
-            >
+            />
           </label>
         </div>
         <span class="label" id="upload-file-info"></span>
@@ -27,7 +33,7 @@
           ref="errorImportRef"
           title="Помилка імпорту з XLS файлу!"
         >
-          <b-alert show variant="danger">{{this.errorData}}</b-alert>
+          <b-alert show variant="danger">{{ this.errorData }}</b-alert>
         </b-modal>
       </div>
 
@@ -38,10 +44,11 @@
           :line-numbers="true"
           :sort-options="{
             enabled: true,
-            initialSortBy: [            
-            {field: 'course', type: 'desc'},
-            {field: 'surename', type: 'asc'}            
-            ]}"
+            initialSortBy: [
+              { field: 'course', type: 'desc' },
+              { field: 'surename', type: 'asc' }
+            ]
+          }"
           :pagination-options="{
             enabled: true,
             mode: 'pages',
@@ -53,7 +60,7 @@
             rowsPerPageLabel: 'Строк',
             ofLabel: 'з',
             pageLabel: 'Стор.', // for 'pages' mode
-            allLabel: 'All',
+            allLabel: 'All'
           }"
           row-style-class="font-14"
           styleClass="vgt-table condensed bordered"
@@ -67,16 +74,20 @@
                 class="btn btn-warning btnxs"
                 @click="removeItem(props.row.id)"
                 title="Видалити запис"
-              >X</button>
+              >
+                X
+              </button>
             </span>
             <span v-else-if="props.column.field == 'Edit'">
               <button
                 class="btn btn-warning btnxs"
                 @click="editItem(props.row)"
                 title="Редагувати запис"
-              >Зм</button>
+              >
+                Зм
+              </button>
             </span>
-            <span v-else>{{props.formattedRow[props.column.field]}}</span>
+            <span v-else>{{ props.formattedRow[props.column.field] }}</span>
           </template>
         </vue-good-table>
       </div>
@@ -119,7 +130,7 @@ export default {
           field: "patronymic"
         },
         {
-          label: "Спеціальність",
+          label: "Спец",
           field: "specialityId",
           type: "number",
           tdClass: "td-left",
@@ -129,6 +140,7 @@ export default {
           label: "Керівник",
           field: "prepod",
           tdClass: "td-left",
+          width: "130px",
           filterOptions: { enabled: true, placeholder: "Фільтр" }
         },
         {

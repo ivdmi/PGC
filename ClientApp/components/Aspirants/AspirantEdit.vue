@@ -265,6 +265,8 @@
 import axios from "axios";
 import vSelect from "vue-select";
 import moment from "moment";
+//  regex - поиск первого слова до пробельного символа
+const firstWordRegex = /(^\S+)/;
 
 export default {
   components: {
@@ -366,15 +368,13 @@ export default {
 
   computed: {
     filterPrepods: function() {
-      //  regex - поиск первого слова до пробельного символа
-      var firstWordRegex = /(^\S+)/;
-
       var prepodList = this.prepods;
+
       if (this.selectedDepartment.text != null) {
         let dep = this.selectedDepartment.text.match(firstWordRegex);
 
-        // regex - поиск целого слова в строке
-        var matchWholeWord = new RegExp(
+        // regex - поиск целого слова - акронима кафедры в строке Препода
+        let matchWholeWord = new RegExp(
           "(^" + dep[0] + "[^а-яА-Я])|(\\W" + dep[0] + "[^а-яА-Я])"
         );
 
@@ -388,6 +388,35 @@ export default {
 
   methods: {
     editItem() {
+      // ВАЛИДАЦИЯ ПРЕПОД - КАФЕДРА
+
+      let dep = this.selectedDepartment.text.match(firstWordRegex);
+
+      // regex - поиск целого слова - акронима кафедры в строке Препода
+      let matchWholeWord = new RegExp(
+        "(^" + dep[0] + "[^а-яА-Я])|(\\W" + dep[0] + "[^а-яА-Я])"
+      );
+
+      //      if (!matchWholeWord.test(selectedPrepod.text))
+      var t = this.errors;
+
+      this.errors.add({
+        scope: "DONT USE SCOPE IF YOU DONT HAVE",
+        field: "email",
+        msg: "email is already in use"
+      });
+
+      var field = this.$validator.fields.find({ name: "email" }); // get me the first field that has this name
+
+      field.setFlags({
+        valid: false,
+        dirty: true
+      });
+
+      // this.errors.push(new { field: patronymic, message: "dfs" }());
+      //    this.errors.add("patronymic", "message"); //this message i want to move to the dictionary
+
+      // if (selectedPrepod)
       this.$validator.validate().then(valid => {
         if (valid) {
           this.model.statusType = this.selectedStatusType.value;

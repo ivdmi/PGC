@@ -57,6 +57,14 @@ namespace PGC.Models {
 
         public bool Present { get; set; }
 
+        public bool P1 { get; set; }
+        public bool P2 { get; set; }
+        public bool P3 { get; set; }
+        public bool P4 { get; set; }
+        public bool P5 { get; set; }
+        public bool P6 { get; set; }
+        public bool P7 { get; set; }
+
         [Range (0, 5)]
         [Display (Name = "Курс")]
         public int Course { get; set; }
