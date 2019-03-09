@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -35,20 +36,22 @@ namespace PGC.Controllers {
                     Position = i.Position.GetDisplayName (),
                     Rank = i.Rank.GetDisplayName (),
                     Patronymic = i.Patronymic,
-                    Present = i.Present ? "Є" : "-"
+                    Present = i.Present ? "Є" : "-",
+                    DeparmentsString = i.DepartmentsString
             }).ToList ();
 
-            foreach (var prep in list) {
-                foreach (var pd in _context.PrepodDepartments.OrderBy (c => c.DepartmentId)) {
-                    if (prep.Id == pd.PrepodId) {
-                        var dep = _context.Departments.Find (pd.DepartmentId);
-                        if (String.IsNullOrEmpty (prep.DeparmentsString))
-                            prep.DeparmentsString = dep.Acronym;
-                        else
-                            prep.DeparmentsString = prep.DeparmentsString + ", " + dep.Acronym;;
-                    }
-                }
-            }
+            // foreach (var prep in list) {
+            //     foreach (var pd in _context.PrepodDepartments.OrderBy (c => c.DepartmentId)) {
+            //         if (prep.Id == pd.PrepodId) {
+            //             var dep = _context.Departments.Find (pd.DepartmentId);
+            //             if (String.IsNullOrEmpty (prep.DeparmentsString))
+            //                 prep.DeparmentsString = dep.Acronym;
+            //             else
+            //                 prep.DeparmentsString = prep.DeparmentsString + ", " + dep.Acronym;;
+            //         }
+            //     }
+            //  }
+
             return list;
         }
 
@@ -83,6 +86,17 @@ namespace PGC.Controllers {
             if (!ModelState.IsValid) {
                 return BadRequest (ModelState);
             }
+
+            // заполнение поля акронимами кафедр
+            prepod.DepartmentsString = String.Empty;
+            foreach (var item in prepod.Departments) {
+                var dep = _context.Departments.FirstOrDefault (i => i.Id == item.Id);
+                if (String.IsNullOrEmpty (prepod.DepartmentsString))
+                    prepod.DepartmentsString = dep?.Acronym;
+                else
+                    prepod.DepartmentsString = prepod.DepartmentsString + ", " + dep?.Acronym;
+            }
+
             _context.Entry (prepod).State = EntityState.Modified;
             try {
                 await EditAssignedDepartments (prepod);
@@ -119,7 +133,7 @@ namespace PGC.Controllers {
 
         // -------------- вспомагательные Get ----------------
 
-                                                                                        // FOR DELETE
+        // FOR DELETE
         // перечень всех кафедр для Select (PrepodDepartmentList.vue)
         [HttpGet ("departments")]
         public dynamic GetSelectNames () {
@@ -127,7 +141,7 @@ namespace PGC.Controllers {
             return kafedraList;
         }
 
-                                                                                        // FOR DELETE
+        // FOR DELETE
         // перечень выбранных кафедр для препода (PrepodDepartmentSelectedList.vue)
         [HttpGet ("workplaces/{prepodId}")]
         public dynamic GetSelectedDepartments ([FromRoute] int prepodId) {
@@ -216,8 +230,7 @@ namespace PGC.Controllers {
         // =========================================================================================================== 
 
         // названия кафедр для выпадающего списка 
-        [HttpGet ("names")]
-        public IEnumerable<ItemData> GetNames () {
+        [HttpGet ("names")] public IEnumerable<ItemData> GetNames () {
             IList<ItemData> list = new List<ItemData> ();
             var sp = _context.Departments.Include ("Faculty");
             foreach (var item in sp) {

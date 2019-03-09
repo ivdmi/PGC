@@ -50,6 +50,9 @@ namespace PGC.Models {
 
         public bool Present { get; set; }
 
+        // для отображения акронимов кафедр
+        public string DepartmentsString { get; set; }
+
         public ICollection<PrepodDepartment> PrepodDepartment { get; set; }
 
         // [Display (Name = "Кафедра")]

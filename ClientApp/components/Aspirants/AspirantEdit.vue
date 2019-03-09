@@ -56,7 +56,7 @@
 
         <b-row class="pad-4">
           <b-col cols="2" class="text-right">Телефон:</b-col>
-          <b-col cols="9">
+          <b-col cols="5">
             <b-form-input
               size="sm"
               type="text"
@@ -73,7 +73,7 @@
 
         <b-row class="pad-4">
           <b-col cols="2" class="text-right">Email:</b-col>
-          <b-col cols="9">
+          <b-col cols="5">
             <b-form-input
               size="sm"
               type="email"
@@ -131,27 +131,6 @@
         </div>
 
         <b-row class="pad-4">
-          <b-col cols="2" class="text-right">Керівник:</b-col>
-          <b-col cols="5">
-            <v-select
-              name="Керівник"
-              label="text"
-              :options="filterPrepods"
-              v-model="selectedPrepod"
-              v-validate="'required|selectValue'"
-              :class="{ 'has-error': errors.has('Керівник') }"
-            >
-              <template slot="option" slot-scope="option">
-                <span v-html="option.text"></span>
-              </template>
-            </v-select>
-          </b-col>
-        </b-row>
-        <div v-if="errors.has('Керівник')" class="offset-3 alert-validate">
-          {{ errors.first("Керівник") }}
-        </div>
-
-        <b-row class="pad-4">
           <b-col cols="2" class="text-right">Кафедра:</b-col>
           <b-col cols="5">
             <v-select
@@ -171,6 +150,27 @@
         </b-row>
         <div v-if="errors.has('Кафедра')" class="offset-3 alert-validate">
           {{ errors.first("Кафедра") }}
+        </div>
+
+        <b-row class="pad-4">
+          <b-col cols="2" class="text-right">Керівник:</b-col>
+          <b-col cols="5">
+            <v-select
+              name="Керівник"
+              label="text"
+              :options="filterPrepods"
+              v-model="selectedPrepod"
+              v-validate="'required|selectValue'"
+              :class="{ 'has-error': errors.has('Керівник') }"
+            >
+              <template slot="option" slot-scope="option">
+                <span v-html="option.text"></span>
+              </template>
+            </v-select>
+          </b-col>
+        </b-row>
+        <div v-if="errors.has('Керівник')" class="offset-3 alert-validate">
+          {{ errors.first("Керівник") }}
         </div>
 
         <b-row class="pad-4">
@@ -358,9 +358,6 @@ export default {
         this.selectedSpeciality = responses[1].data.selectedSpeciality;
         this.selectedDepartment = responses[1].data.selectedDepartment;
         this.selectedPrepod = responses[1].data.selectedPrepod;
-
-        // this.selectedDegree = responses[2].data.selectedDegree;
-        // this.selectedPosition = responses[2].data.selectedPosition;
       })
       .catch(err => {
         console.log(err);
@@ -369,11 +366,20 @@ export default {
 
   computed: {
     filterPrepods: function() {
+      //  regex - поиск первого слова до пробельного символа
+      var firstWordRegex = /(^\S+)/;
+
       var prepodList = this.prepods;
       if (this.selectedDepartment.text != null) {
-        let kafedra = this.selectedDepartment.text.split("&nbsp");
-        prepodList = this.prepods.filter(item => {
-          return item.text == kafedra;
+        let dep = this.selectedDepartment.text.match(firstWordRegex);
+
+        // regex - поиск целого слова в строке
+        var matchWholeWord = new RegExp(
+          "(^" + dep[0] + "[^а-яА-Я])|(\\W" + dep[0] + "[^а-яА-Я])"
+        );
+
+        prepodList = this.prepods.filter(p => {
+          return matchWholeWord.test(p.text);
         });
       }
       return prepodList;
@@ -381,8 +387,6 @@ export default {
   },
 
   methods: {
-    // СДЕЛАТЬ ВАЛИДАЦИЮ ПО КАФЕДРА - ПРЕПОД          !!!!
-
     editItem() {
       this.$validator.validate().then(valid => {
         if (valid) {

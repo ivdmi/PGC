@@ -71,8 +71,6 @@ namespace PGC.Models {
         [Display (Name = "Кафедра")]
         public int? DepartmentId { get; set; }
 
-        //       public int? StudyformId { get; set; }
-
         public int? PrepodId { get; set; }
 
         //  -------------------- навигационные свойства ------------------------

@@ -23,33 +23,36 @@ namespace PGC.Controllers {
         // GET: api/Aspirants
         [HttpGet]
         public IEnumerable<AspirantView> GetAspirants () {
+            var l = _context.Aspirants.ToList ();
 
-            var list = _context.Aspirants.Include ("Prepod").Include ("Speciality").Include ("Department").ToList ().Select (i => new AspirantView {
-                Id = i.Id,
-                    Surename = i.Surename,
-                    Name = i.Name,
-                    Patronymic = i.Patronymic,
+            var list = _context.Aspirants.
+            Include ("Prepod").Include ("Speciality").Include ("Department").Include ("Department.Faculty").ToList ()
+                .Select (i => new AspirantView {
+                    Id = i.Id,
+                        Surename = i.Surename,
+                        Name = i.Name,
+                        Patronymic = i.Patronymic,
 
-                    Phone = i.Phone,
-                    Email = i.Email,
+                        Phone = i.Phone,
+                        Email = i.Email,
 
-                    BirthYear = i.Birthday?.Year,
-                    InputYear = i.InputDate?.Year,
-                    GraduationYear = i.GraduationDate?.Year,
-                    ProtectionYear = i.ProtectionDate?.Year,
-                    StudyForm = i.StudyForm.GetDisplayName (),
-                    StatusType = i.StatusType.GetDisplayName (),
-                    Budget = i.Budget ? "Б" : "к",
-                    Doctorant = i.Doctorant ? "Д" : "а",
-                    Sex = i.Sex ? "ч" : "Ж",
-                    Protection = i.Protection ? "З" : "-",
-                    Present = i.Present ? "Є" : "-",
-                    Course = i.Course,
-                    SpecialityId = i.SpecialityId,
-                    Department = i.Department?.Acronym,
-                    Faculty = i.Department?.Faculty?.Acronym,
-                    Prepod = i.Prepod?.FIO
-            }).ToList ();
+                        BirthYear = i.Birthday?.Year,
+                        InputYear = i.InputDate?.Year,
+                        GraduationYear = i.GraduationDate?.Year,
+                        ProtectionYear = i.ProtectionDate?.Year,
+                        StudyForm = i.StudyForm.GetDisplayName (),
+                        StatusType = i.StatusType.GetDisplayName (),
+                        Budget = i.Budget ? "Б" : "к",
+                        Doctorant = i.Doctorant ? "Д" : "а",
+                        Sex = i.Sex ? "ч" : "Ж",
+                        Protection = i.Protection ? "З" : "-",
+                        Present = i.Present ? "Є" : "-",
+                        Course = i.Course,
+                        SpecialityId = i.SpecialityId,
+                        Department = i.Department?.Acronym,
+                        Faculty = i.Department?.Faculty?.Acronym,
+                        Prepod = i.Prepod?.FIO
+                }).ToList ();
             return list;
         }
 

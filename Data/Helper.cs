@@ -91,7 +91,8 @@ namespace PGC.Data {
             IList<ItemData> list = new List<ItemData> ();
             var sp = context.Departments.Include ("Faculty");
             foreach (var item in sp) {
-                char ch = Convert.ToChar (160);
+                // char ch = Convert.ToChar (160);
+                char ch = ' ';
                 string spaceA = new String (ch, 8 - item.Acronym.ToString ().Length);
                 string txt = item.Acronym + spaceA + item.Faculty.Acronym;
                 list.Add (new ItemData () { Value = item.Id, Text = txt });
@@ -100,7 +101,7 @@ namespace PGC.Data {
         }
 
         public static IEnumerable<ItemData> GetPrepods (AspiranturaContext context) {
-            var prepods = context.Prepods.Where (t => t.Present).Select (s => new ItemData { Value = s.Id, Text = s.FIO }).ToList ();
+            var prepods = context.Prepods.Where (t => t.Present).Select (s => new ItemData { Value = s.Id, Text = s.DepartmentsString + " " + s.FIO }).ToList ();
             return prepods;
         }
     }
