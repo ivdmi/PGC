@@ -83,7 +83,7 @@ namespace PGC.Models {
         public Prepod Prepod { get; set; }
 
         [Display (Name = "Статус")]
-        public StatusTypeEnum StatusType { get; set; }
+        public StatusType StatusType { get; set; }
 
         public StudyForm StudyForm { get; set; }
 

@@ -12,13 +12,13 @@ namespace PGC.Data {
         public DbSet<Aspirant> Aspirants { get; set; }
         public DbSet<Prepod> Prepods { get; set; }
         public DbSet<Order> Orders { get; set; }
-        public DbSet<Department> Departments { get; set; }        
+        public DbSet<Department> Departments { get; set; }
         public DbSet<Faculty> Faculties { get; set; }
         public DbSet<AspirantOrder> AspirantOrders { get; set; }
         public DbSet<DepartmentSpeciality> DepartmentSpecialities { get; set; }
         public DbSet<PrepodDepartment> PrepodDepartments { get; set; }
-        public DbSet<StatusType> Statuses { get; set; }
-        
+        // public DbSet<StatusType> Statuses { get; set; }
+
         public DbSet<OrderType> Ordertypes { get; set; }
 
         // Для того, чтобы таблицы были в единственном числе
@@ -36,13 +36,13 @@ namespace PGC.Data {
             // modelBuilder.Entity<AspirantOrder> ().ToTable ("AspirantOrder");
             // modelBuilder.Entity<DepartmentSpeciality> ().ToTable ("DepartmentSpeciality");
             // modelBuilder.Entity<PrepodDepartment> ().ToTable ("PrepodDepartment");
-            
+
             // табл связи многие ко многим
             modelBuilder.Entity<AspirantOrder> ().HasKey (c => new { c.AspirantId, c.OrderId }); // настраивает составной первичный ключ
             modelBuilder.Entity<DepartmentSpeciality> ().HasKey (c => new { c.DepartmentId, c.SpecialityId }); // настраивает составной первичный ключ
             modelBuilder.Entity<PrepodDepartment> ().HasKey (c => new { c.DepartmentId, c.PrepodId }); // настраивает составной первичный ключ
 
             modelBuilder.Entity<AspirantOrder> ().HasKey (c => new { c.AspirantId, c.OrderId }); // настраивает составной первичный ключ
-        }       
+        }
     }
 }

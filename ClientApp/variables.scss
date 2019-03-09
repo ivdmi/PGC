@@ -14,35 +14,31 @@ span {
 }
 
 input {
-  float: left;  
+  float: left;
 }
 
 label {
   float: left;
   width: 20%;
   text-align: right;
-  
 }
 
 .pad-4 {
   padding: 4px 0px 4px 0px;
 }
 
-.font-12
-{
+.font-12 {
   font-size: 12px;
 }
 
-.font-14
-{
+.font-14 {
   font-size: 14px;
   font-weight: normal;
 }
 
-.btnxs
-{
-  font-size: 12px;  
-  height: 20px;  
+.btnxs {
+  font-size: 12px;
+  height: 20px;
   line-height: 14px;
   margin-bottom: 0px;
   margin-left: 0px;
@@ -59,7 +55,7 @@ label {
   color: red;
 }
 
-.has-error {  
+.has-error {
   border-color: red;
 }
 
@@ -69,7 +65,7 @@ label {
   background-color: #fff;
 }
 
-.v-select .dropdown-toggle{
+.v-select .dropdown-toggle {
   background-color: #fff;
 }
 
@@ -81,7 +77,7 @@ label {
 
 .short-drop {
   overflow: visible;
-  padding: 0 4px 0 6px;  
+  padding: 0 4px 0 6px;
   color: darkolivegreen;
   background-color: #fff;
 }
@@ -91,32 +87,33 @@ table.vgt-table {
   font-weight: normal;
 }
 
-.vgt-input, .vgt-select{  
-  font-size: 11px;  
+.vgt-input,
+.vgt-select {
+  font-size: 11px;
   height: 22px;
 }
 
-.vgt-select{    
-  padding: 0px 0px;    
+.vgt-select {
+  padding: 0px 0px;
 }
-.vgt-input{    
-  padding: 0px 2px;    
+.vgt-input {
+  padding: 0px 2px;
 }
 
-.vgt-table thead th {  
-  padding: .5em 0px .5em 0px;    
+.vgt-table thead th {
+  padding: 0.5em 0px 0.5em 0px;
   text-align: left;
 }
 
 .vgt-table th.filter-th {
-  padding: .3em .3em .3em .3em;
+  padding: 0.3em 0.3em 0.3em 0.3em;
 }
 
-.vgt-wrap__footer {  
-  padding: .2em;  
+.vgt-wrap__footer {
+  padding: 0.2em;
 }
 
-.td-left {  
+.td-left {
   text-align: left;
 }
 
@@ -125,3 +122,6 @@ table.vgt-table {
   height: 0px;
 }
 
+.tzSelect li {
+  font-family: "Courier New", Courier, monospace;
+}

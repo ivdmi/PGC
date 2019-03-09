@@ -24,7 +24,7 @@ namespace PGC.Controllers {
         [HttpGet]
         public IEnumerable<AspirantView> GetAspirants () {
 
-            var list = _context.Aspirants.Include ("Prepod").ToList ().Select (i => new AspirantView {
+            var list = _context.Aspirants.Include ("Prepod").Include ("Speciality").Include ("Department").ToList ().Select (i => new AspirantView {
                 Id = i.Id,
                     Surename = i.Surename,
                     Name = i.Name,
@@ -46,7 +46,7 @@ namespace PGC.Controllers {
                     Present = i.Present ? "Є" : "-",
                     Course = i.Course,
                     SpecialityId = i.SpecialityId,
-                    Deparment = i.Department?.Acronym,
+                    Department = i.Department?.Acronym,
                     Faculty = i.Department?.Faculty?.Acronym,
                     Prepod = i.Prepod?.FIO
             }).ToList ();

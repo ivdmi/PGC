@@ -45,7 +45,7 @@ namespace PGC.Models.ViewModels {
 
         //		public string SpecialityName { get; set; }
 
-        public string Deparment { get; set; }
+        public string Department { get; set; }
         public string Faculty { get; set; }
 
         public string Prepod { get; set; }

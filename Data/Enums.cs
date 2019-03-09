@@ -14,7 +14,7 @@ namespace PGC.Data {
         Зміна_форми_навчання = 7
     }
 
-    public enum StatusTypeEnum : int {
+    public enum StatusType : int {
         новий = 1,
         навчання = 2, [Display (Name = "акд.відп")]
         академ_відпустка = 3, [Display (Name = "від.невик")]

@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 
 namespace PGC.Models {
-    public class StatusType {
+    public class StatusTypeForDelete {
         public int Id { get; set; }
 
         [Display (Name = "Статус")]

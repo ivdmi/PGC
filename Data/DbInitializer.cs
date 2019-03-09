@@ -12,7 +12,7 @@ namespace PGC.Data {
                 return; // DB has been seeded
             }
 
-            StatusTypeInit (context);
+            //            StatusTypeInit (context);
             OrderTypeInit (context);
             KnowledgeInit (context);
             SpecialityInit (context);
@@ -22,21 +22,21 @@ namespace PGC.Data {
             PrepodsInit (context);
         }
 
-        private static void StatusTypeInit (AspiranturaContext context) {
-            var statuses = new StatusType[] {
-                new StatusType { Id = (int) StatusTypeEnum.новий, Name = StatusTypeEnum.новий.ToString () },
-                new StatusType { Id = (int) StatusTypeEnum.навчання, Name = StatusTypeEnum.навчання.ToString () },
-                new StatusType { Id = (int) StatusTypeEnum.академ_відпустка, Name = StatusTypeEnum.академ_відпустка.ToString () },
-                new StatusType { Id = (int) StatusTypeEnum.відрахований_2, Name = StatusTypeEnum.відрахований_2.ToString () },
-                new StatusType { Id = (int) StatusTypeEnum.захист_достроково, Name = StatusTypeEnum.захист_достроково.ToString () },
-                new StatusType { Id = (int) StatusTypeEnum.закінчив, Name = StatusTypeEnum.закінчив.ToString () },
-                new StatusType { Id = (int) StatusTypeEnum.повторний_курс, Name = StatusTypeEnum.повторний_курс.ToString () },
-                new StatusType { Id = (int) StatusTypeEnum.стажування, Name = StatusTypeEnum.стажування.ToString () }
-            };
-            foreach (var k in statuses) {
-                context.Statuses.Add (k);
-            }
-        }
+        // private static void StatusTypeInit (AspiranturaContext context) {
+        //     var statuses = new StatusType[] {
+        //         new StatusType { Id = (int) StatusType.новий, Name = StatusType.новий.ToString () },
+        //         new StatusType { Id = (int) StatusType.навчання, Name = StatusType.навчання.ToString () },
+        //         new StatusType { Id = (int) StatusType.академ_відпустка, Name = StatusType.академ_відпустка.ToString () },
+        //         new StatusType { Id = (int) StatusType.відрахований_2, Name = StatusType.відрахований_2.ToString () },
+        //         new StatusType { Id = (int) StatusType.захист_достроково, Name = StatusType.захист_достроково.ToString () },
+        //         new StatusType { Id = (int) StatusType.закінчив, Name = StatusType.закінчив.ToString () },
+        //         new StatusType { Id = (int) StatusType.повторний_курс, Name = StatusType.повторний_курс.ToString () },
+        //         new StatusType { Id = (int) StatusType.стажування, Name = StatusType.стажування.ToString () }
+        //     };
+        //     foreach (var k in statuses) {
+        //         context.Statuses.Add (k);
+        //     }
+        // }
 
         private static void OrderTypeInit (AspiranturaContext context) {
             var orderTypes = new OrderType[] {
@@ -226,23 +226,23 @@ namespace PGC.Data {
 
         private static void AspirantInit (AspiranturaContext context) {
             var aspirants = new Aspirant[] {
-                // new Aspirant { Name = "Олександр", Surename = "Бука", Birthday = DateTime.Parse ("1989-09-01"), Patronymic = "Петрович", StatustypeId = (int) StatusTypeEnum.новий, SpecialityId = 73, InputDate = DateTime.Parse ("2018-09-01"), StudyformId=(int)FormEnum.Денна },
-                // new Aspirant { Name = "Сергій", Surename = "Гітієс", Birthday = DateTime.Parse ("1992-09-01"), Patronymic = "Васильевич", StatustypeId = (int) StatusTypeEnum.новий, SpecialityId = 75, StudyformId=(int)FormEnum.Денна },
-                // new Aspirant { Name = "Кирило", Surename = "Вітус", Birthday = DateTime.Parse ("1991-09-01"), StatustypeId = (int) StatusTypeEnum.навчання, SpecialityId = 113, StudyformId=(int) FormEnum.Денна },
-                // new Aspirant { Name = "Михайло", Surename = "Barzdukas", Birthday = DateTime.Parse ("1992-09-01"), StatustypeId = (int) StatusTypeEnum.новий, SpecialityId = 113, StudyformId=(int)FormEnum.Денна },
-                // new Aspirant { Name = "Yan", Surename = "Li", Birthday = DateTime.Parse ("1985-09-01"), StatustypeId = (int) StatusTypeEnum.відрахований_2, SpecialityId = 113, StudyformId=(int)FormEnum.Заочна },
-                // new Aspirant { Name = "Альберт", Surename = "Justice", Birthday = DateTime.Parse ("1991-09-01"), StatustypeId = (int) StatusTypeEnum.відрахований_2, SpecialityId = 73, StudyformId=(int)FormEnum.Вечірня },
-                // new Aspirant { Name = "Laura", Surename = "Norman", Birthday = DateTime.Parse ("1991-09-01"), StatustypeId = (int) StatusTypeEnum.захист_достроково, SpecialityId = 73, StudyformId=(int)FormEnum.Денна },
-                // new Aspirant { Name = "Nino", Surename = "Olivetto", Birthday = DateTime.Parse ("1990-09-01"), StatustypeId = (int) StatusTypeEnum.стажування, SpecialityId = 113, StudyformId=(int)FormEnum.Вечірня }
+                // new Aspirant { Name = "Олександр", Surename = "Бука", Birthday = DateTime.Parse ("1989-09-01"), Patronymic = "Петрович", StatustypeId = (int) StatusType.новий, SpecialityId = 73, InputDate = DateTime.Parse ("2018-09-01"), StudyformId=(int)FormEnum.Денна },
+                // new Aspirant { Name = "Сергій", Surename = "Гітієс", Birthday = DateTime.Parse ("1992-09-01"), Patronymic = "Васильевич", StatustypeId = (int) StatusType.новий, SpecialityId = 75, StudyformId=(int)FormEnum.Денна },
+                // new Aspirant { Name = "Кирило", Surename = "Вітус", Birthday = DateTime.Parse ("1991-09-01"), StatustypeId = (int) StatusType.навчання, SpecialityId = 113, StudyformId=(int) FormEnum.Денна },
+                // new Aspirant { Name = "Михайло", Surename = "Barzdukas", Birthday = DateTime.Parse ("1992-09-01"), StatustypeId = (int) StatusType.новий, SpecialityId = 113, StudyformId=(int)FormEnum.Денна },
+                // new Aspirant { Name = "Yan", Surename = "Li", Birthday = DateTime.Parse ("1985-09-01"), StatustypeId = (int) StatusType.відрахований_2, SpecialityId = 113, StudyformId=(int)FormEnum.Заочна },
+                // new Aspirant { Name = "Альберт", Surename = "Justice", Birthday = DateTime.Parse ("1991-09-01"), StatustypeId = (int) StatusType.відрахований_2, SpecialityId = 73, StudyformId=(int)FormEnum.Вечірня },
+                // new Aspirant { Name = "Laura", Surename = "Norman", Birthday = DateTime.Parse ("1991-09-01"), StatustypeId = (int) StatusType.захист_достроково, SpecialityId = 73, StudyformId=(int)FormEnum.Денна },
+                // new Aspirant { Name = "Nino", Surename = "Olivetto", Birthday = DateTime.Parse ("1990-09-01"), StatustypeId = (int) StatusType.стажування, SpecialityId = 113, StudyformId=(int)FormEnum.Вечірня }
 
-                new Aspirant { Name = "Олександр", Surename = "Бука", Birthday = DateTime.Parse ("1989-09-01"), Patronymic = "Петрович", StatusType = StatusTypeEnum.новий, SpecialityId = 73, InputDate = DateTime.Parse ("2018-09-01"), StudyForm = StudyForm.денна },
-                new Aspirant { Name = "Сергій", Surename = "Гітієс", Birthday = DateTime.Parse ("1992-09-01"), Patronymic = "Васильевич", StatusType = StatusTypeEnum.новий, SpecialityId = 75, StudyForm = StudyForm.вечірня },
-                new Aspirant { Name = "Кирило", Surename = "Вітус", Birthday = DateTime.Parse ("1991-09-01"), StatusType = StatusTypeEnum.навчання, SpecialityId = 113, StudyForm = StudyForm.денна },
-                new Aspirant { Name = "Михайло", Surename = "Barzdukas", Birthday = DateTime.Parse ("1992-09-01"), StatusType = StatusTypeEnum.новий, SpecialityId = 113, StudyForm = StudyForm.денна },
-                new Aspirant { Name = "Yan", Surename = "Li", Birthday = DateTime.Parse ("1985-09-01"), StatusType = StatusTypeEnum.відрахований_2, SpecialityId = 113, StudyForm = StudyForm.заочна },
-                new Aspirant { Name = "Альберт", Surename = "Justice", Birthday = DateTime.Parse ("1991-09-01"), StatusType = StatusTypeEnum.відрахований_2, SpecialityId = 73, StudyForm = StudyForm.вечірня },
-                new Aspirant { Name = "Laura", Surename = "Norman", Birthday = DateTime.Parse ("1991-09-01"), StatusType = StatusTypeEnum.захист_достроково, SpecialityId = 73, StudyForm = StudyForm.денна },
-                new Aspirant { Name = "Nino", Surename = "Olivetto", Birthday = DateTime.Parse ("1990-09-01"), StatusType = StatusTypeEnum.стажування, SpecialityId = 113, StudyForm = StudyForm.вечірня }
+                new Aspirant { Name = "Олександр", Surename = "Бука", Birthday = DateTime.Parse ("1989-09-01"), Patronymic = "Петрович", StatusType = StatusType.новий, SpecialityId = 73, InputDate = DateTime.Parse ("2018-09-01"), StudyForm = StudyForm.денна },
+                new Aspirant { Name = "Сергій", Surename = "Гітієс", Birthday = DateTime.Parse ("1992-09-01"), Patronymic = "Васильевич", StatusType = StatusType.новий, SpecialityId = 75, StudyForm = StudyForm.вечірня },
+                new Aspirant { Name = "Кирило", Surename = "Вітус", Birthday = DateTime.Parse ("1991-09-01"), StatusType = StatusType.навчання, SpecialityId = 113, StudyForm = StudyForm.денна },
+                new Aspirant { Name = "Михайло", Surename = "Barzdukas", Birthday = DateTime.Parse ("1992-09-01"), StatusType = StatusType.новий, SpecialityId = 113, StudyForm = StudyForm.денна },
+                new Aspirant { Name = "Yan", Surename = "Li", Birthday = DateTime.Parse ("1985-09-01"), StatusType = StatusType.відрахований_2, SpecialityId = 113, StudyForm = StudyForm.заочна },
+                new Aspirant { Name = "Альберт", Surename = "Justice", Birthday = DateTime.Parse ("1991-09-01"), StatusType = StatusType.відрахований_2, SpecialityId = 73, StudyForm = StudyForm.вечірня },
+                new Aspirant { Name = "Laura", Surename = "Norman", Birthday = DateTime.Parse ("1991-09-01"), StatusType = StatusType.захист_достроково, SpecialityId = 73, StudyForm = StudyForm.денна },
+                new Aspirant { Name = "Nino", Surename = "Olivetto", Birthday = DateTime.Parse ("1990-09-01"), StatusType = StatusType.стажування, SpecialityId = 113, StudyForm = StudyForm.вечірня }
 
             };
 

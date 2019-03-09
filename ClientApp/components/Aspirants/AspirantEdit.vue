@@ -110,12 +110,33 @@
         </div>
 
         <b-row class="pad-4">
+          <b-col cols="2" class="text-right">Форма:</b-col>
+          <b-col cols="5">
+            <v-select
+              name="Форма"
+              label="text"
+              :options="studyforms"
+              v-model="selectedStudyform"
+              v-validate="'required|selectValue'"
+              :class="{ 'has-error': errors.has('Форма') }"
+            >
+              <template slot="option" slot-scope="option">
+                <span v-html="option.text"></span>
+              </template>
+            </v-select>
+          </b-col>
+        </b-row>
+        <div v-if="errors.has('Форма')" class="offset-3 alert-validate">
+          {{ errors.first("Форма") }}
+        </div>
+
+        <b-row class="pad-4">
           <b-col cols="2" class="text-right">Керівник:</b-col>
           <b-col cols="5">
             <v-select
               name="Керівник"
               label="text"
-              :options="prepods"
+              :options="filterPrepods"
               v-model="selectedPrepod"
               v-validate="'required|selectValue'"
               :class="{ 'has-error': errors.has('Керівник') }"
@@ -128,6 +149,49 @@
         </b-row>
         <div v-if="errors.has('Керівник')" class="offset-3 alert-validate">
           {{ errors.first("Керівник") }}
+        </div>
+
+        <b-row class="pad-4">
+          <b-col cols="2" class="text-right">Кафедра:</b-col>
+          <b-col cols="5">
+            <v-select
+              class="tzSelect"
+              name="Кафедра"
+              label="text"
+              :options="departments"
+              v-model="selectedDepartment"
+              v-validate="'required|selectValue'"
+              :class="{ 'has-error': errors.has('Кафедра') }"
+            >
+              <template slot="option" slot-scope="option">
+                <span v-html="option.text"></span>
+              </template>
+            </v-select>
+          </b-col>
+        </b-row>
+        <div v-if="errors.has('Кафедра')" class="offset-3 alert-validate">
+          {{ errors.first("Кафедра") }}
+        </div>
+
+        <b-row class="pad-4">
+          <b-col cols="2" class="text-right">Спеціальність:</b-col>
+          <b-col cols="5">
+            <v-select
+              name="Спеціальність"
+              label="text"
+              :options="specialities"
+              v-model="selectedSpeciality"
+              v-validate="'required|selectValue'"
+              :class="{ 'has-error': errors.has('Спеціальність') }"
+            >
+              <template slot="option" slot-scope="option">
+                <span v-html="option.text"></span>
+              </template>
+            </v-select>
+          </b-col>
+        </b-row>
+        <div v-if="errors.has('Спеціальність')" class="offset-3 alert-validate">
+          {{ errors.first("Спеціальність") }}
         </div>
 
         <b-row class="pad-4">
@@ -186,7 +250,7 @@
               class="btn btn-warning mr-2"
               value="Зберегти"
             />
-            <router-link to="/prepods" tag="button" class="btn btn-warning">
+            <router-link to="/aspirants" tag="button" class="btn btn-warning">
               Скасувати
             </router-link>
           </b-row>
@@ -238,22 +302,27 @@ export default {
 
         // Select
         statusType: "",
+        studyform: "",
+
         specialityId: "",
-        department: "",
-        studyformId: "",
+        departmentId: "",
         prepodId: ""
       },
 
       selectedStatusType: {},
-      selectedSpecialityId: {},
+      selectedStudyform: {},
+
+      selectedSpeciality: {},
       selectedDepartment: {},
-      selectedStudyformId: {},
       selectedPrepod: {},
+
       statuses: [],
+      studyforms: [],
+
       specialities: [],
       departments: [],
-      studyforms: [],
       prepods: [],
+      // filterPrepods: [],
 
       maxDate: moment()
         .add("years", -25)
@@ -278,12 +347,18 @@ export default {
         this.model = responses[0].data;
 
         this.statuses = responses[1].data.statuses;
+        this.studyforms = responses[1].data.studyforms;
+
         this.specialities = responses[1].data.specialities;
         this.departments = responses[1].data.departments;
-        this.studyforms = responses[1].data.studyforms;
         this.prepods = responses[1].data.prepods;
 
-        // this.selectedRank = responses[2].data.selectedRank;
+        this.selectedStatusType = responses[1].data.selectedStatus;
+        this.selectedStudyform = responses[1].data.selectedStudyform;
+        this.selectedSpeciality = responses[1].data.selectedSpeciality;
+        this.selectedDepartment = responses[1].data.selectedDepartment;
+        this.selectedPrepod = responses[1].data.selectedPrepod;
+
         // this.selectedDegree = responses[2].data.selectedDegree;
         // this.selectedPosition = responses[2].data.selectedPosition;
       })
@@ -292,16 +367,31 @@ export default {
       });
   },
 
+  computed: {
+    filterPrepods: function() {
+      var prepodList = this.prepods;
+      if (this.selectedDepartment.text != null) {
+        let kafedra = this.selectedDepartment.text.split("&nbsp");
+        prepodList = this.prepods.filter(item => {
+          return item.text == kafedra;
+        });
+      }
+      return prepodList;
+    }
+  },
+
   methods: {
+    // СДЕЛАТЬ ВАЛИДАЦИЮ ПО КАФЕДРА - ПРЕПОД          !!!!
+
     editItem() {
       this.$validator.validate().then(valid => {
         if (valid) {
           this.model.statusType = this.selectedStatusType.value;
+          this.model.studyform = this.selectedStudyform.value;
+
           this.model.prepodId = this.selectedPrepod.value;
-          this.model.department = this.selectedDepartment.value;
-          // this.model.degree = this.selectedDegree.value;
-          // this.model.position = this.selectedPosition.value;
-          //          this.model.departments = this.departments;
+          this.model.departmentId = this.selectedDepartment.value;
+          this.model.specialityId = this.selectedSpeciality.value;
           axios
             .put("api/Aspirants/" + this.model.id, this.model)
             .then(response => {
