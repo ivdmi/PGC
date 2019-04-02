@@ -1,29 +1,111 @@
 <template>
   <div>
-    <b-table responsive hover striped bordered small :items="list" :fields="fields" class="table-14">
-      <template slot="index" slot-scope="data">
-        {{ data.index + 1 }}
-      </template>
+    <router-view></router-view>
 
-      <template slot="delete" slot-scope="row">
-        <b-button size="sm" @click="removeItem(row.item.id)" class="btn btn-warning btnxs">
-          X
-        </b-button>
-      </template>
+    <div>
+      <div class="row">
+        <div class="col-2">
+          <button
+            class="btn btn-warning"
+            title="Додати запис"
+            v-on:click="addItem"
+          >
+            Новий аспірант
+          </button>
+        </div>
+        <div class="col-2">
+          <label class="btn btn-warning col-12">
+            Імпорт з xls
+            <input
+              type="file"
+              multiple="false"
+              id="sheetjs-input"
+              accept=".xls, .xlsx"
+              @change="importExcel"
+              style="display:none"
+            />
+          </label>
+        </div>
+        <span class="label" id="upload-file-info"></span>
 
-    </b-table>
+        <b-modal
+          class="text-danger border-danger"
+          ref="errorImportRef"
+          title="Помилка імпорту з XLS файлу!"
+        >
+          <b-alert show variant="danger">{{ this.errorData }}</b-alert>
+        </b-modal>
+      </div>
+
+      <div>
+        <vue-good-table
+          :columns="columns"
+          :rows="list"
+          :line-numbers="true"
+          :sort-options="{
+            enabled: true,
+            initialSortBy: [
+              { field: 'course', type: 'desc' },
+              { field: 'surename', type: 'asc' }
+            ]
+          }"
+          :pagination-options="{
+            enabled: true,
+            mode: 'pages',
+            perPage: 50,
+            perPageDropdown: [25, 50, 100],
+            setCurrentPage: 1,
+            nextLabel: '',
+            prevLabel: '',
+            rowsPerPageLabel: 'Строк',
+            ofLabel: 'з',
+            pageLabel: 'Стор.', // for 'pages' mode
+            allLabel: 'All'
+          }"
+          row-style-class="font-14"
+          styleClass="vgt-table condensed bordered"
+        >
+          <!-- <div slot="selected-row-actions" slot-scope="props">
+            <button class="btn btn-warning btnxs" @click="selectionAction(props.selectedRows)">Дія</button>
+          </div>-->
+          <template slot="table-row" slot-scope="props">
+            <span v-if="props.column.field == 'Delete'">
+              <button
+                class="btn btn-warning btnxs"
+                @click="removeItem(props.row.id)"
+                title="Видалити запис"
+              >
+                X
+              </button>
+            </span>
+            <span v-else-if="props.column.field == 'Edit'">
+              <button
+                class="btn btn-warning btnxs"
+                @click="editItem(props.row)"
+                title="Редагувати запис"
+              >
+                Зм
+              </button>
+            </span>
+            <span v-else>{{ props.formattedRow[props.column.field] }}</span>
+          </template>
+        </vue-good-table>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
+// import AspirantAdd from "./AspirantAdd";
+// import AspirantEdit from "./AspirantEdit";
 import axios from "axios";
-// import { VueGoodTable } from "vue-good-table";
+import { VueGoodTable } from "vue-good-table";
 import XLSX from "xlsx";
 
 export default {
   name: "AspirantList",
   components: {
-    // VueGoodTable,
+    VueGoodTable,
     XLSX
     //    AspirantAdd,
     //    AspirantEdit
@@ -32,146 +114,6 @@ export default {
     return {
       list: [],
       errorData: "",
-
-      fields: [
-        { label: "№", key: "index" },
-        {
-          key: "surename",
-          label: "Прізвище",
-          sortable: true,
-          variant: "info"
-        },
-        {
-          key: "name",
-          label: "Ім'я"
-        },
-        {
-          key: "patronymic",
-          label: "По батькові"
-        },
-        {
-          label: "Сп",
-          key: "specialityId",
-          sortable: true
-        },
-        {
-          label: "Керівник",
-          key: "prepod",
-          sortable: true
-        },
-        {
-          label: "Каф",
-          key: "department",
-          sortable: true
-        },
-        {
-          label: "Фак",
-          key: "faculty",
-          sortable: true
-        },
-        {
-          label: "Форма",
-          key: "studyForm",
-          sortable: true,
-          variant: "danger"
-        },
-        {
-          label: "Б",
-          key: "budget",
-          sortable: true
-        },
-        {
-          label: "Статус",
-          key: "statusType",
-          sortable: true
-        },
-        {
-          label: "К",
-          key: "course",
-          sortable: true
-        },
-
-        {
-          label: "Телефон",
-          key: "phone"
-        },
-        {
-          label: "Email",
-          key: "email"
-        },
-        {
-          label: "Є",
-          key: "present",
-          sortable: true
-        },
-        {
-          label: "А",
-          key: "doctorant",
-          sortable: true
-        },
-        {
-          label: "С",
-          key: "sex",
-          sortable: true
-        },
-        {
-          label: "Нар",
-          key: "birthYear",
-          sortable: true
-        },
-        {
-          label: "Вст",
-          key: "inputYear",
-          sortable: true
-        },
-        {
-          label: "Вип",
-          key: "graduationYear",
-          sortable: true
-        },
-        {
-          label: "Зах",
-          key: "protectionYear",
-          sortable: true
-        },
-        {
-          label: "1",
-          key: "p1",
-          sortable: true
-        },
-        {
-          label: "2",
-          key: "p2",
-          sortable: true
-        },
-        {
-          label: "3",
-          key: "p3",
-          sortable: true
-        },
-        {
-          label: "4",
-          key: "p4",
-          sortable: true
-        },
-        {
-          label: "5",
-          key: "p5",
-          sortable: true
-        },
-        {
-          label: "6",
-          key: "p6",
-          sortable: true
-        },
-        {
-          label: "7",
-          key: "p7",
-          sortable: true
-        },
-        { key: "delete", label: "Del" }
-      ],
-
       columns: [
         {
           label: "Прізвище",
@@ -242,7 +184,7 @@ export default {
           field: "email"
         },
         {
-          label: "Є",
+          label: "Наяв",
           field: "present",
           width: "20px",
           tdClass: "text-center",
@@ -313,36 +255,11 @@ export default {
     this.reloadList();
   },
 
-  computed: {
-    sortOptions() {
-      // Create an options list from our fields
-      return this.fields.filter(f => f.sortable).map(f => {
-        return { text: f.label, value: f.key };
-      });
-    }
-  },
-
   methods: {
-    info(item, index, button) {
-      this.modalInfo.title = `Row index: ${index}`;
-      this.modalInfo.content = JSON.stringify(item, null, 2);
-      this.$root.$emit("bv::show::modal", "modalInfo", button);
-    },
-    resetModal() {
-      this.modalInfo.title = "";
-      this.modalInfo.content = "";
-    },
-    onFiltered(filteredItems) {
-      // Trigger pagination to update the number of buttons/pages due to filtering
-      this.totalRows = filteredItems.length;
-      this.currentPage = 1;
-    },
-
     // -------------- Загрузить данные с контроллера --------------
     reloadList() {
       axios.get(`api/Aspirants`).then(response => {
         this.list = response.data;
-        this.items = this.list;
       });
     },
 
@@ -366,7 +283,7 @@ export default {
       //          return item.id !== id;
       //        });
       //      });
-      axios.delete("api/Aspirants/" + id).then(response => {
+      axios.delete("api/Prepods/" + id).then(response => {
         this.list = this.list.filter(item => {
           return item.id !== id;
         });

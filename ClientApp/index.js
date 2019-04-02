@@ -34,12 +34,13 @@ import "bootstrap-vue/dist/bootstrap-vue.css";
 import "vue-good-table/dist/vue-good-table.css";
 
 import bTable from "bootstrap-vue/es/components/table/table";
+//import BTable from "bootstrap-vue/es/components/table/table";
 import axios from "axios";
-
 
 Vue.config.productionTip = false;
 
 Vue.use(BootstrapVue);
+// Vue.component("b-table", BTable);
 Vue.component("b-table", bTable);
 Vue.use(bTable);
 Vue.use(axios);
@@ -52,32 +53,29 @@ Validator.localize({ uk: uk });
 const phoneRule = {
   getMessage(field, args) {
     return "Поле ${field} має містити телефонний номер";
-  },  
-validate(value, args) 
-{
-  const MOBILREG = /^[+]*\d+[\d-]{5,14}\d+$/;
-  return MOBILREG.test(value);
-}
+  },
+  validate(value, args) {
+    const MOBILREG = /^[+]*\d+[\d-]{5,14}\d+$/;
+    return MOBILREG.test(value);
+  }
 };
 
 const notNull = {
   getMessage(field, args) {
     return "Виберіть поле ${field}";
-  },  
-validate(value, args) 
-{
-  var k = false;
-  //if ((value != null) && (value.value != 0) && (value.value != null))
-  if ((value != null) && (value.value != null))
-  {
-    k=true;
+  },
+  validate(value, args) {
+    var k = false;
+    //if ((value != null) && (value.value != 0) && (value.value != null))
+    if (value != null && value.value != null) {
+      k = true;
+    }
+    return k;
   }
-  return k;
-}
 };
 
-VeeValidate.Validator.extend('phone', phoneRule);
-VeeValidate.Validator.extend('selectValue', notNull);
+VeeValidate.Validator.extend("phone", phoneRule);
+VeeValidate.Validator.extend("selectValue", notNull);
 
 Vue.use(VeeValidate, { locale: "uk" });
 
@@ -87,42 +85,66 @@ const routes = [
     component: App,
     children: [
       {
-        path: "/specialities", component: SpecialityList
+        path: "/specialities",
+        component: SpecialityList
       },
-      
+
       { path: "/aspirants", component: AspirantList },
-      { path: 'aspirant-add/:specialities/:statuses/:studyforms/:departments', name: 'AspirantAdd', component: AspirantAdd, props: true },
-      { path: "aspirant-edit/:id", name: "AspirantEdit", component: AspirantEdit },
+      {
+        path: "aspirant-add/:specialities/:statuses/:studyforms/:departments",
+        name: "AspirantAdd",
+        component: AspirantAdd,
+        props: true
+      },
+      {
+        path: "aspirant-edit/:id",
+        name: "AspirantEdit",
+        component: AspirantEdit
+      },
 
       { path: "/orders", component: OrderList },
       { path: "order-add/:types", name: "OrderAdd", component: OrderAdd },
       { path: "/faculties", component: FacultyList },
 
-      {         
-        path: "faculty-add", name: "FacultyAdd", component: FacultyAdd
-      },
-      {         
-        path: "faculty-edit/:item", name: "FacultyEdit", component: FacultyEdit
+      {
+        path: "faculty-add",
+        name: "FacultyAdd",
+        component: FacultyAdd
       },
       {
-        path: "/departments", component: DepartmentList,        
-      },      
-      {         
-        path: "department-add", name: "DepartmentAdd", component: DepartmentAdd
+        path: "faculty-edit/:item",
+        name: "FacultyEdit",
+        component: FacultyEdit
       },
-      {         
+      {
+        path: "/departments",
+        component: DepartmentList
+      },
+      {
+        path: "department-add",
+        name: "DepartmentAdd",
+        component: DepartmentAdd
+      },
+      {
         // path: "department-edit/:item", name: "DepartmentEdit", component: DepartmentEdit
-        path: "department-edit/:id", name: "DepartmentEdit", component: DepartmentEdit
-      },      
+        path: "department-edit/:id",
+        name: "DepartmentEdit",
+        component: DepartmentEdit
+      },
       {
-        path: "/prepods", component: PrepodList,        
-      },      
-      {         
-        path: "prepod-add", name: "PrepodAdd", component: PrepodAdd
+        path: "/prepods",
+        component: PrepodList
       },
-      {         
-        path: "prepod-edit/:id", name: "PrepodEdit", component: PrepodEdit
+      {
+        path: "prepod-add",
+        name: "PrepodAdd",
+        component: PrepodAdd
       },
+      {
+        path: "prepod-edit/:id",
+        name: "PrepodEdit",
+        component: PrepodEdit
+      }
     ]
   }
 ];

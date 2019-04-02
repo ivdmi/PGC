@@ -38,6 +38,13 @@ namespace PGC.Models.ViewModels {
         public string Protection { get; set; }
 
         public string Present { get; set; }
+        public string P1 { get; set; }
+        public string P2 { get; set; }
+        public string P3 { get; set; }
+        public string P4 { get; set; }
+        public string P5 { get; set; }
+        public string P6 { get; set; }
+        public string P7 { get; set; }
 
         public int Course { get; set; }
 

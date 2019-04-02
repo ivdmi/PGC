@@ -42,11 +42,18 @@ namespace PGC.Controllers {
                         ProtectionYear = i.ProtectionDate?.Year,
                         StudyForm = i.StudyForm.GetDisplayName (),
                         StatusType = i.StatusType.GetDisplayName (),
-                        Budget = i.Budget ? "Б" : "к",
-                        Doctorant = i.Doctorant ? "Д" : "а",
-                        Sex = i.Sex ? "ч" : "Ж",
-                        Protection = i.Protection ? "З" : "-",
-                        Present = i.Present ? "Є" : "-",
+                        Budget = i.Budget ? "б" : "-",
+                        Doctorant = i.Doctorant ? "-" : "а",
+                        Sex = i.Sex ? "ч" : "ж",
+                        Protection = i.Protection ? "+" : "-",
+                        Present = i.Present ? "+" : "-",
+                        P1 = i.P1 ? "+" : "-",
+                        P2 = i.P2 ? "+" : "-",
+                        P3 = i.P3 ? "+" : "-",
+                        P4 = i.P4 ? "+" : "-",
+                        P5 = i.P5 ? "+" : "-",
+                        P6 = i.P6 ? "+" : "-",
+                        P7 = i.P7 ? "+" : "-",
                         Course = i.Course,
                         SpecialityId = i.SpecialityId,
                         Department = i.Department?.Acronym,
@@ -55,6 +62,40 @@ namespace PGC.Controllers {
                 }).ToList ();
             return list;
         }
+
+        // public IEnumerable<AspirantView> GetAspirants () {
+        //     var l = _context.Aspirants.ToList ();
+
+        //     var list = _context.Aspirants.
+        //     Include ("Prepod").Include ("Speciality").Include ("Department").Include ("Department.Faculty").ToList ()
+        //         .Select (i => new AspirantView {
+        //             Id = i.Id,
+        //                 Surename = i.Surename,
+        //                 Name = i.Name,
+        //                 Patronymic = i.Patronymic,
+
+        //                 Phone = i.Phone,
+        //                 Email = i.Email,
+
+        //                 BirthYear = i.Birthday?.Year,
+        //                 InputYear = i.InputDate?.Year,
+        //                 GraduationYear = i.GraduationDate?.Year,
+        //                 ProtectionYear = i.ProtectionDate?.Year,
+        //                 StudyForm = i.StudyForm.GetDisplayName (),
+        //                 StatusType = i.StatusType.GetDisplayName (),
+        //                 Budget = i.Budget ? "Б" : "к",
+        //                 Doctorant = i.Doctorant ? "Д" : "а",
+        //                 Sex = i.Sex ? "ч" : "Ж",
+        //                 Protection = i.Protection ? "З" : "-",
+        //                 Present = i.Present ? "Є" : "-",
+        //                 Course = i.Course,
+        //                 SpecialityId = i.SpecialityId,
+        //                 Department = i.Department?.Acronym,
+        //                 Faculty = i.Department?.Faculty?.Acronym,
+        //                 Prepod = i.Prepod?.FIO
+        //         }).ToList ();
+        //     return list;
+        // }
 
         // один преподаватель
         // GET: api/Aspirants/5
