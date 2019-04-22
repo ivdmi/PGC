@@ -4,23 +4,33 @@ using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 
 namespace PGC.Data {
-    public enum OrderTypeEnum {
+    public enum OrderType {
         Зарахування = 1,
         Переведення = 2,
         Закінчення = 3,
         Відрахування = 4,
         Академвідпустка = 5,
         Інший = 6,
+
+        [Display (Name = "Зміна форми навчання")]
         Зміна_форми_навчання = 7
     }
 
     public enum StatusType : int {
         новий = 1,
-        навчання = 2, [Display (Name = "акд.відп")]
-        академ_відпустка = 3, [Display (Name = "від.невик")]
-        відрахований_2 = 4, [Display (Name = "зах.достр")]
+        навчання = 2,
+
+        [Display (Name = "акд.відп")]
+        академ_відпустка = 3,
+
+        [Display (Name = "від.невик")]
+        відрахований_2 = 4,
+
+        [Display (Name = "зах.достр")]
         захист_достроково = 5,
-        закінчив = 6, [Display (Name = "пвт.курс")]
+        закінчив = 6,
+
+        [Display (Name = "пвт.курс")]
         повторний_курс = 7,
 
         [Display (Name = "стаж.")]
@@ -37,20 +47,31 @@ namespace PGC.Data {
         [Display (Name = "-")]
         відс = 0,
         професор = 1,
-        доцент = 2, [Display (Name = "старший дослідник")]
+        доцент = 2,
+
+        [Display (Name = "старший дослідник")]
         ст_дослідник = 3
     }
 
     public enum Degree {
         [Display (Name = "-")]
-        відс = 0, [Display (Name = "доктор наук")]
-        доктор_наук = 1, [Display (Name = "кандидат наук")]
-        кандидат_наук = 2, [Display (Name = "PhD")]
+        відс = 0,
+
+        [Display (Name = "доктор наук")]
+        доктор_наук = 1,
+
+        [Display (Name = "кандидат наук")]
+        кандидат_наук = 2,
+
+        [Display (Name = "PhD")]
         доктор_філософії = 3
 
     }
 
     public enum Position : int {
+        [Display (Name = "-")]
+        відс = 0,
+
         [Display (Description = "декан факультету")]
         декан = 1,
 

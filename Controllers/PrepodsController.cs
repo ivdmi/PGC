@@ -89,7 +89,7 @@ namespace PGC.Controllers {
 
             // заполнение поля акронимами кафедр
             prepod.DepartmentsString = String.Empty;
-            foreach (var item in prepod.Departments) {
+            foreach (var item in prepod.Departments.OrderBy (o => o.Acronym)) {
                 var dep = _context.Departments.FirstOrDefault (i => i.Id == item.Id);
                 if (String.IsNullOrEmpty (prepod.DepartmentsString))
                     prepod.DepartmentsString = dep?.Acronym;
@@ -149,7 +149,7 @@ namespace PGC.Controllers {
             // пересечение двух множеств по Id
             var departments = _context.Departments.Include ("Faculty").Select (i => new { i.Id, i.Acronym, i.Faculty });
 
-            var selectedDepId = _context.PrepodDepartments.Where (d => d.PrepodId == prepodId);
+            var selectedDepId = _context.PrepodsDepartments.Where (d => d.PrepodId == prepodId);
 
             var selDep =
                 from dp in departments
@@ -200,7 +200,7 @@ namespace PGC.Controllers {
 
             // пересечение двух множеств по Id
             var workPlaces = prepod.Departments.ToList ();
-            var prepodDepartments = _context.PrepodDepartments.Where (i => i.PrepodId == prepod.Id).ToList ();
+            var prepodDepartments = _context.PrepodsDepartments.Where (i => i.PrepodId == prepod.Id).ToList ();
 
             // выбрать в PrepodDepartments записи, которые отсутствуют в workPlaces (prepod.Departments) - для удаления
             var forDelete =
@@ -210,8 +210,8 @@ namespace PGC.Controllers {
             var forAdd =
                 (from d in workPlaces where (!prepodDepartments.Any (x => x.DepartmentId == d.Id)) select (new PrepodDepartment { PrepodId = prepod.Id, DepartmentId = d.Id })).ToList ();
 
-            _context.PrepodDepartments.RemoveRange (forDelete);
-            _context.PrepodDepartments.AddRange (forAdd);
+            _context.PrepodsDepartments.RemoveRange (forDelete);
+            _context.PrepodsDepartments.AddRange (forAdd);
 
             await _context.SaveChangesAsync ();
         }

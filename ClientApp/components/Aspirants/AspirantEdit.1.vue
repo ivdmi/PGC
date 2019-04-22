@@ -55,19 +55,6 @@
         </div>
 
         <b-row class="pad-4">
-          <b-col cols="2" class="text-right">Народження:</b-col>
-          <b-col cols="5">
-            <b-form-input name="Народження" type="date" v-model="model.birthday" size="sm" :min="this.minDate" :max="this.maxDate" v-validate="{
-                date_format: 'YYYY-MM-DD',
-                date_between: [this.minDate, this.maxDate, true]
-              }" :class="{ 'has-error': errors.has('Народження') }"></b-form-input>
-          </b-col>
-        </b-row>
-        <div v-if="errors.has('Народження')" class="offset-3 alert-validate">
-          {{ errors.first("Народження") }}
-        </div>
-
-        <b-row class="pad-4">
           <b-col cols="2" class="text-right">Статус:</b-col>
           <b-col cols="5">
             <v-select name="Статус" label="text" :options="statuses" v-model="selectedStatusType" v-validate="'required|selectValue'" :class="{ 'has-error': errors.has('Статус') }">
@@ -176,42 +163,6 @@
           </b-col>
         </b-row>
 
-        <b-row class="pad-4">
-          <b-col cols="2" class="text-right">Відмітки:</b-col>
-          <b-col cols="8">
-            <label class="text-right col-1">P1</label>
-            <label class="text-right col-1">P2</label>
-            <label class="text-right col-1">P3</label>
-            <label class="text-right col-1">P4</label>
-            <label class="text-right col-1">P5</label>
-            <label class="text-right col-1">P6</label>
-            <label class="text-right col-1">P7</label>
-          </b-col>
-        </b-row>
-        <b-row class="offset-2 col-8">
-          <span class="col-1">
-            <input type="checkbox" class="short-check" v-model="model.p1" />
-          </span>
-          <span class="col-1">
-            <input type="checkbox" class="short-check" v-model="model.p2" />
-          </span>
-          <span class="col-1">
-            <input type="checkbox" class="short-check" v-model="model.p3" />
-          </span>
-          <span class="col-1">
-            <input type="checkbox" class="short-check" v-model="model.p4" />
-          </span>
-          <span class="col-1">
-            <input type="checkbox" class="short-check" v-model="model.p5" />
-          </span>
-          <span class="col-1">
-            <input type="checkbox" class="short-check" v-model="model.p6" />
-          </span>
-          <span class="col-1">
-            <input type="checkbox" class="short-check" v-model="model.p7" />
-          </span>
-        </b-row>
-
         <div class="col-10 offset-2">
           <br />
           <b-row class="pad-4">
@@ -231,9 +182,12 @@
 import axios from "axios";
 import vSelect from "vue-select";
 import moment from "moment";
+import { ErrorBag } from "vee-validate";
 
 //  regex - поиск первого слова до пробельного символа
 const firstWordRegex = /(^\S+)/;
+
+const bag = new ErrorBag();
 
 export default {
   components: {
@@ -265,13 +219,6 @@ export default {
         sex: "",
         protection: "",
         present: "",
-        p1: "",
-        p2: "",
-        p3: "",
-        p4: "",
-        p5: "",
-        p6: "",
-        p7: "",
 
         // int (numeric)
         course: "",
@@ -389,6 +336,28 @@ export default {
             });
         }
       });
+    },
+
+    onDel(id) {
+      var k = this.model.departments
+        .map(function(e) {
+          return e.id;
+        })
+        .indexOf(id);
+      if (k != -1) {
+        this.model.departments.splice(k, 1);
+      }
+    },
+
+    onAddOne(data) {
+      var k = this.model.departments
+        .map(function(e) {
+          return e.id;
+        })
+        .indexOf(data.id);
+      if (k === -1) {
+        this.model.departments.push(data);
+      }
     }
   }
 };

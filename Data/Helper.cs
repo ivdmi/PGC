@@ -49,9 +49,9 @@ namespace PGC.Data {
             return list;
         }
 
-        public static IList<ItemData> GetOrderTypeList () {
+        public static IList<ItemData> GetOrderTypes () {
             IList<ItemData> list = new List<ItemData> ();
-            foreach (OrderTypeEnum item in Enum.GetValues (typeof (OrderTypeEnum))) {
+            foreach (OrderType item in Enum.GetValues (typeof (OrderType))) {
                 list.Add (item: new ItemData () { Value = (int) item, Text = item.GetDisplayName () });
             }
             return list;

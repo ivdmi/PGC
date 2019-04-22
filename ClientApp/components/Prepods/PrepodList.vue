@@ -10,14 +10,7 @@
         <div class="col-2">
           <label class="btn btn-warning col-12">
             Імпорт з xls
-            <input
-              type="file"
-              multiple="false"
-              id="sheetjs-input"
-              accept=".xls, .xlsx"
-              @change="importExcel"
-              style="display:none"
-            >
+            <input type="file" multiple="false" id="sheetjs-input" accept=".xls, .xlsx" @change="importExcel" style="display:none">
           </label>
         </div>
         <span class="label" id="upload-file-info"></span>
@@ -28,11 +21,7 @@
       </div>
 
       <div>
-        <vue-good-table
-          :columns="columns"
-          :rows="list"
-          :line-numbers="true"
-          :pagination-options="{
+        <vue-good-table :columns="columns" :rows="list" :line-numbers="true" :pagination-options="{
             enabled: true,
             mode: 'pages',
             perPage: 20,
@@ -44,27 +33,15 @@
             ofLabel: 'з',
             pageLabel: 'Стор.', // for 'pages' mode
             allLabel: 'All',
-          }"
-          :search-options="{
+          }" :search-options="{
             enabled: true
-          }"
-          row-style-class="font-14"
-          styleClass="vgt-table condensed bordered"
-        >       
+          }" row-style-class="font-14" styleClass="vgt-table condensed bordered">
           <template slot="table-row" slot-scope="props">
             <span v-if="props.column.field == 'Delete'">
-              <button
-                class="btn btn-warning btnxs"
-                @click="removeItem(props.row.id)"
-                title="Видалити запис"
-              >X</button>
+              <button class="btn btn-warning btnxs" @click="removeItem(props.row.id)" title="Видалити запис">X</button>
             </span>
             <span v-else-if="props.column.field == 'Edit'">
-              <button
-                class="btn btn-warning btnxs"
-                @click="editItem(props.row)"
-                title="Редагувати запис"
-              >Зм</button>
+              <button class="btn btn-warning btnxs" @click="editItem(props.row)" title="Редагувати запис">Зм</button>
             </span>
             <span v-else>{{props.formattedRow[props.column.field]}}</span>
           </template>
@@ -75,7 +52,6 @@
 </template>
 
 <script>
-// import PrepodAdd from "./PrepodAdd";
 import axios from "axios";
 import { VueGoodTable } from "vue-good-table";
 import XLSX from "xlsx";
@@ -84,15 +60,14 @@ export default {
   name: "PrepodList",
   components: {
     VueGoodTable,
-//    PrepodAdd,
     XLSX
   },
   data() {
     return {
       list: [],
       errorData: "",
-      
-	  columns: [
+
+      columns: [
         {
           label: "Прізвище",
           field: "surename",
@@ -183,41 +158,36 @@ export default {
   },
 
   methods: {
-  
-	// -------------- Загрузить данные с контроллера --------------
+    // -------------- Загрузить данные с контроллера --------------
     reloadList() {
-//      var self = this;
-//      axios.get(`api/Prepods`).then(function(response) {
-//        self.list = response.data;
-//      });
-	axios.get(`api/Prepods`).then(response => {
-      this.list = response.data;
-    });	
+      axios.get(`api/Prepods`).then(response => {
+        this.list = response.data;
+      });
     },
-    
-	// -------------- Добавить --------------
+
+    // -------------- Добавить --------------
     addItem() {
       this.$router.push("/prepod-add");
     },
 
-	// -------------- Редактировать --------------
+    // -------------- Редактировать --------------
     editItem(item) {
       this.$router.push({
         name: "PrepodEdit",
         params: { id: item.id }
       });
     },
-	
-	// -------------- Удалить --------------
+
+    // -------------- Удалить --------------
     removeItem(id) {
-//      var self = this;
-//      axios.delete("api/Prepods/" + id).then(function(response) {
-//        self.list = self.list.filter(item => {
-//          return item.id !== id;
-//        });
-//      });
-	  
-	   axios.delete("api/Prepods/" + id).then(response => {
+      //      var self = this;
+      //      axios.delete("api/Prepods/" + id).then(function(response) {
+      //        self.list = self.list.filter(item => {
+      //          return item.id !== id;
+      //        });
+      //      });
+
+      axios.delete("api/Prepods/" + id).then(response => {
         this.list = this.list.filter(item => {
           return item.id !== id;
         });
@@ -225,7 +195,7 @@ export default {
     },
 
     // -------------- Импортировать из файла Excel --------------
-	importExcel: function(evt) {
+    importExcel: function(evt) {
       var file;
       var files = evt.target.files;
 

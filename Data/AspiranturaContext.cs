@@ -16,10 +16,10 @@ namespace PGC.Data {
         public DbSet<Faculty> Faculties { get; set; }
         public DbSet<AspirantOrder> AspirantOrders { get; set; }
         public DbSet<DepartmentSpeciality> DepartmentSpecialities { get; set; }
-        public DbSet<PrepodDepartment> PrepodDepartments { get; set; }
+        public DbSet<PrepodDepartment> PrepodsDepartments { get; set; }
         // public DbSet<StatusType> Statuses { get; set; }
 
-        public DbSet<OrderType> Ordertypes { get; set; }
+        // public DbSet<OrderType> Ordertypes { get; set; }
 
         // Для того, чтобы таблицы были в единственном числе
         protected override void OnModelCreating (ModelBuilder modelBuilder) {

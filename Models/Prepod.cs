@@ -53,7 +53,7 @@ namespace PGC.Models {
         // для отображения акронимов кафедр
         public string DepartmentsString { get; set; }
 
-        public ICollection<PrepodDepartment> PrepodDepartment { get; set; }
+        public ICollection<PrepodDepartment> PrepodsDepartments { get; set; }
 
         // [Display (Name = "Кафедра")]
         // public int? DepartmentId { get; set; }

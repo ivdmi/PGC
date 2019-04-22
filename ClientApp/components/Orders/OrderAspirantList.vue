@@ -1,6 +1,6 @@
 <template>
   <div>
-    <vue-good-table ref="departments-table" :columns="columns" :rows="list" :search-options="{
+    <vue-good-table ref="aspirants-table" :columns="columns" :rows="list" :search-options="{
             enabled: true
           }" row-style-class="font-14" styleClass="vgt-table condensed bordered">
       <template slot="table-row" slot-scope="props">
@@ -18,22 +18,33 @@ import axios from "axios";
 import { VueGoodTable } from "vue-good-table";
 
 export default {
-  name: "PrepodDepartmentList",
+  name: "OrderAspirantList",
   components: {
     VueGoodTable
   },
+  props: ["list"],
 
   data() {
     return {
-      list: [],
+      // list: [],
       columns: [
         {
-          label: "Кафедра",
-          field: "acronym"
+          label: "Прізвище",
+          field: "fio",
+          filterOptions: {
+            enabled: true,
+            placeholder: "Фільтр"
+          }
         },
         {
-          label: "Факультет",
-          field: "faculty.acronym"
+          label: "Курс",
+          field: "course",
+          type: "number",
+          width: "20px",
+          filterOptions: {
+            enabled: true,
+            placeholder: "1"
+          }
         },
         {
           label: "",
@@ -44,16 +55,16 @@ export default {
     };
   },
 
-  mounted: function() {
-    axios.get(`api/Prepods/departments`).then(response => {
-      this.list = response.data;
-    });
-  },
+  // mounted: function() {
+  //   axios.get(`api/Aspirants`).then(response => {
+  //     this.list = response.data;
+  //   });
+  // },
 
   methods: {
     addItem(param) {
-      // отправить event add-department с параметром родителю
-      this.$emit("add-department", param);
+      // отправить event add-aspirant с параметром родителю
+      this.$emit("add-aspirant", param);
     }
   }
 };

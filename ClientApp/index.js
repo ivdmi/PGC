@@ -15,6 +15,7 @@ import AspirantEdit from "./components/Aspirants/AspirantEdit.vue";
 
 import OrderList from "./components/Orders/OrderList.vue";
 import OrderAdd from "./components/Orders/OrderAdd.vue";
+import OrderEdit from "./components/Orders/OrderEdit.vue";
 
 import DepartmentList from "./components/Departments/DepartmentList.vue";
 import DepartmentAdd from "./components/Departments/DepartmentAdd.vue";
@@ -91,10 +92,9 @@ const routes = [
 
       { path: "/aspirants", component: AspirantList },
       {
-        path: "aspirant-add/:specialities/:statuses/:studyforms/:departments",
+        path: "aspirant-add",
         name: "AspirantAdd",
-        component: AspirantAdd,
-        props: true
+        component: AspirantAdd
       },
       {
         path: "aspirant-edit/:id",
@@ -103,14 +103,17 @@ const routes = [
       },
 
       { path: "/orders", component: OrderList },
-      { path: "order-add/:types", name: "OrderAdd", component: OrderAdd },
-      { path: "/faculties", component: FacultyList },
-
       {
-        path: "faculty-add",
-        name: "FacultyAdd",
-        component: FacultyAdd
+        path: "order-add",
+        name: "OrderAdd",
+        component: OrderAdd
       },
+      {
+        path: "order-edit/:id",
+        name: "OrderEdit",
+        component: OrderEdit
+      },
+
       {
         path: "faculty-edit/:item",
         name: "FacultyEdit",

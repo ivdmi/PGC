@@ -32,6 +32,7 @@ namespace PGC.Controllers {
                         Surename = i.Surename,
                         Name = i.Name,
                         Patronymic = i.Patronymic,
+                        FIO = i.FIO,
 
                         Phone = i.Phone,
                         Email = i.Email,

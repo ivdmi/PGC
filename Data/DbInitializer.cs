@@ -13,7 +13,7 @@ namespace PGC.Data {
             }
 
             //            StatusTypeInit (context);
-            OrderTypeInit (context);
+            // OrderTypeInit (context);
             KnowledgeInit (context);
             SpecialityInit (context);
             OrderInit (context);
@@ -38,21 +38,21 @@ namespace PGC.Data {
         //     }
         // }
 
-        private static void OrderTypeInit (AspiranturaContext context) {
-            var orderTypes = new OrderType[] {
-                new OrderType { Id = (int) OrderTypeEnum.Зарахування, Name = OrderTypeEnum.Зарахування.ToString () },
-                new OrderType { Id = (int) OrderTypeEnum.Переведення, Name = OrderTypeEnum.Переведення.ToString () },
-                new OrderType { Id = (int) OrderTypeEnum.Закінчення, Name = OrderTypeEnum.Закінчення.ToString () },
-                new OrderType { Id = (int) OrderTypeEnum.Відрахування, Name = OrderTypeEnum.Відрахування.ToString () },
-                new OrderType { Id = (int) OrderTypeEnum.Академвідпустка, Name = OrderTypeEnum.Академвідпустка.ToString () },
-                new OrderType { Id = (int) OrderTypeEnum.Інший, Name = OrderTypeEnum.Інший.ToString () },
-                new OrderType { Id = (int) OrderTypeEnum.Зміна_форми_навчання, Name = OrderTypeEnum.Зміна_форми_навчання.ToString () }
-            };
-            foreach (var k in orderTypes) {
-                context.Ordertypes.Add (k);
-            }
-            context.SaveChanges ();
-        }
+        // private static void OrderTypeInit (AspiranturaContext context) {
+        //     var orderTypes = new OrderType[] {
+        //         new OrderType { Id = (int) OrderTypeEnum.Зарахування, Name = OrderTypeEnum.Зарахування.ToString () },
+        //         new OrderType { Id = (int) OrderTypeEnum.Переведення, Name = OrderTypeEnum.Переведення.ToString () },
+        //         new OrderType { Id = (int) OrderTypeEnum.Закінчення, Name = OrderTypeEnum.Закінчення.ToString () },
+        //         new OrderType { Id = (int) OrderTypeEnum.Відрахування, Name = OrderTypeEnum.Відрахування.ToString () },
+        //         new OrderType { Id = (int) OrderTypeEnum.Академвідпустка, Name = OrderTypeEnum.Академвідпустка.ToString () },
+        //         new OrderType { Id = (int) OrderTypeEnum.Інший, Name = OrderTypeEnum.Інший.ToString () },
+        //         new OrderType { Id = (int) OrderTypeEnum.Зміна_форми_навчання, Name = OrderTypeEnum.Зміна_форми_навчання.ToString () }
+        //     };
+        //     foreach (var k in orderTypes) {
+        //         context.Ordertypes.Add (k);
+        //     }
+        //     context.SaveChanges ();
+        // }
 
         private static void KnowledgeInit (AspiranturaContext context) {
 
@@ -272,11 +272,11 @@ namespace PGC.Data {
 
         private static void OrderInit (AspiranturaContext context) {
             var orders = new Order[] {
-                new Order { Date = DateTime.Parse ("2010-09-01"), Number = "1", OrdertypeId = 1 },
-                new Order { Date = DateTime.Parse ("2011-09-01"), Number = "79", OrdertypeId = 4 },
-                new Order { Date = DateTime.Parse ("2012-09-01"), Number = "53", OrdertypeId = 1 },
-                new Order { Date = DateTime.Parse ("2014-03-01"), Number = "3", OrdertypeId = 2 },
-                new Order { Date = DateTime.Parse ("2015-05-30"), Number = "3", OrdertypeId = 3 }
+                new Order { Date = DateTime.Parse ("2010-09-01"), Number = "1", OrderType = OrderType.Відрахування },
+                new Order { Date = DateTime.Parse ("2011-09-01"), Number = "79", OrderType = OrderType.Академвідпустка },
+                new Order { Date = DateTime.Parse ("2012-09-01"), Number = "53", OrderType = OrderType.Відрахування },
+                new Order { Date = DateTime.Parse ("2014-03-01"), Number = "3", OrderType = OrderType.Переведення },
+                new Order { Date = DateTime.Parse ("2015-05-30"), Number = "3", OrderType = OrderType.Зміна_форми_навчання }
             };
             foreach (Order item in orders) {
                 context.Orders.Add (item);

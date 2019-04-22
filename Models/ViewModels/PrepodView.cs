@@ -6,10 +6,6 @@ using System.Linq;
 
 namespace PGC.Models.ViewModels {
 
-    // public class PrepodView : Prepod {
-    //     public string DeparmentsString { get; set; }
-    // }
-
     public class PrepodView {
         public int Id { get; set; }
 
@@ -32,12 +28,8 @@ namespace PGC.Models.ViewModels {
 
         public string Email { get; set; }
 
-        
-        public string Present {get; set;}
+        public string Present { get; set; }
 
-        
         public string DeparmentsString { get; set; }
-
     }
-
 }

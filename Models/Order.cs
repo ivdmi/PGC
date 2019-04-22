@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using PGC.Models.ViewModels;
+using PGC.Data;
 
 namespace PGC.Models {
     public class Order {
@@ -18,17 +18,16 @@ namespace PGC.Models {
         [DataType (DataType.Date)]
         public DateTime Date { get; set; }
 
-        public int OrdertypeId { get; set; }
+        // public int OrdertypeId { get; set; }
 
         [Display (Name = "Вид наказу")]
         public OrderType OrderType { get; set; }
 
-        public ICollection<AspirantOrder> AspirantOrders { get; set; }
+        //   public ICollection<AspirantOrder> AspirantsOrders { get; set; }
 
         // не включаются в БД
         [NotMapped]
         [Display (Name = "Аспіранти")]
-        public virtual ICollection<AssignedAspirantData> Aspirants { get; set; }
+        public virtual ICollection<Aspirant> Aspirants { get; set; }
     }
-
 }

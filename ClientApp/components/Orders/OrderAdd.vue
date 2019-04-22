@@ -1,131 +1,190 @@
 <template>
   <div class="col-10 offset-1">
     <h2>Додати наказ</h2>
+    <form v-on:submit.prevent="addItem">
+      <b-container fluid>
+        <b-row class="pad-4">
+          <b-col cols="3" class="text-right">Номер:</b-col>
+          <b-col cols="9">
+            <b-form-input size="sm" name="number" v-model="model.number" v-validate="'required|numeric'" :class="{'has-error': errors.has('number')}"></b-form-input>
+          </b-col>
+        </b-row>
+        <div v-if="errors.has('number')" class="offset-3 alert-validate">{{ errors.first('number') }}</div>
 
-<form v-on:submit.prevent="addItem">    
-       <b-container fluid>
-      <b-row class="pad-4">
-        <b-col cols="3" class="text-right">Номер:</b-col>
-        <b-col cols="9">
-          <b-form-input 
-          size="sm"
-          name="number"
-          v-model="order.number"
-          v-validate="'required|numeric'"
-          :class="{'has-error': errors.has('number')}"
-          ></b-form-input>
-        </b-col>
-      </b-row>
-      <div v-if="errors.has('number')" class="offset-3 alert-validate" >{{ errors.first('number') }}</div>
-      
-<b-row class="pad-4">
-        <b-col cols="3" class="text-right">Дата наказу:</b-col>
-        <b-col cols="9">
-          <b-form-input
-            name="Дата"
-            type="date"
-            v-model="order.date"
-            size="sm"            
-            min="2019-01-01"
-            :max=this.currentDate
-            v-validate="{
+        <b-row class="pad-4">
+          <b-col cols="3" class="text-right">Дата наказу:</b-col>
+          <b-col cols="9">
+            <b-form-input name="Дата" type="date" v-model="model.date" size="sm" min="2019-01-01" :max=this.currentDate v-validate="{
               required,
               date_format : 'YYYY-MM-DD',
               date_between : ['2019-01-01', this.currentDate, true]
-            }"         
-          :class="{'has-error': errors.has('Дата')}"
-          ></b-form-input>
-        </b-col>
-      </b-row>
-     <div v-if="errors.has('Дата')" class="offset-3 alert-validate" >{{ errors.first('Дата') }}</div>
+            }" :class="{'has-error': errors.has('Дата')}"></b-form-input>
+          </b-col>
+        </b-row>
+        <div v-if="errors.has('Дата')" class="offset-3 alert-validate">{{ errors.first('Дата') }}</div>
 
-<b-row class="pad-4">
-        <b-col cols="3" class="text-right">Зміст:</b-col>
-        <b-col cols="9">
-          <b-form-input v-model="order.context" size="sm" ></b-form-input>
-        </b-col>
-      </b-row>   
-  
-      <b-row class="pad-4">
-        <b-col cols="3" class="text-right">Вид наказу:</b-col>
-        <b-col cols="9">
-          <v-select 
-          name="Вид" 
-          label="text" 
-          :options="types"
-          v-model="selectedType"
-          v-validate="'required'" 
-          :class="{'has-error': errors.has('Вид')}">
-            <template slot="option" slot-scope="option">
-              <span v-html="option.text"></span>
-            </template>
-          </v-select>
-        </b-col>
-      </b-row>
-      <div v-if="errors.has('Вид')" class="offset-3 alert-validate" >{{ errors.first('Вид') }}</div>
-  <br />
+        <b-row class="pad-4">
+          <b-col cols="3" class="text-right">Зміст:</b-col>
+          <b-col cols="9">
+            <b-form-input v-model="model.context" size="sm"></b-form-input>
+          </b-col>
+        </b-row>
 
-  <div class="form-group">
-    <input type="submit" class="btn btn-primary" value="Додати наказ"/>
+        <b-row class="pad-4">
+          <b-col cols="2" class="text-right">Вид наказу:</b-col>
+          <b-col cols="5">
+            <v-select name="Вид" label="text" :options="orderTypes" v-model="selectedOrderType" v-validate="'required|selectValue'" :class="{ 'has-error': errors.has('Вид') }">
+              <template slot="option" slot-scope="option">
+                <span v-html="option.text"></span>
+              </template>
+            </v-select>
+          </b-col>
+        </b-row>
+        <div v-if="errors.has('Вид')" class="offset-3 alert-validate">
+          {{ errors.first("Вид") }}
+        </div>
+
+        <div class="col-10 offset-2">
+          <br />
+          <b-row class="pad-4">
+            <input type="submit" class="btn btn-warning mr-2" value="Зберегти" />
+            <router-link to="/orders" tag="button" class="btn btn-warning">Скасувати</router-link>
+          </b-row>
+          <hr />
+        </div>
+
+        <div class="col-10 offset-2">
+          <h5>Аспіранти, включені до наказу</h5>
+          <order-aspirant-selected-list @del-aspirant="onDel" :list="this.aspirantsInOrder"></order-aspirant-selected-list>
+          <hr>
+          <h5>Обрати аспірантів</h5>
+          <order-aspirant-list @add-aspirant="onAddOne" :list="filterAspirants"></order-aspirant-list>
+        </div>
+
+      </b-container>
+    </form>
   </div>
 
-<aspirant-order-list @add-aspirants="onAdd" ></aspirant-order-list>
-
-  </b-container>
-  </form>
-  </div>
-   
 </template>
 
 <script>
 import axios from "axios";
-import moment from "moment";
 import vSelect from "vue-select";
-import aspirantOrderList from "./AspirantOrderList";
+import moment from "moment";
+import orderAspirantList from "./OrderAspirantList";
+import orderAspirantSelectedList from "./OrderAspirantSelectedList";
 
 export default {
-  components: {    
-    name: "AddItem",
+  components: {
     vSelect,
-    aspirantOrderList
+    axios,
+    orderAspirantList,
+    orderAspirantSelectedList
   },
 
   data() {
     return {
-      order: {
+      model: {
         number: "",
         context: "",
-        ordertypeId: "",
+        orderTypeValue: "",
         date: "",
-        aspirants: []
+        aspirantIdList: []
       },
-      selectedType: "",      
-      types: [],
+      aspirantsInOrder: [],
+      aspirants: [],
+      selectedOrderType: {
+        value: 1,
+        text: "Зарахування"
+      },
+
+      orderTypes: [],
+
       currentDate: moment().format("YYYY-MM-DD")
     };
   },
 
-  created: function() {
-    this.types = this.$route.params.types;
-    },
+  mounted: function() {
+    const responseOrderTypes = axios.get("api/Orders/types");
+    const responseAspirants = axios.get("api/Aspirants");
+
+    axios
+      .all([responseOrderTypes, responseAspirants])
+      .then(responses => {
+        this.orderTypes = responses[0].data;
+        this.aspirants = responses[1].data;
+      })
+      .catch(err => {
+        console.log(err);
+      });
+
+    axios.get("api/Orders/types").then(response => {
+      this.orderTypes = response.data;
+    });
+  },
+
+  computed: {
+    filterAspirants: function() {
+      var aspirantList = this.aspirants;
+
+      switch (this.selectedOrderType.value) {
+        case 1: {
+          aspirantList = this.aspirants.filter(item => {
+            return item.course == 0;
+          });
+          break;
+        }
+        default: {
+          console.log(this.selectedOrderType.value);
+          break;
+        }
+      }
+      return aspirantList;
+    }
+  },
 
   methods: {
     addItem() {
       this.$validator.validate().then(valid => {
         if (valid) {
-          this.order.ordertypeId = this.selectedType.value;
-          axios.post("api/orders", this.order).then(response => {
-            console.log(response);
+          this.model.orderTypeValue = this.selectedOrderType.value;
+          // выбрать только Id
+          this.model.aspirantIdList = this.aspirantsInOrder.map(function(v) {
+            return v.id;
+          });
+          axios.post("api/orders/", this.model).then(response => {
             this.$router.push("/orders");
+          });
+        }
       });
-    }
-  })
-  },
+    },
 
-// Возвращаем данные (список аспирантов) из подчиненной формы
-// метод onAdd вызывается по событию add-order
-    onAdd(data){
-      this.order.aspirants = data;     
+    onDel(id) {
+      var k = this.aspirantsInOrder
+        .map(function(e) {
+          return e.id;
+        })
+        .indexOf(id);
+      if (k != -1) {
+        this.aspirantsInOrder.splice(k, 1);
+      }
+    },
+
+    onAddOne(data) {
+      var k = this.aspirantsInOrder
+        .map(function(e) {
+          return e.id;
+        })
+        .indexOf(data.id);
+      if (k === -1) {
+        this.aspirantsInOrder.push(data);
+      }
+    },
+
+    // Возвращаем данные (список аспирантов) из подчиненной формы
+    // метод onAdd вызывается по событию add-order
+    onAdd(data) {
+      this.aspirantsInOrder = data;
     }
   }
 };
