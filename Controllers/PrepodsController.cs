@@ -39,19 +39,6 @@ namespace PGC.Controllers {
                     Present = i.Present ? "Є" : "-",
                     DeparmentsString = i.DepartmentsString
             }).ToList ();
-
-            // foreach (var prep in list) {
-            //     foreach (var pd in _context.PrepodDepartments.OrderBy (c => c.DepartmentId)) {
-            //         if (prep.Id == pd.PrepodId) {
-            //             var dep = _context.Departments.Find (pd.DepartmentId);
-            //             if (String.IsNullOrEmpty (prep.DeparmentsString))
-            //                 prep.DeparmentsString = dep.Acronym;
-            //             else
-            //                 prep.DeparmentsString = prep.DeparmentsString + ", " + dep.Acronym;;
-            //         }
-            //     }
-            //  }
-
             return list;
         }
 
@@ -73,6 +60,8 @@ namespace PGC.Controllers {
             if (!ModelState.IsValid) {
                 return BadRequest (ModelState);
             }
+            prepod.DepartmentsString = GetDepartmentsString (prepod);
+
             _context.Prepods.Add (prepod);
             await _context.SaveChangesAsync ();
             await EditAssignedDepartments (prepod);
@@ -87,15 +76,17 @@ namespace PGC.Controllers {
                 return BadRequest (ModelState);
             }
 
-            // заполнение поля акронимами кафедр
-            prepod.DepartmentsString = String.Empty;
-            foreach (var item in prepod.Departments.OrderBy (o => o.Acronym)) {
-                var dep = _context.Departments.FirstOrDefault (i => i.Id == item.Id);
-                if (String.IsNullOrEmpty (prepod.DepartmentsString))
-                    prepod.DepartmentsString = dep?.Acronym;
-                else
-                    prepod.DepartmentsString = prepod.DepartmentsString + ", " + dep?.Acronym;
-            }
+            prepod.DepartmentsString = GetDepartmentsString (prepod);
+
+            // // заполнение поля акронимами кафедр
+            // prepod.DepartmentsString = String.Empty;
+            // foreach (var item in prepod.Departments.OrderBy (o => o.Acronym)) {
+            //     var dep = _context.Departments.FirstOrDefault (i => i.Id == item.Id);
+            //     if (String.IsNullOrEmpty (prepod.DepartmentsString))
+            //         prepod.DepartmentsString = dep?.Acronym;
+            //     else
+            //         prepod.DepartmentsString = prepod.DepartmentsString + ", " + dep?.Acronym;
+            // }
 
             _context.Entry (prepod).State = EntityState.Modified;
             try {
@@ -175,7 +166,7 @@ namespace PGC.Controllers {
             }
 
             foreach (var item in prepods) {
-                if (!IsPrepodUniq (item))
+                if (!IsPrepodUniqByName (item))
                     return BadRequest ("Викладач " + item.FIO + " вже є в БД. Видаліть або виправте запис та повторіть імпорт");
             }
 
@@ -185,7 +176,84 @@ namespace PGC.Controllers {
             return Ok ();
         }
 
-        private bool IsPrepodUniq (Prepod prepod) {
+        // Импорт из файла Excel (з формуляра відділу кадрів)
+        [HttpPost ("formularImport")]
+        public async Task<IActionResult> FormularImport ([FromBody] IEnumerable<Prepod> importPrepods) {
+            if (!ModelState.IsValid) {
+                return BadRequest ("Перевірте наявність даних в полях Surename та Name в усіх строках, починаючи з другої.");
+            }
+
+            List<Prepod> dbPrepods = _context.Prepods.ToList ();
+
+            foreach (var dbPrepod in dbPrepods) {
+                // сначала делаем всех неактивніми, а затем по IDImport - активными и вносим изменения
+                dbPrepod.Present = false;
+                dbPrepod.Departments = new List<Department> ();
+            }
+
+            foreach (var importPrepod in importPrepods) {
+
+                // Распарсить полный путь до акронима
+                Department department = _context.Departments.FirstOrDefault (d => d.Acronym == importPrepod.DepartmentsString);
+                if (department == null) {
+                    return BadRequest ("Перевірте Кафедру для " + importPrepod.Surename);
+                }
+
+                Prepod dbPrepod = dbPrepods.FirstOrDefault (p => p.ImportId == importPrepod.ImportId);
+
+                if (dbPrepod == null) {
+                    dbPrepod = CopyPrepod (new Prepod () { Departments = new List<Department> () }, importPrepod, department);
+                    // dbPrepod.Departments = new List<Department> ();
+                    dbPrepods.Add (dbPrepod);
+                    _context.Prepods.Add (dbPrepod);
+                    await _context.SaveChangesAsync ();
+                } else {
+                    dbPrepod = CopyPrepod (dbPrepod, importPrepod, department);
+                }
+            }
+
+            foreach (var dbPrepod in dbPrepods) {
+                await EditAssignedDepartments (dbPrepod);
+            }
+
+            await _context.SaveChangesAsync ();
+
+            return Ok ();
+        }
+
+        private Prepod CopyPrepod (Prepod dbPrepod, Prepod importPrepod, Department department) {
+
+            dbPrepod.Departments.Add (department);
+
+            // повторно встречается - совместитель
+            if (dbPrepod.Present) {
+                dbPrepod.DepartmentsString = dbPrepod.DepartmentsString + ", " + importPrepod.DepartmentsString;
+            } else {
+                dbPrepod.Present = true;
+
+                dbPrepod.ImportId = importPrepod.ImportId;
+                dbPrepod.Degree = importPrepod.Degree;
+                dbPrepod.DepartmentsString = importPrepod.DepartmentsString;
+                dbPrepod.Name = importPrepod.Name;
+                dbPrepod.Patronymic = importPrepod.Patronymic;
+                dbPrepod.Position = importPrepod.Position;
+                dbPrepod.Rank = importPrepod.Rank;
+                dbPrepod.Surename = importPrepod.Surename;
+
+                // ДОПОЛНЕНИИ ИНФОРМАЦИИ ОБ импортируемых ПРЕПОДАВАТЕЛЯХ СОБСТВЕННЫМИ ДАННЫМИ - не перезаписывать (тлф, , почта, ...)
+                // dbPrepod.Birthday 
+                // dbPrepod.Email;
+                // dbPrepod.Phone;
+            }
+
+            return dbPrepod;
+        }
+
+        private bool IsPrepodUniq (Prepod prepod, List<Prepod> dbPrepods) {
+            return !dbPrepods.Any (p => p.ImportId == prepod.ImportId);
+        }
+
+        private bool IsPrepodUniqByName (Prepod prepod) {
             bool uniq = false;
             if (String.IsNullOrEmpty (prepod.Patronymic))
                 uniq = !_context.Prepods.Any (p => p.Surename + p.Name == prepod.Surename + prepod.Name);
@@ -241,6 +309,20 @@ namespace PGC.Controllers {
                 list.Add (new ItemData () { Value = item.Id, Text = txt });
             }
             return list;
+        }
+
+        // заполнение поля акронимами кафедр
+        private string GetDepartmentsString (Prepod prepod) {
+            string departmentsString = String.Empty;
+            foreach (var item in prepod.Departments.OrderBy (o => o.Acronym)) {
+                var dep = _context.Departments.FirstOrDefault (i => i.Id == item.Id);
+                if (String.IsNullOrEmpty (departmentsString))
+                    departmentsString = dep?.Acronym;
+                else
+                    departmentsString = departmentsString + ", " + dep?.Acronym;
+            }
+
+            return departmentsString;
         }
 
         private bool DepartmentExists (int id) {

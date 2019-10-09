@@ -13,14 +13,20 @@
       </div>
       <span class="label" id="upload-file-info"></span>
 
-      <b-modal class="text-danger border-danger" ref="errorImportRef" title="Помилка імпорту з XLS файлу!">
-        <b-alert show variant="danger">{{this.errorData}}</b-alert>
+      <b-modal class="text-danger border-danger" ref="errorImportRef" title="Помилка імпорту з XLS файлу!">        
+        <b-alert show variant="danger"><span v-html="this.errorData"></span></b-alert>
       </b-modal>
     </div>
 
     <b-table responsive hover striped bordered small :items="list" :fields="fields" class="table-14">
+
       <template slot="index" slot-scope="data">
         {{ data.index + 1 }}
+      </template>
+
+      <template slot="HEAD_selected" slot-scope="data">
+        <b-form-checkbox @click.native.stop v-model="allSelected">
+        </b-form-checkbox>
       </template>
 
       <template slot="info" slot-scope="row">
@@ -75,6 +81,7 @@ export default {
 
       fields: [
         { label: "№", key: "index" },
+        { label: "v", key: "HEAD_selected" },
         // {
         //   key: "surename",
         //   label: "Прізвище",
@@ -94,6 +101,7 @@ export default {
         { key: "statusType", label: "Статус", sortable: true },
         { key: "course", label: "К", sortable: true },
         { key: "present", label: "Є", sortable: true },
+        { key: "vacation", label: "V", sortable: true },
         { key: "doctorant", label: "А", sortable: true },
         { key: "sex", label: "С", sortable: true },
         { key: "birthYear", label: "Нар", sortable: true },
@@ -204,14 +212,15 @@ export default {
           var wsname = wb.SheetNames[0];
           var ws = wb.Sheets[wsname];
 
-          let Json = XLSX.utils.sheet_to_json(ws);
+          // { range: 1 } - читать начиная со 2 строки
+          let Json = XLSX.utils.sheet_to_json(ws, { range: 1 });
 
-          //          axios
-          //            .post(`api/prepods/import`, Json)
-          //            .then(response => resolve("result"))
-          //            .catch(err => {
-          //              reject(new Error(err.response.data));
-          //            });
+          axios
+            .post(`api/aspirants/import`, Json)
+            .then(response => resolve("result"))
+            .catch(err => {
+              reject(new Error(err.response.data));
+            });
         };
         reader.readAsArrayBuffer(file);
       });
@@ -221,6 +230,7 @@ export default {
         error => {
           this.errorData = error.message;
           this.$refs.errorImportRef.show();
+          this.reloadList();
         }
       );
     }

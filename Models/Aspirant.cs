@@ -57,6 +57,8 @@ namespace PGC.Models {
 
         public bool Present { get; set; }
 
+        public bool Vacation { get; set; }
+
         public bool P1 { get; set; }
         public bool P2 { get; set; }
         public bool P3 { get; set; }
@@ -68,8 +70,6 @@ namespace PGC.Models {
         [Range (0, 5)]
         [Display (Name = "Курс")]
         public int Course { get; set; }
-
-        // public int? StatustypeId { get; set; }
 
         // ключи
 

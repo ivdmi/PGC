@@ -1,390 +1,315 @@
-<template id="aspirant">
-  <div>
-    <h2>Редагування облікового запису аспіранта</h2>
+<template>
+  <div class="col-10 offset-1">
+    <h2>Редагувати наказ</h2>
+    <form v-on:submit.prevent="editItem">
+      <b-container fluid>
+        <b-row class="pad-4">
+          <b-col cols="3" class="text-right">Номер:</b-col>
+          <b-col cols="9">
+            <b-form-input size="sm" name="number" v-model="model.number" v-validate="'required|numeric'" :class="{'has-error': errors.has('number')}"></b-form-input>
+          </b-col>
+        </b-row>
+        <div v-if="errors.has('number')" class="offset-3 alert-validate">{{ errors.first('number') }}</div>
 
-    <b-container fluid>
-      <b-row class="pad-4">
-        <b-col cols="2" class="text-right">Прізвище:</b-col>
-        <b-col cols="5">
-          <b-form-input 
-          size="sm" 
-          type="text" 
-          name="surename"
-          v-model="aspirant.surename"
-          v-validate="'required|alpha'"
-          :class="{'has-error': errors.has('surename')}"
-          ></b-form-input>
-        </b-col>
-      </b-row>
-      <div v-if="errors.has('surename')" class="offset-3 alert-validate" >{{ errors.first('surename') }}</div>
-         
-      <b-row class="pad-4">
-        <b-col cols="2" class="text-right">Ім'я:</b-col>
-        <b-col cols="5">
-          <b-form-input
-            size="sm"
-            type="text"            
-            name="name"
-            v-model="aspirant.name"
-            v-validate="'required|alpha'"
-            :class="{'has-error': errors.has('name')}"
-          ></b-form-input>
-        </b-col>
-      </b-row>
-      <div v-if="errors.has('name')" class="offset-3 alert-validate" >{{ errors.first('name') }}</div>
-
-      <b-row class="pad-4">
-        <b-col cols="2" class="text-right">По батькові:</b-col>
-        <b-col cols="5">
-          <b-form-input
-            size="sm"
-            type="text"           
-            name="patronymic"
-          v-model="aspirant.patronymic"
-          v-validate="'alpha'"
-          :class="{'has-error': errors.has('patronymic')}"
-          ></b-form-input>
-        </b-col>
-      </b-row>
-      <div v-if="errors.has('patronymic')" class="offset-3 alert-validate" >{{ errors.first('patronymic') }}</div>
-
-      <b-row class="pad-4">
-        <b-col cols="2" class="text-right">Телефон:</b-col>
-        <b-col cols="5">
-          <b-form-input
-            size="sm"
-            type="text"                        
-            name="phone"
-          v-model="aspirant.phone"
-          v-validate="'phone'"
-          :class="{'has-error': errors.has('phone')}"
-          ></b-form-input>
-        </b-col>
-      </b-row>
-      <div v-if="errors.has('phone')" class="offset-3 alert-validate" >{{ errors.first('phone') }}</div>
-
-      <b-row class="pad-4">
-        <b-col cols="2" class="text-right">Email:</b-col>
-        <b-col cols="5">
-          <b-form-input
-            size="sm"
-            type="email"
-            name="email"
-          v-model="aspirant.email"
-          v-validate="'email'"
-          :class="{'has-error': errors.has('email')}"
-          ></b-form-input>
-        </b-col>
-      </b-row>
-      <div v-if="errors.has('email')" class="offset-3 alert-validate" >{{ errors.first('email') }}</div>
-
-      <b-row class="pad-4">
-        <b-col cols="2" class="text-right">Народження:</b-col>
-        <b-col cols="5">
-          <b-form-input
-            name="birthday"
-            type="date"
-            v-model="aspirant.birthday"
-            size="sm"            
-            :min=this.minDate
-            :max=this.maxDate
-            v-validate="{
+        <b-row class="pad-4">
+          <b-col cols="3" class="text-right">Дата наказу:</b-col>
+          <b-col cols="9">
+            <b-form-input name="Дата" type="date" v-model="model.date" size="sm" min="2019-01-01" :max=this.currentDate v-validate="{
+              required,
               date_format : 'YYYY-MM-DD',
-              date_between : [this.minDate, this.maxDate, true]
-            }"
-          :class="{'has-error': errors.has('birthday')}"
-          ></b-form-input>
-        </b-col>
-      </b-row>
-     <div v-if="errors.has('birthday')" class="offset-3 alert-validate" >{{ errors.first('birthday') }}</div>
+              date_between : ['2019-01-01', this.currentDate, true]
+            }" :class="{'has-error': errors.has('Дата')}"></b-form-input>
+          </b-col>
+        </b-row>
+        <div v-if="errors.has('Дата')" class="offset-3 alert-validate">{{ errors.first('Дата') }}</div>
 
-<b-row class="pad-4">
-        <b-col cols="2" class="text-right">inputDate:</b-col>
-        <b-col cols="5">
-          <b-form-input
-            name="inputDate"
-            type="date"
-            v-model="aspirant.inputDate"
-            size="sm"            
-            min="2017-01-01"
-            :max=this.currentDate
-            v-validate="{
-              date_format : 'YYYY-MM-DD',
-              date_between : ['2017-01-01', this.currentDate, true]
-            }"
-          :class="{'has-error': errors.has('inputDate')}"
-          ></b-form-input>
-        </b-col>
-      </b-row>
-     <div v-if="errors.has('inputDate')" class="offset-3 alert-validate" >{{ errors.first('inputDate') }}</div>
+        <b-row class="pad-4">
+          <b-col cols="3" class="text-right">Зміст:</b-col>
+          <b-col cols="9">
+            <b-form-input v-model="model.context" size="sm"></b-form-input>
+          </b-col>
+        </b-row>
 
-<b-row class="pad-4">
-        <b-col cols="2" class="text-right">Захист:</b-col>
-        <b-col cols="5">
-          <b-form-input
-            name="protectionDate"
-            type="date"
-            v-model="aspirant.protectionDate"
-            size="sm"            
-            min="2017-01-01"
-            :max=this.currentDate
-            v-validate="{
-              date_format : 'YYYY-MM-DD',
-              date_between : ['2017-01-01', this.currentDate, true]
-            }"
-          :class="{'has-error': errors.has('protectionDate')}"
-          ></b-form-input>
-        </b-col>
-      </b-row>
-     <div v-if="errors.has('protectionDate')" class="offset-3 alert-validate" >{{ errors.first('protectionDate') }}</div>
-   
-      <b-row class="pad-4">
-        <b-col cols="2" class="text-right">Спеціальність:</b-col>
-        <b-col cols="5">
-          <v-select name="Спеціальність" label="text" :options="specialities" v-model="selectedSpeciality" v-validate="'required'" :class="{'has-error': errors.has('Спеціальність')}">
-            <template slot="option" slot-scope="option">
-              <span v-html="option.text"></span>
-            </template>
-          </v-select>
-        </b-col>
-      </b-row>
-      <div v-if="errors.has('Спеціальність')" class="offset-3 alert-validate" >{{ errors.first('Спеціальність') }}</div>
+        <b-row class="pad-4">
+          <b-col cols="3" class="text-right">Вид наказу:</b-col>
+          <b-col cols="9">
+            <v-select name="Вид" label="text" :options="orderTypes" v-model="selectedOrderType" v-validate="'required|selectValue'" :class="{ 'has-error': errors.has('Вид') }">
+              <template slot="option" slot-scope="option">
+                <span v-html="option.text"></span>
+              </template>
+            </v-select>
+          </b-col>
+        </b-row>
+        <div v-if="errors.has('Вид')" class="offset-3 alert-validate">
+          {{ errors.first("Вид") }}
+        </div>
 
-      <b-row class="pad-4">
-        <b-col cols="2" class="text-right">Статус:</b-col>
-        <b-col cols="5">
-          <v-select 
-          name="Статус" 
-          label="text" 
-          :options="statuses" 
-          v-model="selectedStatus"
-          v-validate="'required'" 
-          :class="{'has-error': errors.has('Статус')}">
-            <template slot="option" slot-scope="option">
-              <span v-html="option.text"></span>
-            </template>
-          </v-select>
-        </b-col>
-      </b-row>
-      <div v-if="errors.has('Статус')" class="offset-3 alert-validate" >{{ errors.first('Статус') }}</div>
-      
-      <b-row class="pad-4">
-        <b-col cols="2" class="text-right">В наявності:</b-col>
-        <b-col cols="5">
-          <span>
-            <input type="checkbox" class="short-check" v-model="aspirant.present">
-          </span>
-        </b-col>
-      </b-row>         
+        <div class="col-10 offset-2">
+          <br />
+          <b-row class="pad-4">
+            <!-- <input v-if="submitVisible" type="submit" class="btn btn-warning mr-2" value="Зберегти" /> -->
+            <input type="submit" class="btn btn-warning mr-2" value="Зберегти" />
+            <router-link to="/orders" tag="button" class="btn btn-warning">Скасувати</router-link>
+          </b-row>
+          <hr />
+        </div>
 
-<b-row class="pad-4">
-        <b-col cols="2" class="text-right">Бюджет (контракт):</b-col>
-        <b-col cols="5">
-          <span>
-            <input type="checkbox" class="short-check" v-model="aspirant.budget">
-          </span>
-        </b-col>
-      </b-row>         
+        <div class="col-10 offset-2">
+          <h5>Аспіранти, включені до наказу</h5>
+          <order-aspirant-selected-list @del-aspirant="onDel" :list="this.aspirantsInOrder"></order-aspirant-selected-list>
+          <hr>
+          <h5>Обрати аспірантів</h5>
+          <order-aspirant-list @add-aspirant="onAddOne" @add-aspirants="onAddSeveral" :list="filterAspirants"></order-aspirant-list>
+        </div>
 
-<b-row class="pad-4">
-        <b-col cols="2" class="text-right">Стаціонар (заочна):</b-col>
-        <b-col cols="5">
-          <span>
-            <input type="checkbox" class="short-check" v-model="aspirant.stationary">
-          </span>
-        </b-col>
-      </b-row>         
-
-      <b-row class="pad-4">
-        <b-col cols="2" class="text-right">Денна (вечірня):</b-col>
-        <b-col cols="5">
-          <span>
-            <input type="checkbox" class="short-check" v-model="aspirant.day">
-          </span>
-        </b-col>
-      </b-row>         
-
-      <b-row class="pad-4">
-        <b-col cols="2" class="text-right">Докторант (аспірант):</b-col>
-        <b-col cols="5">
-          <span>
-            <input type="checkbox" class="short-check" v-model="aspirant.doctorant">
-          </span>
-        </b-col>
-      </b-row>  
-
-      <b-row class="pad-4">
-        <b-col cols="2" class="text-right">Захист:</b-col>
-        <b-col cols="5">
-          <span>
-            <input type="checkbox" class="short-check" v-model="aspirant.protection">
-          </span>
-        </b-col>
-      </b-row>  
-                
-      <b-row class="pad-4">
-        <b-col cols="2" class="text-right">Курс:</b-col>
-        <b-col cols="5">
-          <b-form-input          
-          name="Курс"
-          v-model="aspirant.course"
-          min=0
-          max=3
-          type="number"
-          v-validate="'numeric|between:0,3'"
-          :class="{'has-error': errors.has('Курс')}"
-          ></b-form-input>
-        </b-col>
-      </b-row>
-      <div v-if="errors.has('Курс')" class="offset-3 alert-validate" >{{ errors.first('Курс') }}</div>
-
-    </b-container>
-
-    <button class="btn btn-warning" v-on:click="saveAspirant('put')">Зберегти</button>
-    <button class="btn btn-warning" v-on:click="saveAspirant('cancel')">Відмовитися</button>
-
-    <hr>
+      </b-container>
+    </form>
   </div>
+
 </template>
 
 <script>
 import axios from "axios";
-import { eventBus } from "./../../index.js";
 import vSelect from "vue-select";
-import VueRouter from "vue-router";
 import moment from "moment";
+import orderAspirantList from "./OrderAspirantList";
+import orderAspirantSelectedList from "./OrderAspirantSelectedList";
 
 export default {
   components: {
-    vSelect
+    vSelect,
+    axios,
+    orderAspirantList,
+    orderAspirantSelectedList
   },
 
   data() {
     return {
-      // новый объект для значений (чтобы не портить ссылку)
-      aspirant: {
-        id: this.$route.params.item.id,
-
-        name: this.$route.params.item.name,
-        surename: this.$route.params.item.surename,
-        patronymic: this.$route.params.item.patronymic,
-
-        phone: this.$route.params.item.phone,
-        email: this.$route.params.item.email,
-
-        birthday: this.$route.params.item.birthday,
-        inputDate: this.$route.params.item.inputDate,
-        protectionDate: this.$route.params.item.protectionDate,
-
-        present: this.$route.params.item.present,
-        budget: this.$route.params.item.budget,
-        stationary: this.$route.params.item.stationary,
-        day: this.$route.params.item.day,
-        doctorant: this.$route.params.item.doctorant,
-        protection: this.$route.params.item.protection,        
-
-        course: this.$route.params.item.course,
-
-        specialityId: this.$route.params.item.specialityId,
-        statustypeId: this.$route.params.item.statustypeId
+      model: {
+        id: "",
+        number: "",
+        context: "",
+        orderTypeValue: "",
+        date: "",
+        aspirantIdList: [],
+        budget: "",
+        studyForm: ""
       },
 
-      // запомнить ссылку на объект
-      refAspirant: this.$route.params.item,
+      aspirantsInOrder: [],
+      aspirants: [],
 
-      specialities: [],
-      statuses: [],
-      selectedSpeciality: {
-        value: this.$route.params.item.specialityId
-      },
-      selectedStatus: {
-        value: this.$route.params.item.statustypeId
-      },
-      currentDate: moment().format("YYYY-MM-DD"),
-      maxDate: moment()
-        .add("years", -20)
-        .format("YYYY-MM-DD"),
-      minDate: "1935-01-01"
+      selectedOrderType: {},
+      selectedStudyForm: {},
+
+      orderTypes: [],
+      //      studyForms: [],
+
+      //    studyFormVisible: false,
+      // submitVisible: true,
+
+      currentDate: moment().format("YYYY-MM-DD")
     };
   },
 
-  created: function() {
-    // читаем в массив специальности и заполняем selectedSpeciality
+  mounted: function() {
+    const responseOrder = axios.get("api/Orders/" + this.$route.params.id);
+    const responseAspirantsInOrder = axios.get(
+      "api/Orders/aspirants/" + this.$route.params.id
+    );
+    const responseAspirants = axios.get("api/Aspirants");
+    const responseOrderTypes = axios.get("api/Orders/types");
+    //    const responseStudyForms = axios.get("api/Aspirants/sforms");
 
-    this.specialities = this.$route.params.specialities;
-    this.selectedSpeciality.text = this.specialities.find(
-      x => x.value === this.selectedSpeciality.value
-    ).text;
+    axios
+      .all([
+        responseOrder,
+        responseAspirantsInOrder,
+        responseAspirants,
+        responseOrderTypes
+        //     responseStudyForms
+      ])
+      .then(responses => {
+        this.model = responses[0].data;
+        this.aspirantsInOrder = responses[1].data;
+        this.aspirants = responses[2].data;
+        this.orderTypes = responses[3].data;
+        //      this.studyForms = responses[4].data;
+        this.selectedOrderType.value = responses[0].data.orderType;
+        this.selectedOrderType.text = this.orderTypes.find(
+          x => x.value === this.selectedOrderType.value
+        ).text;
 
-    this.statuses = this.$route.params.statuses;
-    this.selectedStatus.text = this.statuses.find(
-      x => x.value === this.$route.params.item.statustypeId
-    ).text;
+        // Если тип - "Зміна форми навчання" - менять не будем
+        // if (this.selectedOrderType.value == 7) {
+        //   this.submitVisible = false;
+        // }
 
-    // var self = this;
+        // if (this.aspirantsInOrder.length != 0) {
+        //   this.selectedStudyForm.value = this.aspirantsInOrder[0].studyForm;
+        //   this.selectedStudyForm.text = this.studyForms.find(
+        //     x => x.value === this.selectedStudyForm.value
+        //   ).text;
+        //   this.model.budget = this.aspirantsInOrder[0].budget;
+        // }
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  },
 
-    // axios.get(`api/specialities/names`).then(function(response) {
-    //   self.specialities = response.data;
-    //   self.selectedSpeciality.text = self.specialities.find(
-    //     x => x.value === self.selectedSpeciality.value
-    //   ).text;
-    // });
+  computed: {
+    // список аспірантів та форма залежно від типу наказу
+    filterAspirants: function() {
+      //    this.studyFormVisible = false;
+      var aspirantList = this.aspirants;
+      var aspirantListActiv = this.aspirants;
 
-    // axios.get(`api/Aspirants/statuses`).then(function(response) {
-    //   self.statuses = response.data;
-    //   self.selectedStatus.text = self.statuses.find(
-    //     x => x.value === self.$route.params.item.statustypeId
-    //   ).text;
-    // });
+      if (this.selectedOrderType.value == 1) {
+        // Зарахування
+        aspirantList = this.aspirants.filter(item => {
+          return item.course == 0;
+        });
+      } else {
+        aspirantListActiv = this.aspirants.filter(item => {
+          return item.course != 0 && item.statusType == "навчання";
+        });
+        switch (this.selectedOrderType.value) {
+          case 6: {
+            // Повернення з відпустки
+            aspirantList = this.aspirants.filter(item => {
+              return item.vacation == "+";
+            });
+            break;
+          }
+          case 7: {
+            // Зміна форми навчання
+            //          this.studyFormVisible = true;
+            break;
+          }
+          case 8: {
+            // Інший
+            aspirantList = this.aspirants;
+            break;
+          }
+          default: {
+            aspirantList = aspirantListActiv;
+            break;
+          }
+        }
+      }
+
+      //     this.aspirantsInOrder = [];
+
+      return aspirantList;
+    }
   },
 
   methods: {
-    saveAspirant: function(action) {
-      var backparam;
-
+    editItem() {
       this.$validator.validate().then(valid => {
-        if (valid || action == "cancel") {
-          if (action == "put") {
-            this.aspirant.specialityId = this.selectedSpeciality.value;
-            this.aspirant.statustypeId = this.selectedStatus.value;
+        if (valid) {
+          this.model.orderTypeValue = this.selectedOrderType.value;
+          this.model.studyForm = this.selectedStudyForm.value;
+          // выбрать только Id
+          this.model.aspirantIdList = this.aspirantsInOrder.map(function(v) {
+            return v.id;
+          });
+          // axios.put("api/orders/", this.model).then(response => {
+          //   this.$router.push("/orders");
+          // });
 
-            // заполнить ссылку валидными значениями
-            this.refAspirant.name = this.aspirant.name;
-            this.refAspirant.surename = this.aspirant.surename;
-            this.refAspirant.patronymic = this.aspirant.patronymic;
-            this.refAspirant.phone = this.aspirant.phone;
-            this.refAspirant.email = this.aspirant.email;
+          // axios.put("api/orders/", this.model).then(response => {
+          //   this.$router.push("/orders");
+          // });
 
-            this.refAspirant.birthday = this.aspirant.birthday;
-            this.refAspirant.inputDate = this.aspirant.inputDate;
-            this.refAspirant.protectionDate = this.aspirant.protectionDate;
-
-            this.refAspirant.specialityId = this.selectedSpeciality.value;
-            this.refAspirant.statustypeId = this.selectedStatus.value;
-
-            this.refAspirant.present = this.aspirant.present;
-            this.refAspirant.budget = this.aspirant.budget;
-            this.refAspirant.stationary = this.aspirant.stationary;
-            this.refAspirant.day = this.aspirant.day;
-            
-            this.refAspirant.doctorant = this.aspirant.doctorant;
-            this.refAspirant.protection = this.aspirant.protection;
-            
-            this.refAspirant.course = this.aspirant.course;
-
-            backparam = {
-              item: this.aspirant,
-              action: "put"
-            };
-          } else {
-            backparam = {
-              action: "cancel"
-            };
-          }
-          eventBus.$emit("change-aspirant", backparam);
-          this.$router.push("/aspirants");
+          axios
+            .put("api/Orders/" + this.model.id, this.model)
+            .then(response => {
+              this.$router.push("/orders");
+            });
         }
       });
+    },
+
+    onDel(data) {
+      // удалить строку из aspirantsInOrder - верхний список
+      var k = this.aspirantsInOrder
+        .map(function(e) {
+          return e.id;
+        })
+        .indexOf(data.id);
+      if (k != -1) {
+        this.aspirantsInOrder.splice(k, 1);
+      }
+
+      // Зарахування
+      if (this.selectedOrderType.value == 1) {
+        var item = this.aspirants.find(x => x.id === data.id);
+        if (item != null) {
+          item.course = 0;
+        }
+      }
+
+      // добавить строку в aspirants - нижний список
+      var m = this.aspirants
+        .map(function(e) {
+          return e.id;
+        })
+        .indexOf(data.id);
+      if (m === -1) {
+        this.aspirants.push(data);
+      }
+    },
+
+    onAddOne(data) {
+      // добавить строку в aspirantsInOrder - верхний список
+      var k = this.aspirantsInOrder
+        .map(function(e) {
+          return e.id;
+        })
+        .indexOf(data.id);
+      if (k === -1) {
+        this.aspirantsInOrder.push(data);
+      }
+
+      // удалить строку из aspirants - нижний список
+      var n = this.aspirants
+        .map(function(e) {
+          return e.id;
+        })
+        .indexOf(data.id);
+      if (n != -1) {
+        this.aspirants.splice(n, 1);
+      }
+    },
+
+    onAddSeveral(data) {
+      data.forEach(element => {
+        var k = this.aspirantsInOrder
+          .map(function(e) {
+            return e.id;
+          })
+          .indexOf(element.id);
+        if (k === -1) {
+          this.aspirantsInOrder.push(element);
+        }
+
+        var n = this.aspirants
+          .map(function(e) {
+            return e.id;
+          })
+          .indexOf(element.id);
+        if (n != -1) {
+          this.aspirants.splice(n, 1);
+        }
+      });
+    },
+
+    // Возвращаем данные (список аспирантов) из подчиненной формы
+    // метод onAdd вызывается по событию add-order
+    onAdd(data) {
+      this.aspirantsInOrder = data;
     }
   }
 };

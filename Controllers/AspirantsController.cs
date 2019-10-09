@@ -46,6 +46,7 @@ namespace PGC.Controllers {
                         Budget = i.Budget ? "б" : "-",
                         Doctorant = i.Doctorant ? "-" : "а",
                         Sex = i.Sex ? "ч" : "ж",
+                        Vacation = i.Vacation ? "+" : "-",
                         Protection = i.Protection ? "+" : "-",
                         Present = i.Present ? "+" : "-",
                         P1 = i.P1 ? "+" : "-",
@@ -64,41 +65,7 @@ namespace PGC.Controllers {
             return list;
         }
 
-        // public IEnumerable<AspirantView> GetAspirants () {
-        //     var l = _context.Aspirants.ToList ();
-
-        //     var list = _context.Aspirants.
-        //     Include ("Prepod").Include ("Speciality").Include ("Department").Include ("Department.Faculty").ToList ()
-        //         .Select (i => new AspirantView {
-        //             Id = i.Id,
-        //                 Surename = i.Surename,
-        //                 Name = i.Name,
-        //                 Patronymic = i.Patronymic,
-
-        //                 Phone = i.Phone,
-        //                 Email = i.Email,
-
-        //                 BirthYear = i.Birthday?.Year,
-        //                 InputYear = i.InputDate?.Year,
-        //                 GraduationYear = i.GraduationDate?.Year,
-        //                 ProtectionYear = i.ProtectionDate?.Year,
-        //                 StudyForm = i.StudyForm.GetDisplayName (),
-        //                 StatusType = i.StatusType.GetDisplayName (),
-        //                 Budget = i.Budget ? "Б" : "к",
-        //                 Doctorant = i.Doctorant ? "Д" : "а",
-        //                 Sex = i.Sex ? "ч" : "Ж",
-        //                 Protection = i.Protection ? "З" : "-",
-        //                 Present = i.Present ? "Є" : "-",
-        //                 Course = i.Course,
-        //                 SpecialityId = i.SpecialityId,
-        //                 Department = i.Department?.Acronym,
-        //                 Faculty = i.Department?.Faculty?.Acronym,
-        //                 Prepod = i.Prepod?.FIO
-        //         }).ToList ();
-        //     return list;
-        // }
-
-        // один преподаватель
+        // один 
         // GET: api/Aspirants/5
         [HttpGet ("{id}")]
         public async Task<IActionResult> Get ([FromRoute] int id) {
@@ -108,6 +75,12 @@ namespace PGC.Controllers {
             }
             return Ok (aspirant);
         }
+
+        // [HttpGet ("qq/{id}")]
+        // public string Getq ([FromRoute] int id) {
+
+        //     return "QQQQQQQQQQQQQQQQQQQQQQQ";
+        // }
 
         // Редактировать запись
         // PUT: api/Aspirant/5
@@ -145,6 +118,11 @@ namespace PGC.Controllers {
             return aspirantSelectLists;
         }
 
+        [HttpGet ("sforms")]
+        public IEnumerable<ItemData> GetStudyForms () {
+            return Helper.GetStudyForms ();
+        }
+
         // Добавить запись
         // POST: api/Aspirants
         [HttpPost]
@@ -178,6 +156,43 @@ namespace PGC.Controllers {
 
             return Ok (aspirant);
         }
+
+        // Импорт из файла Excel
+        [HttpPost ("import")]
+        public async Task<IActionResult> Import ([FromBody] IEnumerable<AspirantImport> aspirants) {
+            string badMessage = "<b>До бази даних вже занесені:</b> <br>";
+            bool exist = false;
+
+            if (!ModelState.IsValid) {
+                return BadRequest ("Перевірте наявність даних в полях Прізвище та Ім'я у строках, починаючи з № 3");
+            }
+
+            foreach (AspirantImport aspirantImport in aspirants) {
+                Aspirant aspirant = InitAspirantFromAspirantImport (aspirantImport);
+                if (aspirant == null) {
+                    badMessage += aspirantImport.Surename + " " + aspirantImport.Name + " " + aspirantImport.Patronymic + " " + DateTime.FromOADate (aspirantImport.Birthday).ToShortDateString () + " народж.  <br> \n";
+                    exist = true;
+                } else {
+                    _context.Aspirants.Add (aspirant);
+                }
+            }
+            await _context.SaveChangesAsync ();
+            if (exist) {
+                return BadRequest (badMessage);
+            } else {
+                return Ok ();
+            }
+        }
+
+        // private bool IsAspirantUniq (AspirantImport aspirant) {
+        //     bool uniq = false;
+        //     if (String.IsNullOrEmpty (aspirant.Patronymic))
+        //         uniq = !_context.Prepods.Any (p => p.Surename + p.Name == aspirant.Surename + aspirant.Name);
+        //     else
+        //         uniq = !_context.Prepods.Any (p => p.Surename + p.Name + p.Patronymic == aspirant.Surename + aspirant.Name + aspirant.Patronymic);
+
+        //     return uniq;
+        // }
 
         // ===========================================================================================================    
 
@@ -213,13 +228,53 @@ namespace PGC.Controllers {
             return _context.Aspirants.Any (e => e.Id == id);
         }
 
-        // public class AspirantView {
-        //     public string Name { get; set; }
+        private Aspirant InitAspirantFromAspirantImport (AspirantImport aspirantImport) {
+            DateTime birthday = DateTime.FromOADate (aspirantImport.Birthday);
 
-        //     public string Surename { get; set; }
+            Aspirant aspirant = _context.Aspirants.FirstOrDefault (a => (a.Name == aspirantImport.Name &&
+                a.Surename == aspirantImport.Surename &&
+                a.Patronymic == aspirantImport.Patronymic &&
+                a.Birthday.Value.Date == birthday.Date));
 
-        //     public int StatustypeId { get; set; }
+            // Возвращаем null, если аспирант уже есть в БД
+            if (aspirant != null) {
+                return null;
+            }
 
-        // }
+            aspirant = new Aspirant ();
+            aspirant.Name = aspirantImport.Name;
+            aspirant.Surename = aspirantImport.Surename;
+            aspirant.Patronymic = aspirantImport.Patronymic;
+            aspirant.Birthday = birthday;
+
+            aspirant.Phone = aspirantImport.Phone;
+            aspirant.Email = aspirantImport.Email;
+
+            aspirant.Doctorant = false;
+            aspirant.Present = true;
+            aspirant.StatusType = StatusType.новий;
+            aspirant.Sex = aspirantImport.Sex.Contains ("чоловік") ? true : false;
+            aspirant.Budget = aspirantImport.Budget.Contains ("держзамовлення") ? true : false;
+
+            // Enum из строки
+            aspirant.StudyForm = (StudyForm) Enum.Parse (typeof (StudyForm), aspirantImport.StudyForm);
+
+            string acronym = aspirantImport.Department.Split (new char[] { ';' }) [0].Trim ();
+            var dep = _context.Departments.FirstOrDefault (d => d.Acronym.Contains (acronym));
+            aspirant.DepartmentId = _context.Departments.FirstOrDefault (d => d.Acronym == acronym).Id;
+
+            string specialityId = aspirantImport.Speciality.Split (new char[] { ';' }) [0].Trim ();
+            aspirant.SpecialityId = Int32.Parse (specialityId);
+
+            Prepod prepod = _context.Prepods.FirstOrDefault (p => (p.DepartmentsString.ContainsWholeWord (acronym) && p.Surename == aspirantImport.Supervisor));
+            if (prepod != null) {
+                aspirant.PrepodId = prepod.Id;
+            } else {
+                aspirant.PrepodId = 0;
+            }
+
+            return aspirant;
+        }
+
     }
 }

@@ -13,6 +13,12 @@
             <input type="file" multiple="false" id="sheetjs-input" accept=".xls, .xlsx" @change="importExcel" style="display:none">
           </label>
         </div>
+        <div class="col-2">
+          <label class="btn btn-warning col-12">
+            Імпорт з Формуляра
+            <input type="file" multiple="false" id="sheetjs-formular-input" accept=".xls, .xlsx" @change="importFromFormular" style="display:none">
+          </label>
+        </div>
         <span class="label" id="upload-file-info"></span>
 
         <b-modal class="text-danger border-danger" ref="errorImportRef" title="Помилка імпорту з XLS файлу!">
@@ -207,7 +213,6 @@ export default {
       document.getElementById("sheetjs-input").value = "";
 
       var reader = new FileReader();
-
       var self = this;
 
       const importPromise = new Promise((resolve, reject) => {
@@ -231,6 +236,56 @@ export default {
 
           axios
             .post(`api/prepods/import`, Json)
+            .then(response => resolve("result"))
+            .catch(err => {
+              reject(new Error(err.response.data));
+            });
+        };
+        reader.readAsArrayBuffer(file);
+      });
+
+      importPromise.then(
+        result => this.reloadList(),
+        error => {
+          this.errorData = error.message;
+          this.$refs.errorImportRef.show();
+        }
+      );
+    },
+
+    // -------------- Импортировать из файла Excel - Формуляра --------------
+    importFromFormular: function(evt) {
+      var files = evt.target.files;
+      if (!files || files.length == 0) return;
+      var file = files[0];
+
+      // очистить input, чтобы можно было выбрать тот же файл повторно
+      document.getElementById("sheetjs-formular-input").value = "";
+
+      var reader = new FileReader();
+      var self = this;
+
+      const importPromise = new Promise((resolve, reject) => {
+        reader.onload = function(e) {
+          // pre-process data
+          var binary = "";
+          var bytes = new Uint8Array(e.target.result);
+          var length = bytes.byteLength;
+          for (var i = 0; i < length; i++) {
+            binary += String.fromCharCode(bytes[i]);
+          }
+
+          /* read workbook */
+          var wb = XLSX.read(binary, { type: "binary" });
+
+          /* grab first sheet */
+          var wsname = wb.SheetNames[0];
+          var ws = wb.Sheets[wsname];
+
+          let Json = XLSX.utils.sheet_to_json(ws);
+
+          axios
+            .post(`api/prepods/formularImport`, Json)
             .then(response => resolve("result"))
             .catch(err => {
               reject(new Error(err.response.data));

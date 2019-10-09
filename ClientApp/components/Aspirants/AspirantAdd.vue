@@ -67,23 +67,9 @@
         </div>
 
         <b-row class="pad-4">
-          <b-col cols="2" class="text-right">Статус:</b-col>
-          <b-col cols="5">
-            <v-select name="Статус" label="text" :options="statuses" v-model="selectedStatusType" v-validate="'required|selectValue'" :class="{ 'has-error': errors.has('Статус') }">
-              <template slot="option" slot-scope="option">
-                <span v-html="option.text"></span>
-              </template>
-            </v-select>
-          </b-col>
-        </b-row>
-        <div v-if="errors.has('Статус')" class="offset-3 alert-validate">
-          {{ errors.first("Статус") }}
-        </div>
-
-        <b-row class="pad-4">
           <b-col cols="2" class="text-right">Форма:</b-col>
           <b-col cols="5">
-            <v-select name="Форма" label="text" :options="studyforms" v-model="selectedStudyform" v-validate="'required|selectValue'" :class="{ 'has-error': errors.has('Форма') }">
+            <v-select name="Форма" label="text" :options="studyForms" v-model="selectedStudyForm" v-validate="'required|selectValue'" :class="{ 'has-error': errors.has('Форма') }">
               <template slot="option" slot-scope="option">
                 <span v-html="option.text"></span>
               </template>
@@ -236,7 +222,7 @@ export default {
 
         // Select
         statusType: "",
-        studyform: "",
+        studyForm: "",
 
         specialityId: "",
         departmentId: "",
@@ -244,14 +230,14 @@ export default {
       },
 
       selectedStatusType: {},
-      selectedStudyform: {},
+      selectedStudyForm: {},
 
       selectedSpeciality: {},
       selectedDepartment: {},
       selectedPrepod: {},
 
       statuses: [],
-      studyforms: [],
+      studyForms: [],
 
       specialities: [],
       departments: [],
@@ -276,21 +262,22 @@ export default {
     axios
       .all([responseLists])
       .then(responses => {
-        this.statuses = responses[0].data.statuses;
-        this.studyforms = responses[0].data.studyforms;
+        // this.statuses = responses[0].data.statuses;
+        this.studyForms = responses[0].data.studyforms;
 
         this.specialities = responses[0].data.specialities;
         this.departments = responses[0].data.departments;
         this.prepods = responses[0].data.prepods;
         this.selectedStatusType.value = 1;
-        this.selectedStudyform.value = 1;
+        this.selectedStudyForm.value = 1;
 
-        this.selectedStatusType.text = this.statuses.find(
+        // this.selectedStatusType.text = this.statuses.find(
+        //   x => x.value === 1
+        // ).text;
+        this.selectedStudyForm.text = this.studyForms.find(
           x => x.value === 1
         ).text;
-        this.selectedStudyform.text = this.studyforms.find(
-          x => x.value === 1
-        ).text;
+        //       var k = 1;
       })
       .catch(err => {
         console.log(err);
@@ -299,7 +286,7 @@ export default {
 
   computed: {
     filterPrepods: function() {
-      var prepodList = this.prepods;
+      var prepodList = [];
 
       if (this.selectedDepartment.text != null) {
         // акроним кафедры
@@ -312,7 +299,10 @@ export default {
 
         // Cообщение об ошибке, если кафедра и препод не совпадают
         {
-          if (this.selectedPrepod.text.indexOf(dep[0]) == -1) {
+          if (
+            this.selectedPrepod.text != null &&
+            this.selectedPrepod.text.indexOf(dep[0]) == -1
+          ) {
             this.errorMessage =
               "Викладач не працює на обраній кафедрі (в інституті)";
           } else {
@@ -333,7 +323,7 @@ export default {
       this.$validator.validate().then(valid => {
         if (valid && this.errorMessage === "") {
           this.model.statusType = this.selectedStatusType.value;
-          this.model.studyform = this.selectedStudyform.value;
+          this.model.studyForm = this.selectedStudyForm.value;
 
           this.model.prepodId = this.selectedPrepod.value;
           this.model.departmentId = this.selectedDepartment.value;

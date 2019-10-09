@@ -83,15 +83,23 @@ namespace PGC.Controllers {
                 return BadRequest ("Перевірте наявність даних в полях Name та Acronim в усіх строках, починаючи з другої.");
             }
 
+            string message = String.Empty;
+
+            IList<Department> deleteDeps = new List<Department> ();
+
             foreach (var item in departments) {
-                if (!IsDepartmentUniq (item))
-                    return BadRequest ("Підрозділ " + item.Acronym + " вже є в БД. Видаліть або виправте запис та повторіть імпорт");
+                if (!IsDepartmentUniq (item)) {
+                    deleteDeps.Add (item);
+                    message += "Підрозділ " + item.Acronym + " вже є в БД. \n";
+                }
             }
 
-            _context.Departments.AddRange (departments);
+            List<Department> result = departments.Except (deleteDeps).ToList ();
+
+            _context.Departments.AddRange (result);
             await _context.SaveChangesAsync ();
 
-            return Ok ();
+            return Ok (message);
         }
 
         private bool IsDepartmentUniq (Department department) {
@@ -201,7 +209,7 @@ namespace PGC.Controllers {
         // =========================================================================================================== 
 
         // названия кафедр для выпадающего списка 
-//        [HttpGet ("names")]
+        //        [HttpGet ("names")]
         // public IEnumerable<ItemData> GetNames () {
         //     IList<ItemData> list = new List<ItemData> ();
         //     var sp = _context.Departments.Include ("Faculty");

@@ -11,6 +11,8 @@ namespace PGC.Models {
     public class Prepod {
         public int Id { get; set; }
 
+        public string ImportId { get; set; }
+
         [Display (Name = "Прізвище")]
         [Required]
         [RegularExpression (@"^[а-яА-ЯЇїІіЄє'a-zA-Z]+$", ErrorMessage = "Дозволяються тільки літери")]

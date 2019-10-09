@@ -5,6 +5,7 @@ import uk from "vee-validate/dist/locale/uk";
 import BootstrapVue from "bootstrap-vue";
 import { ClientTable, Event } from "vue-tables-2";
 
+
 import App from "./App.vue";
 
 import SpecialityList from "./components/Specialities/SpecialityList.vue";
@@ -101,8 +102,10 @@ const routes = [
         name: "AspirantEdit",
         component: AspirantEdit
       },
-
-      { path: "/orders", component: OrderList },
+      {
+        path: "/orders",
+        component: OrderList
+      },
       {
         path: "order-add",
         name: "OrderAdd",
@@ -113,9 +116,17 @@ const routes = [
         name: "OrderEdit",
         component: OrderEdit
       },
-
       {
-        path: "faculty-edit/:item",
+        path: "/faculties",
+        component: FacultyList
+      },
+      {
+        path: "faculty-add",
+        name: "FacultyAdd",
+        component: FacultyAdd
+      },
+      {
+        path: "faculty-edit/:id",
         name: "FacultyEdit",
         component: FacultyEdit
       },
@@ -129,7 +140,6 @@ const routes = [
         component: DepartmentAdd
       },
       {
-        // path: "department-edit/:item", name: "DepartmentEdit", component: DepartmentEdit
         path: "department-edit/:id",
         name: "DepartmentEdit",
         component: DepartmentEdit

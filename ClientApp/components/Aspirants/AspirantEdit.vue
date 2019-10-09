@@ -177,6 +177,15 @@
         </b-row>
 
         <b-row class="pad-4">
+          <b-col cols="2" class="text-right">Академвідпустка:</b-col>
+          <b-col cols="5">
+            <span>
+              <input type="checkbox" class="short-check" v-model="model.vacation" />
+            </span>
+          </b-col>
+        </b-row>
+
+        <b-row class="pad-4">
           <b-col cols="2" class="text-right">Відмітки:</b-col>
           <b-col cols="8">
             <label class="text-right col-1">P1</label>
@@ -265,6 +274,7 @@ export default {
         sex: "",
         protection: "",
         present: "",
+        vacation: "",
         p1: "",
         p2: "",
         p3: "",
@@ -343,20 +353,20 @@ export default {
 
   computed: {
     filterPrepods: function() {
-      var prepodList = this.prepods;
+      var prepodList = [];
 
       if (this.selectedDepartment.text != null) {
         // акроним кафедры
         let dep = this.selectedDepartment.text.match(firstWordRegex);
 
-        // regex - поиск целого слова - акронима кафедры в строке Препода
-        let matchWholeWord = new RegExp(
-          "(^" + dep[0] + "[^а-яА-Я])|(\\W" + dep[0] + "[^а-яА-Я])"
-        );
+        // let matchWholeWord = new RegExp("(^|\\s)" + dep[0] + "(?=\\s|$)", "g");
 
         // Cообщение об ошибке, если кафедра и препод не совпадают
         {
-          if (this.selectedPrepod.text.indexOf(dep[0]) == -1) {
+          if (
+            this.selectedPrepod.сomment != null &&
+            this.selectedPrepod.сomment.indexOf(dep[0]) == -1
+          ) {
             this.errorMessage =
               "Викладач не працює на обраній кафедрі (в інституті)";
           } else {
@@ -365,7 +375,19 @@ export default {
         }
 
         prepodList = this.prepods.filter(p => {
-          return matchWholeWord.test(p.text);
+          let result = false;
+
+          if (
+            p.сomment != null &&
+            (p.сomment == dep[0] ||
+              p.сomment.indexOf(", " + dep[0]) != -1 ||
+              p.сomment.indexOf(dep[0] + ",") != -1)
+          ) {
+            result = true;
+          }
+
+          return result;
+          // matchWholeWord.test(p.сomment);
         });
       }
       return prepodList;

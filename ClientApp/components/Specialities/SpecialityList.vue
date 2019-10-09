@@ -1,87 +1,81 @@
 <template>
-    <div>
-<div id="people" class="col-8 offset-2">
-  <v-client-table :columns="columns" :data="list" :options="options"></v-client-table>
-</div>
-
-    </div>
+  <div>
+    <vue-bootstrap4-table :rows="list" :columns="columns" :config="config" :classes="classes">
+    </vue-bootstrap4-table>
+  </div>
 </template>
 
 <script>
 import axios from "axios";
+import VueBootstrap4Table from "vue-bootstrap4-table";
 
-export default {  
+export default {
+  components: {
+    VueBootstrap4Table
+  },
   data() {
     return {
       list: [],
-      errors: [],
-      columns: ["id", "name", "knowledgeId", "knowledge.name"],
-      
-      options: {
-        headings: {
-          id: "Код",
-          name: "Спеціальність",
-          knowledgeId: "Шифр",
-          "knowledge.name": "Галузь"
-          
+      columns: [
+        {
+          label: "Код",
+          name: "id",
+          filter: {
+            type: "simple",
+            placeholder: "id"
+          },
+          sort: true
         },
-        sortable: ["id", "name"],
-        filterable: ["id", "name"]
+        {
+          label: "Спеціальність",
+          name: "name",
+          filter: {
+            type: "simple"
+          },
+          sort: true,
+          row_text_alignment: "text-left"
+        },
+        {
+          label: "Шифр",
+          name: "knowledgeId",
+          sort: true
+        },
+        {
+          label: "Галузь",
+          name: "knowledge.name",
+          filter: {
+            type: "simple",
+            placeholder: "Галузь"
+          }
+        }
+      ],
+      config: {
+        pagination: true,
+        pagination_info: true,
+        num_of_visibile_pagination_buttons: 20,
+        checkbox_rows: true,
+        highlight_row_hover: true,
+        rows_selectable: true,
+        multi_column_sort: false,
+        card_title: "Vue Bootsrap 4 advanced table",
+        selected_rows_info: true,
+        per_page: 25
+
+        //card_mode: false,
+        // highlight_row_hover_color: "grey",
+        // per_page_options: [5, 10, 20, 30]
+      },
+      classes: {
+        table: "table-bordered table-striped",
+        // row: "pad4",
+        cell: "cellpad4"
       }
     };
   },
   created: function() {
-    axios
-      .get(`api/specialities`)
-      .then(response => {
-        this.list = response.data;
-      })
-      .catch(e => {
-        this.errors.push(e);
-      });
+    axios.get(`api/specialities`).then(response => {
+      this.list = response.data;
+    });
   }
 };
-
 </script>
-
-<style lang="scss">
-.VuePagination {
-  text-align: center;
-}
-
-.vue-title {
-  text-align: center;
-  margin-bottom: 10px;
-}
-
-.vue-pagination-ad {
-  text-align: center;
-}
-
-.glyphicon.glyphicon-eye-open {
-  width: 16px;
-  display: block;
-  margin: 0 auto;
-}
-
-th:nth-child(3) {
-  text-align: center;
-}
-
-.VueTables__child-row-toggler {
-  width: 16px;
-  height: 16px;
-  line-height: 16px;
-  display: block;
-  margin: auto;
-  text-align: center;
-}
-
-.VueTables__child-row-toggler--closed::before {
-  content: "+";
-}
-
-.VueTables__child-row-toggler--open::before {
-  content: "-";
-}
-</style>

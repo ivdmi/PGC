@@ -23,10 +23,10 @@
           }" row-style-class="font-14" styleClass="vgt-table condensed bordered">
 
           <template slot="table-row" slot-scope="props">
-            <span v-if="props.column.field == 'Delete'">
-              <button class="btn btn-warning btnxs" @click="removeItem(props.row.id)" title="Видалити запис">X</button>
+            <span v-if="props.column.field == 'Delete' && props.row.orderType != 'Зміна форми навчання'">
+              <button class="btn btn-warning btnxs" @click="removeItem(props.row)" title="Видалити запис">X</button>
             </span>
-            <span v-else-if="props.column.field == 'Edit'">
+            <span v-else-if="props.column.field == 'Edit' && props.row.orderType != 'Зміна форми навчання'">
               <button class="btn btn-warning btnxs" @click="editItem(props.row)" title="Редагувати запис">Зм</button>
             </span>
             <span v-else>{{props.formattedRow[props.column.field]}}</span>
@@ -96,6 +96,7 @@ export default {
   },
 
   mounted: function() {
+    //   debugger;
     axios.get(`api/Orders`).then(response => {
       this.list = response.data;
     });
@@ -116,12 +117,14 @@ export default {
     },
 
     // -------------- Удалить --------------
-    removeItem(id) {
-      axios.delete("api/Orders/" + id).then(response => {
-        this.list = this.list.filter(item => {
-          return item.id !== id;
+    removeItem(item) {
+      if (item.orderType != "Зміна форми навчання") {
+        axios.delete("api/Orders/" + item.id).then(response => {
+          this.list = this.list.filter(i => {
+            return i.id !== item.id;
+          });
         });
-      });
+      }
     }
   }
 };

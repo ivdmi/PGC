@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 using Microsoft.EntityFrameworkCore;
 
 namespace PGC.Data {
@@ -80,29 +81,34 @@ namespace PGC.Data {
         }
 
         public static IEnumerable<ItemData> GetDepartments (AspiranturaContext context) {
-            // var departments = context.Departments.Include ("Faculty").Select (s => new ItemData {
-            //     Value = s.Id,
-            //         Text = new StringBuilder ().Append (s.Acronym)
-            //         .Append (new String (Convert.ToChar (160), 8 - s.Acronym.Length))
-            //         .Append (s.Faculty != null ? s.Faculty.Acronym : "")
-            //         .ToString ()
-            // }).ToList ();
 
-            IList<ItemData> list = new List<ItemData> ();
-            var sp = context.Departments.Include ("Faculty");
-            foreach (var item in sp) {
-                // char ch = Convert.ToChar (160);
-                char ch = ' ';
-                string spaceA = new String (ch, 8 - item.Acronym.ToString ().Length);
-                string txt = item.Acronym + spaceA + item.Faculty.Acronym;
-                list.Add (new ItemData () { Value = item.Id, Text = txt });
-            }
+            IList<ItemData> list = context.Departments.Select (d => new ItemData { Value = d.Id, Text = d.Acronym + " " + d.Name }).OrderBy (k => k.Text).ToList ();
+            // var sp = context.Departments.Include ("Faculty");
+            // foreach (var item in sp) {
+            //     // char ch = Convert.ToChar (160);
+            //     char ch = ' ';
+            //     string spaceA = new String (ch, 8 - item.Acronym.ToString ().Length);
+            //     string txt = item.Acronym + spaceA + item.Faculty.Acronym;
+            //     list.Add (new ItemData () { Value = item.Id, Text = txt });
+            // }
+
             return list;
         }
 
         public static IEnumerable<ItemData> GetPrepods (AspiranturaContext context) {
-            var prepods = context.Prepods.Where (t => t.Present).Select (s => new ItemData { Value = s.Id, Text = s.DepartmentsString + " " + s.FIO }).ToList ();
+            //var prepods = context.Prepods.Where (t => t.Present).Select (s => new ItemData { Value = s.Id, Text = s.DepartmentsString + " " + s.FIO }).ToList ();
+            var prepods = context.Prepods.Where (t => t.Present).Select (s => new ItemData { Value = s.Id, Text = s.FIO, Сomment = s.DepartmentsString }).OrderBy (p => p.Text).ToList ();
             return prepods;
+        }
+
+        // определить наличие целого слова в строке
+        public static bool ContainsWholeWord (this string s, string word) {
+            string pattern = @"\b" + Regex.Escape (word) + @"\b";
+            // Regex re = new Regex (pattern, RegexOptions.IgnoreCase);
+            //Regex re = new Regex (pattern);
+            //var filtered = re.IsMatch (word);
+            bool result = (Regex.Match (s, pattern).Success);
+            return result;
         }
     }
 }

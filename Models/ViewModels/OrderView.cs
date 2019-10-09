@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using PGC.Data;
 using PGC.Models.ViewModels;
 
 namespace PGC.Models {
@@ -20,6 +21,9 @@ namespace PGC.Models {
         public string OrderType { get; set; }
 
         public int OrderTypeValue { get; set; }
+
+        public bool Budget { get; set; }
+        public StudyForm StudyForm { get; set; }
 
         public virtual ICollection<int> AspirantIdList { get; set; }
     }

@@ -23,9 +23,24 @@ label {
   text-align: right;
 }
 
+.vbt-per-page-dropdown{
+  visibility: hidden;
+}
+
 .pad-4 {
   padding: 4px 0px 4px 0px;
 }
+
+.table td {
+  padding: 5px 0px 0px 10px;  
+  text-align: left;
+}
+
+.cellpad4 {  
+  font-size: 14px;
+  color: darkslateblue
+}
+
 
 .font-12 {
   font-size: 12px;

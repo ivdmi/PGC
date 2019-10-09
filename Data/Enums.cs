@@ -10,10 +10,15 @@ namespace PGC.Data {
         Закінчення = 3,
         Відрахування = 4,
         Академвідпустка = 5,
-        Інший = 6,
+
+        [Display (Name = "Повернення з відпустки")]
+        Вихід_з_відпустки = 6,
 
         [Display (Name = "Зміна форми навчання")]
-        Зміна_форми_навчання = 7
+        Зміна_форми_навчання = 7,
+
+        Інший = 8,
+
     }
 
     public enum StatusType : int {
@@ -23,8 +28,8 @@ namespace PGC.Data {
         [Display (Name = "акд.відп")]
         академ_відпустка = 3,
 
-        [Display (Name = "від.невик")]
-        відрахований_2 = 4,
+        [Display (Name = "відрахов.")]
+        відрахований = 4,
 
         [Display (Name = "зах.достр")]
         захист_достроково = 5,
@@ -105,9 +110,10 @@ namespace PGC.Data {
 
     public class ItemData {
         public int Value { get; set; }
-        public string Text { get; set; }
-    }
 
+        public string Text { get; set; }
+        public string Сomment { get; set; }
+    }
 }
 
 // Расширяющий Enum класс - для расширяющих методов получения атрибутов из Enum

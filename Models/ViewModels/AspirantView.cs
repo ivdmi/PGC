@@ -37,6 +37,8 @@ namespace PGC.Models.ViewModels {
         [Display (Name = "Чоловік/Жінка")]
         public string Sex { get; set; }
 
+        public string Vacation { get; set; }
+
         [Display (Name = "Захист")]
         public string Protection { get; set; }
 

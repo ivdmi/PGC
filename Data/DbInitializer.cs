@@ -239,8 +239,8 @@ namespace PGC.Data {
                 new Aspirant { Name = "Сергій", Surename = "Гітієс", Birthday = DateTime.Parse ("1992-09-01"), Patronymic = "Васильевич", StatusType = StatusType.новий, SpecialityId = 75, StudyForm = StudyForm.вечірня },
                 new Aspirant { Name = "Кирило", Surename = "Вітус", Birthday = DateTime.Parse ("1991-09-01"), StatusType = StatusType.навчання, SpecialityId = 113, StudyForm = StudyForm.денна },
                 new Aspirant { Name = "Михайло", Surename = "Barzdukas", Birthday = DateTime.Parse ("1992-09-01"), StatusType = StatusType.новий, SpecialityId = 113, StudyForm = StudyForm.денна },
-                new Aspirant { Name = "Yan", Surename = "Li", Birthday = DateTime.Parse ("1985-09-01"), StatusType = StatusType.відрахований_2, SpecialityId = 113, StudyForm = StudyForm.заочна },
-                new Aspirant { Name = "Альберт", Surename = "Justice", Birthday = DateTime.Parse ("1991-09-01"), StatusType = StatusType.відрахований_2, SpecialityId = 73, StudyForm = StudyForm.вечірня },
+                new Aspirant { Name = "Yan", Surename = "Li", Birthday = DateTime.Parse ("1985-09-01"), StatusType = StatusType.відрахований, SpecialityId = 113, StudyForm = StudyForm.заочна },
+                new Aspirant { Name = "Альберт", Surename = "Justice", Birthday = DateTime.Parse ("1991-09-01"), StatusType = StatusType.захист_достроково, SpecialityId = 73, StudyForm = StudyForm.вечірня },
                 new Aspirant { Name = "Laura", Surename = "Norman", Birthday = DateTime.Parse ("1991-09-01"), StatusType = StatusType.захист_достроково, SpecialityId = 73, StudyForm = StudyForm.денна },
                 new Aspirant { Name = "Nino", Surename = "Olivetto", Birthday = DateTime.Parse ("1990-09-01"), StatusType = StatusType.стажування, SpecialityId = 113, StudyForm = StudyForm.вечірня }
 
